@@ -193,32 +193,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const phoneOutput = document.getElementById('output-phone');
   const btnSubmit = document.getElementById('btn-booking-submit');
 
-  bookingForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+bookingForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    const clientPhone = document.getElementById('client-phone').value;
-    
-    // Disable inputs and show loading state
-    btnSubmit.disabled = true;
-    btnSubmit.textContent = 'Processing Booking...';
+  const clientPhone = document.getElementById('client-phone').value;
+
+  const data = {
+    name: document.getElementById('client-name').value,
+    phone: clientPhone,
+    destination: document.getElementById('select-trip').value,
+    package: document.getElementById('select-package').value,
+    date: document.getElementById('travel-date').value,
+    comments: document.getElementById('client-message').value
+  };
+
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = 'Sending...';
+
+  try {
+    await fetch(
+      'https://script.google.com/macros/s/AKfycbzjYhZwrBOpZSOEvU_w4QEfBmR6f96d-i2fyE_l-XWUre9hpg3vyN7k1NkSeIjC-S3e/exec',
+      {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }
+    );
+
+    phoneOutput.textContent = clientPhone;
+    formSuccessBox.style.display = 'block';
+
+    bookingForm.reset();
 
     setTimeout(() => {
-      // Set success box elements
-      phoneOutput.textContent = clientPhone;
-      formSuccessBox.style.display = 'block';
+      closeBookingModal();
+    }, 4000);
 
-      // Reset form controls
-      bookingForm.reset();
-      btnSubmit.disabled = false;
-      btnSubmit.textContent = 'Confirm Reservation';
+  } catch (error) {
+    alert('Error sending booking. Please try again.');
+    console.error(error);
+  }
 
-      // Auto close modal after a display duration
-      setTimeout(() => {
-        closeBookingModal();
-      }, 4000);
-
-    }, 1500);
-  });
+  btnSubmit.disabled = false;
+  btnSubmit.textContent = 'Confirm Reservation';
+});
 
   // ==========================================
   // 5. Scroll Animations (Intersection Observer)
