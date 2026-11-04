@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://scenestours.eu.org/sitemap.xml
+Sitemap: https://shema-k.github.io/scenes-tours/sitemap.xml
