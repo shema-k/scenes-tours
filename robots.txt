@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shema-k.github.io/scenes-tours-main-website/sitemap.xml

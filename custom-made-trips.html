@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Custom Made Trips with Scenes Tours - Tailor-made journeys across Uganda and East Africa.">
+  <title>Custom Made Trips | Scenes Tours</title>
+
+  <!-- ================================================================
+       FULL CSS — IDENTICAL TO INDEX.HTML
+       ================================================================ -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+
+    :root {
+      --primary-gold: #f59e0b;
+      --primary-dark: #0f172a;
+      --primary-light: #f8fafc;
+      --accent-orange: #d97706;
+      --accent-green: #059669;
+      --accent-teal: #0d9488;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f1f5f9;
+      --bg-dark: #0f172a;
+      --bg-dark-card: rgba(30, 41, 59, 0.7);
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-light: #f8fafc;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; color: var(--text-primary); font-family: var(--font-sans); -webkit-text-size-adjust: 100%; }
+    body { min-height: 100vh; line-height: 1.6; background-color: var(--bg-primary); overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-serif); font-weight: 700; line-height: 1.25; }
+    a { color: inherit; text-decoration: none; transition: all var(--transition-fast); }
+    img { max-width: 100%; height: auto; display: block; }
+
+    .logo-img { width: 50px; height: auto; max-height: 50px; object-fit: contain; display: block; }
+    .button-row { display: flex; gap: 10px; align-items: center; }
+    @media (max-width: 600px) { .button-row { flex-direction: column; align-items: stretch; } }
+    .about-trip { background-color: darkgreen; color: white; border: none; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; width: 100%; }
+    @media (min-width: 480px) { .container { padding: 0 1.5rem; } }
+    @media (min-width: 768px) { .container { padding: 0 2rem; } }
+    @media (min-width: 1024px) { .container { padding: 0 2rem; } }
+
+    .section { padding: 3rem 0; }
+    @media (min-width: 480px) { .section { padding: 4rem 0; } }
+    @media (min-width: 768px) { .section { padding: 6rem 0; } }
+    @media (min-width: 1024px) { .section { padding: 100px 0; } }
+    .section-alt { background-color: var(--bg-secondary); }
+
+    .section-header { text-align: center; max-width: 700px; margin: 0 auto 2rem auto; }
+    @media (min-width: 768px) { .section-header { margin: 0 auto 5rem auto; } }
+    .section-title { font-size: 1.75rem; margin-bottom: 1rem; color: var(--primary-dark); }
+    @media (min-width: 480px) { .section-title { font-size: 2.2rem; } }
+    @media (min-width: 768px) { .section-title { font-size: 2.75rem; margin-bottom: 1.5rem; } }
+    .section-desc { color: var(--text-secondary); font-size: 0.95rem; }
+    @media (min-width: 768px) { .section-desc { font-size: 1.05rem; } }
+    .section-tagline { display: inline-block; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary-gold); margin-bottom: 0.75rem; border-left: 3px solid var(--primary-gold); padding-left: 0.75rem; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.9rem 2.2rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all var(--transition-fast); gap: 0.5rem; border: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-orange) 100%); color: var(--text-light); box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4); }
+    .btn-secondary { background-color: transparent; color: var(--text-light); border: 2px solid var(--text-light); }
+    .btn-secondary:hover { background-color: var(--text-light); color: var(--primary-dark); transform: translateY(-2px); }
+    .btn-outline { background-color: transparent; color: var(--accent-orange); border: 2px solid var(--accent-orange); }
+    .btn-outline:hover { background-color: var(--accent-orange); color: var(--text-light); }
+
+    /* ===== HEADER ===== */
+    .header { background-color: #0f172a; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; transition: all var(--transition-normal); padding: 1.5rem 0; }
+    .header.scrolled { background-color: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 0.8rem 0; box-shadow: var(--shadow-md); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .nav { display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-serif); font-weight: 800; font-size: 1.5rem; color: var(--text-light); flex-shrink: 0; }
+    .logo span { white-space: nowrap; }
+    .nav-links { display: flex; list-style: none; gap: 2.5rem; align-items: center; }
+    .nav-link { font-size: 0.95rem; font-weight: 500; color: rgba(255, 255, 255, 0.8); position: relative; padding: 0.5rem 0; }
+    .nav-link:hover { color: var(--primary-gold); }
+    .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--primary-gold); transition: width var(--transition-fast) ease-out; }
+    .nav-link:hover::after { width: 100%; }
+    .btn-nav { background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-orange) 100%); color: var(--text-light); padding: 0.6rem 1.4rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; transition: all var(--transition-fast); }
+    .btn-nav:hover { transform: scale(1.03); box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3); }
+    .menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 110; }
+    .menu-btn span { display: block; width: 25px; height: 2px; background-color: var(--text-light); margin: 5px 0; transition: all var(--transition-fast) ease-in-out; }
+
+    /* ===== HERO ===== */
+    .hero { min-height: 60vh; position: relative; background-size: cover; background-position: center; display: flex; align-items: center; padding-top: 60px; }
+    .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.3) 100%); z-index: 0; }
+    @media (min-width: 480px) { .hero { min-height: 70vh; padding-top: 80px; } }
+    @media (min-width: 768px) { .hero { min-height: 80vh; padding-top: 100px; } }
+    @media (min-width: 1024px) { .hero { min-height: 100vh; } }
+    .hero-content { position: relative; z-index: 1; max-width: 550px; }
+    @media (min-width: 768px) { .hero-content { max-width: 800px; } }
+    .hero-motto { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--primary-gold); letter-spacing: 0.25em; margin-bottom: 1rem; display: inline-block; border-left: 3px solid var(--primary-gold); padding-left: 1rem; }
+    @media (min-width: 768px) { .hero-motto { font-size: 1.1rem; margin-bottom: 1.5rem; } }
+    .hero-title { font-size: 1.8rem; font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.01em; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+    @media (min-width: 480px) { .hero-title { font-size: 2.4rem; } }
+    @media (min-width: 768px) { .hero-title { font-size: 3.2rem; } }
+    @media (min-width: 1024px) { .hero-title { font-size: 4.5rem; } }
+    .hero-subtitle { font-size: 0.95rem; color: rgba(255, 255, 255, 0.95); margin-bottom: 2rem; max-width: 100%; font-weight: 300; line-height: 1.6; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+    @media (min-width: 768px) { .hero-subtitle { font-size: 1.25rem; margin-bottom: 3rem; max-width: 650px; } }
+    .hero-ctas { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+    /* ===== AUTO REFRESH ===== */
+    .auto-mode-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 1.4rem; display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
+    @media (min-width: 480px) { .auto-mode-panel { border-radius: 16px; padding: 1.4rem; gap: 1.2rem; margin-top: 1.8rem; } }
+    @media (min-width: 768px) { .auto-mode-panel { border-radius: 24px; padding: 1.8rem; grid-template-columns: 1.8fr 1fr; gap: 1.5rem; margin-top: 2rem; } }
+    .auto-mode-info { color: rgba(248, 250, 252, 0.95); }
+    .auto-mode-label { display: inline-block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--primary-gold); margin-bottom: 0.4rem; }
+    @media (min-width: 768px) { .auto-mode-label { margin-bottom: 0.65rem; } }
+    .auto-mode-text { font-size: 0.85rem; line-height: 1.5; color: rgba(248, 250, 252, 0.8); max-width: 560px; }
+    @media (min-width: 480px) { .auto-mode-text { font-size: 0.9rem; } }
+    @media (min-width: 768px) { .auto-mode-text { font-size: 1rem; line-height: 1.6; } }
+    .auto-mode-actions { display: flex; justify-content: flex-start; gap: 0.8rem; flex-wrap: wrap; align-items: center; }
+    @media (min-width: 768px) { .auto-mode-actions { justify-content: flex-end; gap: 1rem; } }
+    .auto-mode-status { grid-column: 1 / -1; color: var(--text-light); background: rgba(248, 250, 252, 0.08); border: 1px solid rgba(248, 250, 252, 0.12); padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.85rem; }
+    @media (min-width: 768px) { .auto-mode-status { padding: 1rem 1.2rem; border-radius: 18px; font-size: 0.95rem; } }
+
+    /* ===== GALLERY ===== */
+    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (min-width: 480px) { .gallery-grid { grid-template-columns: 1fr 1fr; gap: 1.2rem; } }
+    @media (min-width: 768px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+    @media (min-width: 1024px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); gap: 1.8rem; } }
+    .gallery-item { position: relative; overflow: hidden; border-radius: 16px; box-shadow: var(--shadow-sm); transition: all var(--transition-normal); cursor: pointer; aspect-ratio: 1 / 1; background: var(--bg-secondary); }
+    .gallery-item:hover { transform: scale(1.03); box-shadow: var(--shadow-lg); z-index: 2; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow); }
+    .gallery-item:hover img { transform: scale(1.08); }
+    .gallery-item.featured { grid-column: span 2; aspect-ratio: 2 / 1; }
+    @media (max-width: 480px) { .gallery-item.featured { grid-column: span 1; aspect-ratio: 1 / 1; } }
+    .gallery-item .overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(transparent, rgba(15, 23, 42, 0.8)); color: white; opacity: 0; transform: translateY(20px); transition: all var(--transition-normal); }
+    .gallery-item:hover .overlay { opacity: 1; transform: translateY(0); }
+    .gallery-item .overlay h4 { font-size: 1.1rem; font-family: var(--font-serif); font-weight: 600; }
+    .gallery-item .overlay p { font-size: 0.85rem; color: rgba(255, 255, 255, 0.8); margin-top: 0.2rem; }
+
+    /* ===== VIDEO ===== */
+    .video-wrapper { position: relative; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); background: #000; margin-top: 2rem; }
+    .video-wrapper video { width: 100%; display: block; max-height: 550px; object-fit: cover; }
+    .video-caption { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem 2rem 1.5rem; background: linear-gradient(transparent, rgba(15, 23, 42, 0.85)); color: white; }
+    .video-caption h3 { font-size: 1.6rem; font-family: var(--font-serif); font-weight: 700; }
+    .video-caption p { font-size: 0.95rem; color: rgba(255, 255, 255, 0.85); max-width: 500px; margin-top: 0.3rem; }
+    .video-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: rgba(245, 158, 11, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; transition: all var(--transition-normal); cursor: pointer; border: none; box-shadow: 0 0 40px rgba(245, 158, 11, 0.3); z-index: 2; }
+    .video-play-btn:hover { transform: translate(-50%, -50%) scale(1.1); background: var(--primary-gold); }
+    .video-play-btn.hidden { opacity: 0; pointer-events: none; }
+
+    /* ===== FOOTER ===== */
+    .footer { background-color: #0b0f19; color: var(--text-light); padding: 3rem 0 2rem 0; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    @media (min-width: 768px) { .footer { padding: 5rem 0 2rem 0; } }
+    .footer-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 2rem; }
+    @media (min-width: 480px) { .footer-grid { gap: 3rem; } }
+    @media (min-width: 768px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; gap: 5rem; margin-bottom: 4rem; } }
+    .footer-brand h3 { font-size: 1.6rem; margin-bottom: 1rem; color: var(--text-light); }
+    .footer-brand h3 span { color: var(--primary-gold); }
+    .footer-brand p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; max-width: 320px; }
+    .footer-socials { display: flex; gap: 1rem; }
+    .social-link { width: 38px; height: 38px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all var(--transition-fast); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .social-link:hover { background-color: var(--primary-gold); color: var(--text-light); transform: translateY(-2px); }
+    .footer-col h4 { font-size: 0.9rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 0.05em; font-family: var(--font-sans); }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .footer-links a { color: var(--text-muted); font-size: 0.9rem; }
+    .footer-links a:hover { color: var(--primary-gold); padding-left: 4px; }
+    .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted); flex-wrap: wrap; gap: 1rem; }
+    .footer-bottom-links { display: flex; gap: 1.5rem; }
+    .footer-bottom-links a { color: var(--text-muted); }
+    .footer-bottom-links a:hover { color: var(--primary-gold); }
+
+    /* ===== MODALS ===== */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 200; opacity: 0; pointer-events: none; transition: opacity var(--transition-normal); display: flex; align-items: center; justify-content: center; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-card { background-color: var(--bg-primary); width: 95%; max-width: 600px; border-radius: 12px; box-shadow: var(--shadow-lg); overflow: hidden; position: relative; transform: translateY(-40px); transition: transform var(--transition-normal) cubic-bezier(0.34, 1.56, 0.64, 1); border: 1px solid rgba(15, 23, 42, 0.08); }
+    @media (min-width: 480px) { .modal-card { border-radius: 16px; } }
+    @media (min-width: 768px) { .modal-card { width: 90%; border-radius: 24px; } }
+    .modal-overlay.active .modal-card { transform: translateY(0); }
+    .modal-header { background-color: var(--bg-dark); color: var(--text-light); padding: 1.5rem; position: relative; }
+    @media (min-width: 480px) { .modal-header { padding: 2rem; } }
+    @media (min-width: 768px) { .modal-header { padding: 2.5rem 3rem; } }
+    .modal-header h3 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+    .modal-header #modal-subtitle { font-size: 1rem; color: var(--primary-gold); }
+    .modal-header p { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; }
+    .modal-close-btn { position: absolute; top: 1rem; right: 1rem; background: rgba(255, 255, 255, 0.08); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; transition: background var(--transition-fast); }
+    .modal-close-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    @media (min-width: 768px) { .modal-close-btn { top: 1.5rem; right: 1.5rem; width: 42px; height: 42px; } }
+    .modal-body { padding: 1.5rem; }
+    @media (min-width: 480px) { .modal-body { padding: 2rem; } }
+    @media (min-width: 768px) { .modal-body { padding: 3rem; } }
+    .form-group-row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 480px) { .form-group-row { gap: 1.5rem; } }
+    @media (min-width: 768px) { .form-group-row { grid-template-columns: 1fr 1fr; } }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-input { width: 100%; background-color: var(--bg-secondary); border: 1px solid rgba(15, 23, 42, 0.08); border-radius: 8px; padding: 0.8rem 1rem; color: var(--text-primary); font-family: var(--font-sans); font-size: 0.95rem; transition: all var(--transition-fast); }
+    .form-input:focus { outline: none; background-color: var(--bg-primary); border-color: var(--accent-orange); box-shadow: 0 0 10px rgba(217, 119, 6, 0.15); }
+    .btn-form { width: 100%; padding: 1rem; border-radius: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1rem; }
+    .form-success-box { display: none; background-color: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.2); color: var(--accent-green); padding: 1.2rem; border-radius: 8px; text-align: center; margin-top: 1.5rem; font-weight: 500; animation: slideUp var(--transition-normal) forwards; }
+
+    /* ===== ANIMATIONS ===== */
+    .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity var(--transition-slow) ease-out, transform var(--transition-slow) ease-out; }
+    .animate-on-scroll.animated { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 479px) { html { font-size: 14px; } .header.scrolled { padding: 0.6rem 0; } .logo { gap: 0.4rem; font-size: 1rem; } .logo-img { width: 24px !important; max-height: 24px !important; } .logo span { font-size: 0.85rem; } .btn { padding: 0.7rem 1.6rem; font-size: 0.85rem; } .btn-form { padding: 0.85rem; } }
+    @media (min-width: 480px) and (max-width: 767px) { html { font-size: 15px; } }
+    @media (max-width: 1024px) { .header.scrolled { padding: 0.8rem 0; } }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .menu-btn { display: block; }
+      .nav-links.mobile-open { display: flex; flex-direction: column; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: var(--bg-dark); padding: 100px 1.5rem 2rem 1.5rem; z-index: 105; animation: fadeIn var(--transition-fast) forwards; overflow-y: auto; }
+      .nav-links.mobile-open li { width: 100%; text-align: center; }
+      .nav-links.mobile-open .nav-link { font-size: 1.2rem; display: block; padding: 0.75rem 0; }
+      .menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+      .menu-btn.active span:nth-child(2) { opacity: 0; }
+      .menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -8px); }
+      .form-group-row { grid-template-columns: 1fr; gap: 0; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .footer-bottom-links { justify-content: center; }
+      .modal-body { padding: 2rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="header">
+    <div class="container nav">
+      <a href="index.html" class="logo" id="logo-link">
+        <img src="logo.png" alt="Scenes Tours Logo" class="logo-img">
+        <span>Scenes Tours & Travel</span>
+      </a>
+      <button class="menu-btn" id="menu-btn" aria-label="Toggle Navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="index.html#destinations" class="nav-link">Destinations</a></li>
+        <li><a href="index.html#about" class="nav-link">About Us</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+        <li><button class="btn-nav" id="btn-header-book">Book a Trip</button></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="background-image: url('custom1.jpg');">
+    <div class="container">
+      <div class="hero-content animate-on-scroll">
+        <span class="hero-motto">Custom Travel</span>
+        <h1 class="hero-title">Build Your Own Journey</h1>
+        <p class="hero-subtitle">
+          Tailor-made trips across Uganda and East Africa — designed around your budget, interests, and travel dreams.
+        </p>
+        <div class="hero-ctas">
+          <a href="#gallery" class="btn btn-primary">Explore Ideas</a>
+          <button class="btn btn-secondary" id="btn-hero-enquire">Enquire Now</button>
+        </div>
+        <div class="auto-mode-panel">
+          <div class="auto-mode-info">
+            <span class="auto-mode-label">Auto Refresh Mode</span>
+            <p class="auto-mode-text">This page updates automatically every 20 seconds to keep your inspiration flowing.</p>
+          </div>
+          <div class="auto-mode-actions">
+            <button class="btn btn-outline" id="toggle-auto-mode">Pause Auto Refresh</button>
+            <button class="btn btn-secondary" id="reset-layout">Reset View</button>
+          </div>
+          <div class="auto-mode-status" id="auto-mode-status">Auto refresh enabled · next update in 20s</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="section section-alt" id="gallery">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tagline">Your Journey, Your Way</span>
+        <h2 class="section-title">Inspiration for Custom Trips</h2>
+        <p class="section-desc">From epic safaris to cultural immersions — we craft experiences that match your vision.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item featured animate-on-scroll delay-1">
+          <img src="custom1.jpg" alt="Epic safari adventure">
+          <div class="overlay"><h4>Epic Safaris</h4><p>Wildlife adventures across East Africa</p></div>
+        </div>
+        <div class="gallery-item animate-on-scroll delay-2">
+          <img src="custom2.jpg" alt="Luxury travel">
+          <div class="overlay"><h4>Luxury Retreats</h4><p>Premium lodges and exclusive experiences</p></div>
+        </div>
+        <div class="gallery-item animate-on-scroll delay-3">
+          <img src="custom3.jpg" alt="Cultural tours">
+          <div class="overlay"><h4>Cultural Immersion</h4><p>Connect with local traditions</p></div>
+        </div>
+        <div class="gallery-item animate-on-scroll delay-4">
+          <img src="custom4.jpg" alt="Mountain hiking">
+          <div class="overlay"><h4>Mountain Hikes</h4><p>Conquer Uganda's peaks</p></div>
+        </div>
+        <div class="gallery-item animate-on-scroll delay-1">
+          <img src="custom5.jpg" alt="Water activities">
+          <div class="overlay"><h4>Water Adventures</h4><p>Kayaking, rafting & lake cruises</p></div>
+        </div>
+        <div class="gallery-item animate-on-scroll delay-2">
+          <img src="custom6.jpg" alt="Night safari">
+          <div class="overlay"><h4>Night Safaris</h4><p>Discover the wild after dark</p></div>
+        </div>
+        <div class="gallery-item animate-on-scroll delay-3">
+          <img src="custom7.jpg" alt="Community visits">
+          <div class="overlay"><h4>Community Encounters</h4><p>Meaningful village experiences</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VIDEO ===== -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tagline">In Motion</span>
+        <h2 class="section-title">Your Custom Adventure Awaits</h2>
+        <p class="section-desc">Watch how we bring travel dreams to life.</p>
+      </div>
+      <div class="video-wrapper animate-on-scroll">
+        <video id="customVideo" muted playsinline>
+          <source src="custom-video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <button class="video-play-btn" id="videoPlayBtn" aria-label="Play video">▶</button>
+        <div class="video-caption">
+          <h3>Designed Just for You</h3>
+          <p>Every detail tailored to your preferences — from transport to accommodation to activities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section section-alt">
+    <div class="container" style="text-align: center;">
+      <div class="animate-on-scroll">
+        <span class="section-tagline">Start Planning</span>
+        <h2 class="section-title" style="max-width: 600px; margin: 0 auto 1rem;">Your Dream Trip, Tailored</h2>
+        <p style="max-width: 500px; margin: 0 auto 2rem; color: var(--text-secondary); font-size: 1.05rem;">
+          Tell us your vision — we'll handle the logistics, leaving you free to enjoy every moment.
+        </p>
+        <button class="btn btn-primary" id="cta-book-now" style="font-size: 1.1rem; padding: 1rem 3rem;">
+          Start Your Custom Journey →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h3>Scenes<span> Tours & Travels</span></h3>
+        <p>Creating seamless travel journeys and safaris across East Africa. Let us guide you to see the world's most beautiful scenes.</p>
+        <div class="footer-socials">
+          <a href="https://www.tiktok.com/@scenes.travel" class="social-link" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69A4.83 4.83 0 0 1 16 4.1V15.5A6.5 6.5 0 1 1 9.5 9c.17 0 .34.01.5.03v3.2a3.3 3.3 0 1 0 2.8 3.27V0h3.2a4.84 4.84 0 0 0 3.59 4.59v2.1z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/scenestours" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="https://twitter.com/scenestours" class="social-link" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Our Active Tours</h4>
+        <ul class="footer-links"><li><a href="index.html#destinations">Queen Elizabeth Safari</a></li></ul><br>
+        <h4>Upcoming trips</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#destinations">Diani Beach Kenya</a></li>
+          <li><a href="index.html#destinations">Kampala City Tour</a></li>
+          <li><a href="index.html#destinations">Custom Group Packages</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Head Office</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#map">Next to Lynn Modern Apartments, Kikoni-Makerere</a></li>
+          <li><a href="index.html#map">Makerere-Kampala, Uganda</a></li>
+          <li>Phone: <a href="tel:0700907617">0700907617</a> / <a href="tel:0784066320">0784066320</a></li>
+          <li>Email: <a href="mailto:bookingscenestravel@gmail.com">bookingscenestravel@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <div>&copy; 2026 Scenes Tours and Travels. All rights reserved. Motto: See the world.</div>
+      <div class="footer-bottom-links">
+        <a href="#" id="footer-privacy-link">Privacy Policy</a>
+        <a href="#" id="footer-terms-link">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== BOOKING MODAL ===== -->
+  <div class="modal-overlay" id="booking-modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title">Book Your Travel Slot</h3>
+        <i><strong id="modal-subtitle" style="color: var(--primary-gold);">Custom Made Trips</strong></i>
+        <p id="modal-description">Send in your details and our team will get back to you with a tailor-made itinerary.</p>
+        <button class="modal-close-btn" id="modal-close" aria-label="Close Booking Modal">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="booking-form">
+          <div class="form-group">
+            <label for="client-name" class="form-label">Full Name</label>
+            <input type="text" id="client-name" class="form-input" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="client-phone" class="form-label">Phone Number</label>
+              <input type="tel" id="client-phone" class="form-input" placeholder="e.g. 07********" required>
+            </div>
+            <div class="form-group">
+              <label for="select-trip" class="form-label">Interested In</label>
+              <select id="select-trip" class="form-input" required>
+                <option value="Custom Made Trips">Custom Made Trips</option>
+                <option value="Queen Elizabeth Safari">Queen Elizabeth Safari (Uganda)</option>
+                <option value="Rwanda Adventures">Rwanda Adventures</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="select-package" class="form-label">Group Size</label>
+              <select id="select-package" class="form-input" required>
+                <option value="Solo traveler">Solo traveler</option>
+                <option value="Couple">Couple</option>
+                <option value="Small group (3-6)">Small group (3-6)</option>
+                <option value="Large group (7+)">Large group (7+)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="travel-date" class="form-label">Preferred Date</label>
+              <input type="date" id="travel-date" class="form-input" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="client-message" class="form-label">Your Dream Itinerary / Special Requests</label>
+            <input type="text" id="client-message" class="form-input" placeholder="e.g. I'd love to see gorillas, relax by a lake, and visit a local village">
+          </div>
+          <button type="submit" class="btn btn-primary btn-form" id="btn-booking-submit">Submit Enquiry</button>
+          <div class="form-success-box" id="form-success-box">
+            <span id="form-success-text">Your enquiry was sent successfully! We will call you on </span>
+            <strong><span id="output-phone"></span></strong>
+            <span id="form-success-suffix"> to start planning your custom trip.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LEGAL MODAL ===== -->
+  <div class="modal-overlay" id="legal-modal-overlay">
+    <div class="modal-card legal-modal-card">
+      <div class="modal-header">
+        <h3 id="legal-modal-title">Legal Information</h3>
+        <button class="modal-close-btn" id="legal-modal-close" aria-label="Close Legal Modal">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="legal-modal-body">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       JAVASCRIPT — FULL INDEX.HTML FUNCTIONALITY
+       ================================================================ -->
+  <script>
+    // =================================================================
+    // 1. MOBILE MENU
+    // =================================================================
+    const menuBtn = document.getElementById('menu-btn');
+    const navLinks = document.getElementById('nav-links');
+
+    if (menuBtn && navLinks) {
+      menuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('mobile-open');
+        menuBtn.classList.toggle('active');
+      });
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('mobile-open');
+          menuBtn.classList.remove('active');
+        });
+      });
+    }
+
+    // =================================================================
+    // 2. HEADER SCROLL
+    // =================================================================
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // =================================================================
+    // 3. AUTO REFRESH (20s)
+    // =================================================================
+    let autoRefreshInterval = null;
+    let autoRefreshEnabled = true;
+    const statusEl = document.getElementById('auto-mode-status');
+
+    function startAutoRefresh() {
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+      let countdown = 20;
+      if (statusEl) statusEl.textContent = 'Auto refresh enabled · next update in ' + countdown + 's';
+
+      autoRefreshInterval = setInterval(() => {
+        countdown -= 1;
+        if (countdown <= 0) {
+          document.querySelectorAll('.gallery-item').forEach((item, i) => {
+            setTimeout(() => {
+              item.style.transition = 'none';
+              item.style.opacity = '0.6';
+              setTimeout(() => {
+                item.style.transition = '';
+                item.style.opacity = '1';
+              }, 80);
+            }, i * 60);
+          });
+          countdown = 20;
+          if (statusEl) statusEl.textContent = 'Auto refresh enabled · next update in ' + countdown + 's';
+        } else {
+          if (statusEl) statusEl.textContent = 'Auto refresh enabled · next update in ' + countdown + 's';
+        }
+      }, 1000);
+    }
+
+    function stopAutoRefresh() {
+      if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+        autoRefreshInterval = null;
+      }
+      if (statusEl) statusEl.textContent = 'Auto refresh paused';
+    }
+
+    startAutoRefresh();
+
+    document.getElementById('toggle-auto-mode')?.addEventListener('click', function() {
+      if (autoRefreshEnabled) {
+        stopAutoRefresh();
+        this.textContent = 'Resume Auto Refresh';
+        autoRefreshEnabled = false;
+      } else {
+        startAutoRefresh();
+        this.textContent = 'Pause Auto Refresh';
+        autoRefreshEnabled = true;
+      }
+    });
+
+    document.getElementById('reset-layout')?.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.querySelectorAll('.gallery-item').forEach(card => {
+        card.style.transform = 'scale(0.96)';
+        setTimeout(() => { card.style.transform = ''; }, 300);
+      });
+    });
+
+    // =================================================================
+    // 4. SCROLL ANIMATIONS
+    // =================================================================
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('animated');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // =================================================================
+    // 5. VIDEO PLAYER
+    // =================================================================
+    const video = document.getElementById('customVideo');
+    const playBtn = document.getElementById('videoPlayBtn');
+
+    if (video && playBtn) {
+      playBtn.addEventListener('click', function() {
+        if (video.paused) {
+          video.play().then(() => {
+            this.classList.add('hidden');
+          }).catch(() => {});
+        } else {
+          video.pause();
+          this.classList.remove('hidden');
+        }
+      });
+
+      video.addEventListener('pause', () => {
+        playBtn.classList.remove('hidden');
+      });
+
+      video.addEventListener('play', () => {
+        playBtn.classList.add('hidden');
+      });
+    }
+
+    // =================================================================
+    // 6. BOOKING MODAL (with WhatsApp integration)
+    // =================================================================
+    const modalOverlay = document.getElementById('booking-modal-overlay');
+    const modalSubtitle = document.getElementById('modal-subtitle');
+    const modalClose = document.getElementById('modal-close');
+
+    function openBookingModal(tripName) {
+      if (tripName && modalSubtitle) {
+        modalSubtitle.textContent = tripName;
+      }
+      if (modalOverlay) {
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeBookingModal() {
+      if (modalOverlay) {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (modalClose) modalClose.addEventListener('click', closeBookingModal);
+    if (modalOverlay) {
+      modalOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeBookingModal();
+      });
+    }
+
+    // Open modal from various buttons
+    document.getElementById('btn-hero-enquire')?.addEventListener('click', function() {
+      openBookingModal('Custom Made Trips');
+    });
+
+    document.getElementById('btn-header-book')?.addEventListener('click', function() {
+      openBookingModal('Custom Made Trips');
+    });
+
+    document.getElementById('cta-book-now')?.addEventListener('click', function() {
+      openBookingModal('Custom Made Trips');
+    });
+
+    // =================================================================
+    // 7. BOOKING FORM — WhatsApp Integration
+    // =================================================================
+    document.getElementById('booking-form')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('client-name').value;
+      const phone = document.getElementById('client-phone').value;
+      const trip = document.getElementById('select-trip').value;
+      const packagePlan = document.getElementById('select-package').value;
+      const date = document.getElementById('travel-date').value;
+      const message = document.getElementById('client-message').value;
+
+      const numbers = [
+        '+256700907617',
+        '+256784066320'
+      ];
+
+      const text =
+        `*NEW BOOKING REQUEST*\n\n` +
+        `Name: ${name}\n` +
+        `Phone: ${phone}\n` +
+        `Destination: ${trip}\n` +
+        `Group Size: ${packagePlan}\n` +
+        `Travel Date: ${date}\n` +
+        `Comments: ${message}`;
+
+      const encodedText = encodeURIComponent(text);
+
+      // Open first WhatsApp
+      window.open(`https://wa.me/${numbers[0]}?text=${encodedText}`, '_blank');
+
+      // Give user instruction before second opens
+      setTimeout(() => {
+        const sendSecond = confirm('Send this booking to second admin as well?');
+        if (sendSecond) {
+          window.open(`https://wa.me/${numbers[1]}?text=${encodedText}`, '_blank');
+        }
+      }, 1500);
+
+      // Show success message
+      document.getElementById('output-phone').textContent = phone;
+      const successBox = document.getElementById('form-success-box');
+      if (successBox) {
+        successBox.style.display = 'block';
+        setTimeout(() => { successBox.style.display = 'none'; }, 5000);
+      }
+    });
+
+    // =================================================================
+    // 8. LEGAL MODAL
+    // =================================================================
+    const legalOverlay = document.getElementById('legal-modal-overlay');
+    const legalClose = document.getElementById('legal-modal-close');
+    const legalTitle = document.getElementById('legal-modal-title');
+    const legalBody = document.getElementById('legal-modal-body');
+
+    function openLegal(title, contentHTML) {
+      if (legalTitle) legalTitle.textContent = title;
+      if (legalBody) legalBody.innerHTML = contentHTML;
+      if (legalOverlay) {
+        legalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeLegal() {
+      if (legalOverlay) {
+        legalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (legalClose) legalClose.addEventListener('click', closeLegal);
+    if (legalOverlay) {
+      legalOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeLegal();
+      });
+    }
+
+    document.getElementById('footer-privacy-link')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      openLegal('Privacy Policy', `
+        <h4>Privacy Policy</h4>
+        <p>We respect your privacy. Any information you share through booking or enquiry forms is used only to process your request, contact you, and support your travel plans. We do not sell your personal details to third parties.</p>
+        <p>We may store your name, phone number, email address, and travel preferences to improve our service and follow up on booking requests. By using this site, you consent to this data being used for travel coordination and customer support.</p>
+      `);
+    });
+
+    document.getElementById('footer-terms-link')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      openLegal('Terms of Service', `
+        <h4>Terms of Service</h4>
+        <p>By using this website and booking any of our travel packages, you agree to our terms. All bookings are subject to availability and confirmation. Deposits are non-refundable unless otherwise stated.</p>
+        <p>Scenes Tours and Travels reserves the right to modify itineraries due to weather, safety, or other operational factors. We are not liable for personal injury, loss, or damage to property during tours beyond our control.</p>
+        <p>Full terms are available upon request at our head office.</p>
+      `);
+    });
+
+    // =================================================================
+    // 9. ACTIVE NAV LINK HIGHLIGHTING
+    // =================================================================
+    document.querySelectorAll('nav a, .nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('nav a, .nav-link').forEach(item => {
+          item.classList.remove('active');
+        });
+        this.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
