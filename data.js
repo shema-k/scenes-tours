@@ -36,7 +36,7 @@ const SEED_TRIPS = [
       { src: 'lakeview.jpeg', cap: 'Lake view' }, { src: 'crater.jpeg', cap: 'Crater lakes' },
       { src: 'hills.jpeg', cap: 'Hills at Queen Elizabeth' }, { src: 'gorilla.jpeg', cap: 'Animals at Queen Elizabeth' }
     ],
-    videos: ['hotsprings.mp4', 'animals.mp4', 'tourists.mp4']
+    videos: ['hotsprings.mp4', 'Animals.mp4', 'Tourists(1).mp4']
   },
   {
     id: 'diani-beach', type: 'Beach', title: 'Diani Beach Holiday', region: 'Diani Beach, Kenya',
@@ -45,7 +45,7 @@ const SEED_TRIPS = [
     desc: 'Experience the cool ocean breeze, beautiful sun-soaked beaches, historic Fort Jesus walks, snorkeling adventures, and premium beachfront hotel accommodation in Kenya.',
     media: { type: 'video', src: 'beachview.mp4', poster: '' },
     highlights: ['Sun-soaked beaches', 'Fort Jesus walks', 'Snorkeling adventures', 'Beachfront hotels'],
-    videos: ['beachview.mp4', 'camelwalk.mp4', 'masai.mp4']
+    videos: ['beachview.mp4', 'Camelwalk(1).mp4', 'Masai.mp4']
   },
   {
     id: 'rwanda-adventures', type: 'Regional', title: 'Rwanda Adventures and Safari Packages', region: 'Rwanda',
@@ -75,7 +75,7 @@ const SEED_TRIPS = [
       { src: 'custom5.jpg', cap: 'Water adventures' }, { src: 'custom6.jpg', cap: 'Night safaris' },
       { src: 'custom7.jpg', cap: 'Community encounters' }
     ],
-    videos: ['custom-video.mp4']
+    videos: ['Zebra(2).mp4']
   }
 ];
 

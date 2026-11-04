@@ -24,7 +24,7 @@ function tripInfoHTML(t, chips) {
   const s = status(t);
   const rows = [['Where', t.region], ['Duration', t.duration], ['Dates', s.label], ['Price', priceText(t)], t.deposit && ['Seat deposit', fmt(t.deposit)], t.pickup && ['Pickup', t.pickup]].filter(Boolean);
   const ups = (t.deps || []).filter(d => new Date(d.end + 'T23:59:59') >= new Date());
-  return `<h4>${esc(t.title)}</h4><p>${esc(t.summary)}</p><dl>${rows.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>`
+  return `<h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><dl>${rows.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>`
     + (t.includes ? `<p class="inc"><b>Includes:</b> ${t.includes.map(esc).join(', ')}</p>` : '')
     + (chips && ups.length ? `<p class="deps"><b>Pick a date:</b> ${ups.map(d => `<button type="button" class="chip" data-date="${d.start}">${range(d)}</button>`).join('')}</p>` : '');
 }
