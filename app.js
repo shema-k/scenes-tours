@@ -36,9 +36,9 @@ const plansFor = t => t.price
    loads when the visitor hovers (cards) or presses play (trip hero). Cards use a
    short lightweight preview so hovering is instant. */
 const mediaHTML = (m, alt, list, ctx = 'card') => m.type === 'video'
-  ? `<video src="${ctx === 'card' && m.preview ? m.preview : m.src}" ${m.poster ? `poster="${m.poster}"` : ''} ${list ? `data-list="${list.join(',')}"` : 'loop'} muted playsinline preload="none" aria-label="${esc(alt)}"></video>`
+  ? `<video src="${ctx === 'card' && m.preview ? m.preview : m.src}" ${ctx === 'card' && m.preview ? `data-full="${m.src}"` : ''} ${m.poster ? `poster="${m.poster}"` : ''} ${list ? `data-list="${list.join(',')}"` : 'loop'} muted playsinline preload="none" aria-label="${esc(alt)}" data-alt="${(m.alt || []).join(',')}"></video>`
     + (ctx === 'card' ? '<span class="play" aria-hidden="true"></span>' : '')
-  : `<img src="${m.src}" alt="${esc(alt)}" loading="${ctx === 'hero' ? 'eager' : 'lazy'}" decoding="async">`;
+  : `<img src="${m.src}" alt="${esc(alt)}" loading="${ctx === 'hero' ? 'eager' : 'lazy'}" decoding="async" data-alt="${(m.alt || []).join(',')}">`;
 
 function cardHTML(t, i = 0) {
   const s = status(t);
@@ -66,11 +66,11 @@ function injectChrome() {
   $('#site-header').innerHTML = `<div class="wrap bar">
     <a class="brand" href="index.html"><img src="logo-180.webp" alt="Scenes Tours logo" width="46" height="46" decoding="async"><span>${SITE.name}</span></a>
     <button class="menu" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
-    <nav id="nav"><a href="${home}#trips">Trips</a><a href="${home}#save">Save for a trip</a><a href="${home}#about">About</a><a href="${home}#contact">Contact</a>
+    <nav id="nav"><a href="${home}#trips">Trips</a><a href="${home}#services">Services</a><a href="${home}#save">Savings</a><a href="${home}#about">About</a><a href="${home}#team">Our team</a><a href="${home}#contact">Contact</a>
     <button class="btn btn-primary" data-book="">Book a trip</button></nav></div>`;
   const phones = SITE.phones.map(p => `<a href="tel:${p.tel}">${p.label}</a>`).join(' / ');
   $('#site-footer').innerHTML = `<div class="wrap foot">
-    <div><h3>Scenes<span> Tours &amp; Travels</span></h3><p>Seamless travel journeys and safaris across East Africa. ${SITE.tagline}.</p>
+    <div><h3>Scenes<span> Tours &amp; Travels</span></h3><p>A youth-led, registered tour company in Kampala, Uganda. Seamless travel journeys and safaris across East Africa. ${SITE.tagline}.</p>
       <p class="social">${SITE.social.map(s => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.name}">${ICONS[s.name]}</a>`).join('')}</p></div>
     <div><h4>Trips</h4><ul>${TRIPS.map(t => `<li><a href="trip.html?id=${t.id}">${esc(t.title)}</a></li>`).join('')}</ul></div>
     <div><h4>Head office</h4><ul><li>${SITE.address}</li><li>${phones}</li><li><a href="mailto:${SITE.email}">${SITE.email}</a></li></ul></div>
@@ -143,6 +143,40 @@ function setupDialogs() {
 }
 
 /* ---------- Home page ---------- */
+const initials = s => s.split(/\s+/).filter(w => /^[A-Z]/.test(w)).slice(0, 2).map(w => w[0]).join('') || 'ST';
+const person = (p, cls = '', tag = 'h4') => {
+  const pic = p.photos
+    ? `<div class="avatar-pair">${p.photos.map(s => `<span class="avatar"><img src="${s}" alt="${esc(p.title)}" loading="lazy" decoding="async"></span>`).join('')}</div>`
+    : p.photo
+      ? `<div class="avatar"><img src="${p.photo}" alt="${esc(p.title)}" loading="lazy" decoding="async"></div>`
+      : `<div class="avatar avatar-letter" aria-hidden="true">${esc(initials(p.title))}</div>`;
+  return `<article class="person ${cls}">${pic}<${tag}>${esc(p.title)}</${tag}>${p.name ? `<p class="pname">${esc(p.name)}</p>` : ''}<p>${esc(p.bio)}</p></article>`;
+};
+const cio = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return; cio.unobserve(e.target);
+  const el = e.target, to = +el.dataset.to, t0 = performance.now();
+  const step = now => {
+    const k = Math.min(1, (now - t0) / 1300);
+    el.textContent = (el.dataset.pre || '') + Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString('en-US') + (el.dataset.suf || '');
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}), { threshold: .5 }) : null;
+
+function company() {
+  const svc = $('#svc');
+  if (svc) svc.innerHTML = SERVICES.map((s, i) => `<article class="svc rv" style="--i:${i % 4}"><i>${i + 1}</i><div><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div></article>`).join('');
+  const world = $('#world-grid');
+  if (world) world.innerHTML = WORLD.map((w, i) => `<article class="wcard rv" style="--i:${i}"><img src="${w.img}" alt="${esc(w.t)}" loading="lazy" decoding="async"><div><h3>${esc(w.t)}</h3><p>${esc(w.d)}</p></div></article>`).join('');
+  const story = $('#story');
+  if (story) story.innerHTML = STORY.map(p => `<p>${esc(p)}</p>`).join('');
+  const stats = $('#stats');
+  if (stats) stats.innerHTML = STATS.map(s => `<div class="stat rv"><b data-to="${s.n}" data-pre="${s.pre || ''}" data-suf="${s.suf || ''}">${(s.pre || '') + s.n.toLocaleString('en-US') + (s.suf || '')}</b><span>${esc(s.l)}</span></div>`).join('');
+  const org = $('#org');
+  if (org) org.innerHTML = `<div class="org-top rv">${person(TEAM.lead, 'lead', 'h3')}</div><div class="org-top rv">${person(TEAM.deputy, 'deputy', 'h3')}</div><div class="org-depts">${TEAM.depts.map(d => `<section class="dept rv"><h3>${esc(d.name)}</h3>${person(d.head)}${d.members.map(m => person(m, 'sub')).join('')}</section>`).join('')}</div>`;
+  if (cio && !matchMedia('(prefers-reduced-motion: reduce)').matches) $$('.stat b').forEach(b => { b.textContent = (b.dataset.pre || '') + '0' + (b.dataset.suf || ''); cio.observe(b); });
+}
+
 function home() {
   // Hero: next departure
   const next = TRIPS.filter(t => status(t).key === 'open').sort((a, b) => status(a).dep.start.localeCompare(status(b).dep.start))[0];
@@ -178,10 +212,20 @@ function home() {
   const strip = DB.places().map(p => `<span>${p}</span>`).join(''); $('#places').innerHTML = strip; $('#places2').innerHTML = strip;
   render(); done();
 
+  // Photo mosaic: pictures from every trip in the database, mixed so each trip appears early
+  const shots = TRIPS.flatMap((t, ti) => (t.gallery || []).map((g, gi) => ({ ...g, trip: t.title, k: gi * 10 + ti }))).sort((a, b) => a.k - b.k).slice(0, 12);
+  const moments = $('#moments');
+  if (moments) {
+    moments.hidden = !shots.length;
+    $('#moments-grid').innerHTML = shots.map((g, i) => `<button class="shot rv" style="--i:${i % 4}" data-src="${g.src}" data-cap="${esc(g.cap)}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy" decoding="async"><span><b>${esc(g.cap)}</b>${esc(g.trip)}</span></button>`).join('');
+    $('#moments-grid').addEventListener('click', e => { const b = e.target.closest('.shot'); if (!b) return; const lb = $('#lightbox'); $('img', lb).src = b.dataset.src; $('img', lb).alt = b.dataset.cap; $('p', lb).textContent = b.dataset.cap; lb.showModal(); });
+  }
+
   // Trip history: every departure in the database that has already happened
   const past = TRIPS.flatMap(t => (t.deps || []).filter(d => new Date(d.end + 'T23:59:59') < new Date()).map(d => ({ t, d }))).sort((a, b) => b.d.start.localeCompare(a.d.start));
-  $('#history').hidden = !past.length;
-  $('#history-list').innerHTML = past.map(({ t, d }, i) => `<a class="hist rv" style="--i:${i % 4}" href="trip.html?id=${t.id}"><b>${esc(t.title)}</b><span>${range(d)}</span><small>${esc(t.region)} &middot; completed</small></a>`).join('');
+  $('#history').hidden = !(past.length || PAST_TRIPS.length);
+  $('#history-list').innerHTML = past.map(({ t, d }, i) => `<a class="hist rv" style="--i:${i % 4}" href="trip.html?id=${t.id}"><b>${esc(t.title)}</b><span>${range(d)}</span><small>${esc(t.region)} &middot; completed</small></a>`).join('')
+    + PAST_TRIPS.map((p, i) => `<div class="hist rv" style="--i:${i % 4}"><b>${esc(p)}</b><span>Completed</span><small>Previous trip</small></div>`).join('');
 
   // Savings planner
   const priced = TRIPS.filter(t => t.price);
@@ -287,18 +331,34 @@ const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.
 function reveal() { $$('.rv:not(.in)').forEach(el => io ? io.observe(el) : el.classList.add('in')); }
 function playlists() { /* videos with several clips play one after another, as on the original site */
   $$('video[data-list]').forEach(v => {
-    const list = v.dataset.list.split(','); let n = 0;
-    v.addEventListener('ended', () => { n = (n + 1) % list.length; v.src = list[n]; v.play().catch(() => {}); });
+    if (v._list) return; // delegated setup runs on every render; attach once per element
+    const list = v.dataset.list.split(','); let n = 0; v._list = list; v._n = 0;
+    v.addEventListener('ended', () => { n = (n + 1) % list.length; v._n = n; v.src = list[n]; v.play().catch(() => {}); });
   });
 }
 const done = () => { reveal(); playlists(); };
+/* Deep links: the page renders after load, so scroll to the requested section once it exists. */
+function goHash() {
+  const id = decodeURIComponent((location.hash || '').slice(1)); if (!id) return;
+  const el = document.getElementById(id); if (!el) return;
+  const jump = () => el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  requestAnimationFrame(jump);
+  setTimeout(jump, 300);
+}
+window.addEventListener('hashchange', goHash);
+window.addEventListener('load', goHash);
 
 document.addEventListener('DOMContentLoaded', () => {
   injectChrome(); setupDialogs(); setupMap();
-  if ($('#trip-grid')) home();
+  if ($('#trip-grid')) { home(); company(); }
   if ($('#trip')) detail();
   setupVideos();
   done();
+  goHash();
+  // Photo paths are already correct; only run the background repair probe when
+  // the browser is idle, so it never delays the first paint or interaction.
+  if ('requestIdleCallback' in window) requestIdleCallback(() => healBackgrounds(), { timeout: 4000 });
+  else setTimeout(healBackgrounds, 3000);
 });
 
 /* ---------- Search suggestions: typing + the trip database + what the visitor searched before ---------- */
@@ -353,4 +413,59 @@ function autosuggest(input, onPick) {
   });
   list.addEventListener('mousedown', e => { const li = e.target.closest('[data-i]'); if (li) { e.preventDefault(); pick(items[+li.dataset.i]); } });
   document.addEventListener('click', e => { if (!wrap.contains(e.target)) { list.hidden = true; input.setAttribute('aria-expanded', 'false'); } });
+}
+
+/* ---------- Self-healing media: find the file wherever it was saved, else show a branded placeholder (never white space) ---------- */
+function heal(el) {
+  const cur = el.getAttribute('src'); if (!cur || cur.startsWith('data:')) return;
+  if (!el._chain || !el._chain.includes(cur)) { el._chain = mediaCandidates(cur, (el.dataset.alt || '').split(',').filter(Boolean)); el._i = 0; }
+  const next = el._chain[++el._i];
+  if (next) { el.setAttribute('src', next); if (el.tagName === 'VIDEO') { el.load(); el.play().catch(() => {}); } return; }
+  // A card uses a short preview clip; if it is missing, try the full clip once.
+  if (el.tagName === 'VIDEO' && el.dataset.full) {
+    const full = el.dataset.full; delete el.dataset.full;
+    el._chain = mediaCandidates(full); el._i = 0; el.setAttribute('src', full);
+    el.load(); el.play().catch(() => {}); return;
+  }
+  placeholder(el);
+}
+function placeholder(el) {
+  if (el.closest('#lightbox')) return;
+  if (el.tagName === 'VIDEO' && el._list && (el._skips = (el._skips || 0) + 1) < el._list.length) { /* playlist: skip a missing clip, keep playing the others */
+    el._n = (el._n + 1) % el._list.length; el.setAttribute('src', el._list[el._n]); el.load(); el.play().catch(() => {}); return;
+  }
+  (window.MISSING = window.MISSING || new Set()).add(el._chain ? el._chain[0] : el.getAttribute('src'));
+  if (el.tagName === 'VIDEO' && el.poster && !el._poster) { const i = new Image(); i.src = el.poster; i.alt = el.getAttribute('aria-label') || ''; i._poster = 1; el.replaceWith(i); return; }
+  const ph = document.createElement('div'), label = el.alt || el.getAttribute('aria-label') || '';
+  ph.className = 'ph'; ph.setAttribute('role', 'img'); ph.setAttribute('aria-label', label);
+  if (el.closest('.brand')) { ph.classList.add('logo-ph'); ph.textContent = 'ST'; } else ph.innerHTML = `<span>${esc(label)}</span>`;
+  el.replaceWith(ph);
+}
+document.addEventListener('error', e => { if (/^(IMG|VIDEO)$/.test(e.target.tagName)) heal(e.target); }, true);
+const learn = e => {
+  const el = e.target; if (el._i > 0) {
+    const m = el.getAttribute('src').match(/^(.*\/)[^/]+$/);
+    try { localStorage.setItem('stt_mdir', m ? m[1] : ''); } catch {}
+  }
+};
+document.addEventListener('load', learn, true); document.addEventListener('loadedmetadata', learn, true);
+
+/* Section and hero background photos are set in CSS, so resolve them here the same way as <img> and <video>. */
+function healBackgrounds() {
+  $$('[style*="--photo"]').forEach(el => {
+    const m = el.getAttribute('style').match(/--photo:\s*url\(['"]?([^'")]+)['"]?\)/); if (!m) return;
+    const list = mediaCandidates(m[1]); let i = 0;
+    const next = () => {
+      if (i >= list.length) return;
+      const im = new Image(); const n = i++;
+      im.onload = () => {
+        if (n > 0) {
+          el.style.setProperty('--photo', `url('${list[n]}')`);
+          try { localStorage.setItem('stt_mdir', (list[n].match(/^(.*\/)[^/]+$/) || [, ''])[1]); } catch {}
+        }
+      };
+      im.onerror = next; im.src = list[n];
+    };
+    next();
+  });
 }
