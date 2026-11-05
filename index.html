@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<title>Scenes Tours &amp; Travels | Safaris and trips from Kampala</title>
+<meta name="description" content="Scenes Tours and Travels is a youth-led, registered tour company in Kampala, Uganda. Join group safaris to Queen Elizabeth National Park, Rwanda and Diani Beach, or plan a custom trip. See the world.">
+<meta name="keywords" content="Scenes Tours, Kampala travel agency, Queen Elizabeth safari, Rwanda tours, Diani Beach, custom trips Uganda">
+<link rel="canonical" href="https://shema-k.github.io/scenes-tours/">
+<meta property="og:title" content="Scenes Tours and Travel | See the World"><meta property="og:description" content="Group safaris, Rwanda adventures and custom trips from Kampala.">
+<meta property="og:image" content="https://shema-k.github.io/scenes-tours/og.jpg"><meta property="og:url" content="https://shema-k.github.io/scenes-tours/"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-site-verification" content="4hERf2j91zFcSNJ-6kqhyYeDtpW4znjei68rtwmZmTc">
+<meta name="author" content="Scenes Tours and Travels"><meta name="theme-color" content="#10261f">
+<link rel="icon" href="favicon.png">
+<link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/playfair.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/playfair-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="sunset.webp" as="image" fetchpriority="high">
+<link rel="stylesheet" href="styles.css?v=10">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Scenes Tours and Travel","url":"https://shema-k.github.io/scenes-tours/","slogan":"See the World","telephone":"+256784066320","email":"bookingscenestravels@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Next to Lynn Modern Apartments, Kikoni-Makerere","addressLocality":"Kampala","addressCountry":"UG"}}</script>
+</head><body>
+<header id="site-header"></header>
+<main>
+<section class="hero hero-sm" id="top" style="--photo:url('sunset.webp')"><div class="wrap hero-grid">
+  <div><span class="motto">See the world</span>
+  <h1>Where every <em>Adventure</em> writes a story to tell</h1>
+  <p>Some stories are read in books, while others are written beneath open skies, along winding paths, and across distant horizons and remarkable cultures of the savanna.</p>
+  <form id="quick" class="quick" aria-label="Plan your trip">
+    <label>Where to?<select name="trip"></select></label>
+    <label>Who is travelling?<select name="who"><option value="0">Just me</option><option value="1">A couple</option><option value="2">Small group (3 to 6)</option><option value="3">School or large group</option></select></label>
+    <label>When?<input type="date" name="date"></label>
+    <button class="btn btn-primary" type="submit">Plan my trip</button>
+  </form>
+  <ul class="pills"><li>Youth-led</li><li>Registered company</li><li>5+ years of experience</li><li>Based in Kampala</li></ul></div>
+  <div class="next" id="next" aria-live="polite"></div>
+</div></section>
+
+<div class="tabs-bar"><div class="wrap"><div class="tabs" id="tabs" role="tablist" aria-label="Browse our website"></div></div></div>
+
+<div class="stage bgs v-warm" style="--photo:url('queen-elizabeth.webp')"><div class="wrap" id="panels">
+
+<section class="panel" id="trips" data-title="Trips">
+  <div class="panel-head"><div><span class="tagline">Featured excursions</span><h2>Choose your trip</h2></div>
+    <div class="tools"><div id="chips" class="chips" role="group" aria-label="Filter by trip type"></div><input id="search" type="search" placeholder="Search trips or places" aria-label="Search trips"></div></div>
+  <div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div id="trip-grid" class="rail"></div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div>
+  <div class="past"><b>Previous trips</b><div id="history-list" class="past-list"></div></div>
+</section>
+
+<section class="panel" id="save" data-title="Savings" hidden>
+  <div class="save">
+    <div><img class="cash" src="brochure-savings.webp" alt="Scenes Traveler's Savings Account" width="760" height="760" loading="lazy" decoding="async">
+      <span class="tagline">Introducing</span><h2>Scenes Traveler's Savings Account</h2>
+      <p>Start with as low as <b>UGX 50,000</b> and start saving for your next adventure. Put aside small amounts of money regularly, save at your own pace and turn your travel dreams into a real experience.</p>
+      <p>Pick a trip, choose how many months you have, and see what to set aside each week. Our Queen Elizabeth Safari lets you save 175K over 2 months and reserve your seat with a 50K booking. Your plan stays on this device.</p>
+      <p style="font-size:.85rem;color:var(--muted)">Terms and conditions apply.</p></div>
+    <form id="plan" class="planner rv">
+    <div class="row"><label>Trip<select name="trip"></select></label><label>Travelling<select name="seats"><option value="single">Single</option><option value="double">Double / couple</option></select></label></div>
+    <div id="plan-info" class="tinfo" aria-live="polite"></div>
+    <label>Time to save: <strong id="months-out"></strong><input type="range" name="months" min="1" max="12" step="1"></label>
+    <label>Already saved (UGX)<input type="number" name="saved" min="0" step="5000" inputmode="numeric" placeholder="0"></label>
+    <div class="out"><div><span>Per month</span><b id="per-month"></b></div><div><span>Per week</span><b id="per-week"></b></div></div>
+    <div class="progress" role="progressbar" aria-label="Savings progress"><i id="bar"></i></div>
+    <p class="meta" style="margin-top:.6rem"><span id="pct"></span> of <span id="goal"></span></p>
+    <button class="btn btn-primary wide" type="button" data-book="queen-elizabeth">Reserve a seat</button>
+  </form>
+  </div>
+</section>
+
+<section class="panel" id="services" data-title="Services" hidden>
+  <div class="panel-head"><div><span class="tagline">What we do</span><h2>Our services</h2></div><p class="meta">From planning to the journey home, we look after every part of your trip.</p></div>
+  <div id="svc" class="svc-grid"></div>
+</section>
+
+<section class="panel" id="world" data-title="Destinations" hidden>
+  <div class="panel-head"><div><span class="tagline">Destinations</span><h2>See the world</h2></div><p class="meta">Coastlines, wildlife, cities and living cultures across Uganda, East Africa and beyond.</p></div>
+  <div id="world-grid" class="world-grid"></div>
+  <div class="marquee mini-marquee" aria-hidden="true"><div id="places"></div><div id="places2"></div></div>
+  <div id="moments" hidden><h3 class="sub">Moments from our trips</h3><div id="moments-grid" class="rail photos"></div></div>
+</section>
+
+<section class="panel" id="reviews" data-title="Reviews" hidden>
+  <div class="panel-head"><div><span class="tagline">Customer feedback</span><h2>What our travelers say</h2></div><div id="rev-sum" class="rev-sum"></div></div>
+  <div class="rev-layout">
+    <form id="fb" class="planner" novalidate><h3>Share your experience</h3>
+      <div class="row"><label>Your name<input name="name" autocomplete="name"></label><label>Trip you joined<select name="trip"></select></label></div>
+      <fieldset class="rate"><legend>Your rating</legend><div class="stars-in">
+        <input type="radio" name="rating" id="r5" value="5"><label for="r5" title="5 stars">&#9733;</label><input type="radio" name="rating" id="r4" value="4"><label for="r4" title="4 stars">&#9733;</label><input type="radio" name="rating" id="r3" value="3"><label for="r3" title="3 stars">&#9733;</label><input type="radio" name="rating" id="r2" value="2"><label for="r2" title="2 stars">&#9733;</label><input type="radio" name="rating" id="r1" value="1"><label for="r1" title="1 star">&#9733;</label></div></fieldset>
+      <label>Your feedback<textarea name="text" rows="3" placeholder="How was your trip?"></textarea></label>
+      <p class="err" role="alert" hidden></p>
+      <button class="btn btn-primary wide" type="submit">Send feedback on WhatsApp</button>
+      <p class="meta" style="margin-top:.6rem">Approved feedback is published on this page.</p></form>
+    <div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous reviews">&lsaquo;</button><div id="rev-rail" class="rail reviews"></div><button class="rail-btn next" data-dir="1" aria-label="Next reviews">&rsaquo;</button></div>
+  </div>
+</section>
+
+<section class="panel" id="faq" data-title="FAQ" hidden>
+  <div class="panel-head"><div><span class="tagline">Good to know</span><h2>Frequently asked questions</h2></div><p class="meta">Still unsure? <a href="#contact" style="text-decoration:underline;font-weight:600">Ask us anything</a>.</p></div>
+  <div id="faq-list" class="faq"></div>
+</section>
+
+<section class="panel" id="about" data-title="About us" hidden>
+  <div class="about">
+    <div class="story-media"><div class="ring"><img src="brochure-founder.webp" alt="Founder of Scenes Tours &amp; Travels" width="472" height="707" loading="lazy" decoding="async"></div>
+      <img class="teamshot" src="brochure-team.webp" alt="The Scenes Tours &amp; Travels team in Kigali" width="1080" height="640" loading="lazy" decoding="async"></div>
+    <div><span class="tagline">About us &middot; Our story</span><h2>A youth-led travel company from Kampala</h2>
+      <p><b>Scenes Tours &amp; Travels is a youth-led, registered Ugandan tour company based in Kampala,</b> dedicated to making travel more accessible, affordable and memorable. Through quality services and cost-friendly packages, we connect travelers to breathtaking destinations while shaping the future of tourism.</p>
+      <div id="story"></div>
+      <div class="feats"><div class="feat"><i>&#10003;</i><div><h4>Safe</h4></div></div><div class="feat"><i>&#10003;</i><div><h4>Affordable</h4></div></div><div class="feat"><i>&#10003;</i><div><h4>Memorable</h4></div></div></div></div>
+  </div>
+  <div class="stats" id="stats"></div>
+</section>
+
+<section class="panel" id="team" data-title="Our team" hidden>
+  <div class="panel-head"><div><span class="tagline">Our people</span><h2>Company structure and leadership</h2></div><p class="meta">Led by the Managing Director and supported by the Deputy Managing Director. Select a post to read about the role.</p></div>
+  <div id="org" class="org"></div>
+</section>
+
+<section class="panel" id="contact" data-title="Contact" hidden>
+  <div class="dark-card bgs v-teal dk" style="--photo:url('lakeview.webp')"><div class="contact">
+  <div class="rv"><span class="tagline" style="color:var(--gold)">Get in touch</span><h2>Let's plan your trip</h2>
+  <p>Drop by our head office in Kampala or call our direct customer relations line. Our trip coordinators are ready to help you plan.</p>
+  <p class="actions"><a class="btn btn-primary" href="https://wa.me/256700907617" target="_blank" rel="noopener">WhatsApp us</a><a class="btn btn-light" href="tel:0784066320">Call us</a><button class="btn btn-light" data-book="custom-trips">Plan a custom trip</button></p>
+  <div class="info"><i>&#9990;</i><div><h4>Direct hotline</h4><p><a href="tel:0784066320">0784066320</a> / <a href="tel:0700907617">0700907617</a></p></div></div>
+  <div class="info"><i>&#9906;</i><div><h4>Head office location</h4><p>Next to Lynn Modern Apartments, Kikoni-Makerere<br>Kampala, Uganda</p></div></div>
+  <a class="qr" href="https://wa.me/256784066320" target="_blank" rel="noopener"><img src="whatsapp-qr.png" alt="Scan to chat with Scenes Tours &amp; Travels on WhatsApp" width="110" height="110" loading="lazy" decoding="async"><span>Scan to chat on WhatsApp</span></a>
+  <div class="info"><i>&#9654;</i><div><h4>TikTok</h4><p><a href="https://www.tiktok.com/@scenes.travel" target="_blank" rel="noopener">scenes tours and travels</a></p></div></div>
+  <div class="info"><i>&#9993;</i><div><h4>Email</h4><p><a href="mailto:bookingscenestravels@gmail.com">bookingscenestravels@gmail.com</a></p></div></div></div>
+  <div class="map rv" id="map"><button type="button" data-map="https://www.google.com/maps?q=Lynn+Apartments+kikoni+Kampala&hl=en&z=14&output=embed"><span class="pin" aria-hidden="true">&#9906;</span><b>Our head office</b><small>Next to Lynn Modern Apartments, Kikoni-Makerere &middot; Kampala</small><em>Open interactive map</em></button></div>
+  </div></div>
+</section>
+
+</div></div>
+</main>
+<footer id="site-footer" class="bg-photo foot-bg" style="--photo:url('gorilla.webp')"></footer>
+<noscript><p style="padding:1rem">Enable JavaScript to see trips. Call 0784 066 320 or 0700 907 617 to book.</p></noscript>
+<script src="data.js?v=10"></script><script src="app.js?v=10"></script>
+</body></html>
