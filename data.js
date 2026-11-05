@@ -26,15 +26,15 @@ const SEED_TRIPS = [
     pickup: 'Oryx Lugogo and Rubis Kansanga',
     summary: 'Game loops with elephants, lions and buffaloes, the Kazinga Channel boat cruise, and campfires under the African sky.',
     desc: 'A 3-day, 2-night journey through one of Uganda\'s most spectacular wildlife destinations: savanna game drives, a boat cruise on the Kazinga Channel, campfires, music on board and lodging under the stars.',
-    media: { type: 'video', src: 'hotsprings.mp4', poster: 'queen_elizabeth_safari.png' },
+    media: { type: 'video', src: 'hotsprings.mp4', poster: 'poster-hotsprings.webp', preview: 'preview-hotsprings.mp4' },
     highlights: ['Campfires under the stars in the wild savanna', 'Music on board', 'Boat cruise on the Kazinga Channel'],
     includes: ['Accommodation', 'Feeding', 'Park entrance fees', 'Boat cruise', 'Transport'],
     locations: ['Amabere Caves', 'Kazinga Channel', 'Mubuku Irrigation Scheme', 'Kiwa Hot Springs'],
     activities: ['Campfires', 'Music on board', 'Boat cruising', 'Wildlife viewing', 'Road trip', 'Bird watching', 'Sunset at the national park'],
     gallery: [
-      { src: 'sunset.jpeg', cap: 'Sunset experience' }, { src: 'queen_elizabeth_safari.png', cap: 'Safari experience' },
-      { src: 'lakeview.jpeg', cap: 'Lake view' }, { src: 'crater.jpeg', cap: 'Crater lakes' },
-      { src: 'hills.jpeg', cap: 'Hills at Queen Elizabeth' }, { src: 'gorilla.jpeg', cap: 'Animals at Queen Elizabeth' }
+      { src: 'sunset.webp', cap: 'Sunset experience' }, { src: 'queen-elizabeth.webp', cap: 'Safari experience' },
+      { src: 'lakeview.webp', cap: 'Lake view' }, { src: 'crater.webp', cap: 'Crater lakes' },
+      { src: 'hills.webp', cap: 'Hills at Queen Elizabeth' }, { src: 'gorilla.webp', cap: 'Animals at Queen Elizabeth' }
     ],
     videos: ['hotsprings.mp4', 'Animals.mp4', 'Tourists(1).mp4']
   },
@@ -43,7 +43,7 @@ const SEED_TRIPS = [
     duration: 'To be communicated', kind: 'tbc', price: null,
     summary: 'Cool ocean breeze, sun-soaked beaches, snorkeling and premium beachfront hotels on the Kenyan coast.',
     desc: 'Experience the cool ocean breeze, beautiful sun-soaked beaches, historic Fort Jesus walks, snorkeling adventures, and premium beachfront hotel accommodation in Kenya.',
-    media: { type: 'video', src: 'beachview.mp4', poster: '' },
+    media: { type: 'video', src: 'beachview.mp4', poster: 'poster-beachview.webp', preview: 'preview-beachview.mp4' },
     highlights: ['Sun-soaked beaches', 'Fort Jesus walks', 'Snorkeling adventures', 'Beachfront hotels'],
     videos: ['beachview.mp4', 'Camelwalk(1).mp4', 'Masai.mp4']
   },
@@ -52,13 +52,13 @@ const SEED_TRIPS = [
     duration: 'Flexible', kind: 'yearround', price: null,
     summary: 'Mountain gorillas, volcanoes, luxury lodges and Kigali city trips, as private or group tours.',
     desc: 'Explore Rwanda\'s mountain gorillas, volcanoes, luxury lodges and breathtaking landscapes. We organize private and group tours throughout the year with customizable itineraries.',
-    media: { type: 'image', src: 'rwanda.jpeg' },
+    media: { type: 'image', src: 'rwanda.webp' },
     highlights: ['Gorilla trekking', 'Volcanoes National Park', 'Lake Kivu', 'Group trips in Kigali'],
     gallery: [
-      { src: 'rwanda.jpeg', cap: 'Group trips in Kigali' }, { src: 'rwanda2.jpeg', cap: 'Kigali city monument' },
-      { src: 'rwanda3.jpeg', cap: 'Kigali Convention Centre' }, { src: 'rwanda4.jpeg', cap: 'Kigali city' },
-      { src: 'rwanda5.jpeg', cap: 'Research team' }, { src: 'rwanda6.jpeg', cap: 'Adventure awaits' },
-      { src: 'rwanda7.jpeg', cap: 'Golden hour' }
+      { src: 'rwanda.webp', cap: 'Group trips in Kigali' }, { src: 'rwanda2.webp', cap: 'Kigali city monument' },
+      { src: 'rwanda3.webp', cap: 'Kigali Convention Centre' }, { src: 'rwanda4.webp', cap: 'Kigali city' },
+      { src: 'rwanda5.webp', cap: 'Research team' }, { src: 'rwanda6.webp', cap: 'Adventure awaits' },
+      { src: 'rwanda7.webp', cap: 'Golden hour' }
     ],
     videos: ['rwanda8.mp4']
   },
@@ -67,13 +67,13 @@ const SEED_TRIPS = [
     duration: 'Your choice', kind: 'request', price: null,
     summary: 'Journeys designed around your interests and budget, to any destination in Uganda.',
     desc: 'Tailor-made trips across Uganda and East Africa, designed around your budget, interests and travel dreams. Tell us your vision and we handle the logistics.',
-    media: { type: 'image', src: 'custom1.jpg' },
+    media: { type: 'image', src: 'custom1.webp' },
     highlights: ['Epic safaris', 'Luxury retreats', 'Cultural immersion', 'Mountain hikes', 'Water adventures', 'Night safaris', 'Community encounters'],
     gallery: [
-      { src: 'custom1.jpg', cap: 'Epic safaris' }, { src: 'custom2.jpg', cap: 'Luxury retreats' },
-      { src: 'custom3.jpg', cap: 'Cultural immersion' }, { src: 'custom4.jpg', cap: 'Mountain hikes' },
-      { src: 'custom5.jpg', cap: 'Water adventures' }, { src: 'custom6.jpg', cap: 'Night safaris' },
-      { src: 'custom7.jpg', cap: 'Community encounters' }
+      { src: 'custom1.webp', cap: 'Epic safaris' }, { src: 'custom2.webp', cap: 'Luxury retreats' },
+      { src: 'custom3.webp', cap: 'Cultural immersion' }, { src: 'custom4.webp', cap: 'Mountain hikes' },
+      { src: 'custom5.webp', cap: 'Water adventures' }, { src: 'custom6.webp', cap: 'Night safaris' },
+      { src: 'custom7.webp', cap: 'Community encounters' }
     ],
     videos: ['Zebra(2).mp4']
   }

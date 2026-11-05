@@ -32,9 +32,13 @@ const priceText = t => t.price ? `${fmt(t.price.single)} single, ${fmt(t.price.d
 const plansFor = t => t.price
   ? [`Single traveller (${fmt(t.price.single)})`, `Double / couple (${fmt(t.price.double)})`, 'Group / custom size']
   : ['Solo traveller', 'Couple', 'Small group (3 to 6)', 'Large group (7+)'];
-const mediaHTML = (m, alt, list) => m.type === 'video'
-  ? `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} ${list ? `data-list="${list.join(',')}"` : 'loop'} muted autoplay playsinline preload="metadata" aria-label="${esc(alt)}"></video>`
-  : `<img src="${m.src}" alt="${esc(alt)}" loading="lazy">`;
+/* Videos never download on page load: a poster shows instantly and the clip only
+   loads when the visitor hovers (cards) or presses play (trip hero). Cards use a
+   short lightweight preview so hovering is instant. */
+const mediaHTML = (m, alt, list, ctx = 'card') => m.type === 'video'
+  ? `<video src="${ctx === 'card' && m.preview ? m.preview : m.src}" ${m.poster ? `poster="${m.poster}"` : ''} ${list ? `data-list="${list.join(',')}"` : 'loop'} muted playsinline preload="none" aria-label="${esc(alt)}"></video>`
+    + (ctx === 'card' ? '<span class="play" aria-hidden="true"></span>' : '')
+  : `<img src="${m.src}" alt="${esc(alt)}" loading="${ctx === 'hero' ? 'eager' : 'lazy'}" decoding="async">`;
 
 function cardHTML(t, i = 0) {
   const s = status(t);
@@ -60,7 +64,7 @@ const ICONS = {
 function injectChrome() {
   const home = location.pathname.split('/').pop() !== 'trip.html' ? '' : 'index.html';
   $('#site-header').innerHTML = `<div class="wrap bar">
-    <a class="brand" href="index.html"><img src="logo.png" alt="Scenes Tours logo" width="46" height="46"><span>${SITE.name}</span></a>
+    <a class="brand" href="index.html"><img src="logo-180.webp" alt="Scenes Tours logo" width="46" height="46" decoding="async"><span>${SITE.name}</span></a>
     <button class="menu" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
     <nav id="nav"><a href="${home}#trips">Trips</a><a href="${home}#save">Save for a trip</a><a href="${home}#about">About</a><a href="${home}#contact">Contact</a>
     <button class="btn btn-primary" data-book="">Book a trip</button></nav></div>`;
@@ -92,11 +96,13 @@ function injectChrome() {
   document.body.insertAdjacentHTML('beforeend', `<div class="fab"><button class="up" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg></button>
     <a class="wa" href="https://wa.me/${SITE.phones[0].wa}?text=${encodeURIComponent('Hello Scenes Tours, I would like to know more about your trips.')}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.3L2 22l4.8-1.2A11 11 0 1 0 20.5 3.5zM12 20a9 9 0 0 1-4.6-1.3l-.3-.2-2.8.7.7-2.7-.2-.3A9 9 0 1 1 12 20zm5-6.7c-.3-.1-1.600-.8-1.900-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6 0a7.400 7.400 0 0 1-3.700-3.200c-.3-.5.3-.5.800-1.500a.5.5 0 0 0 0-.5l-.9-2c-.2-.5-.5-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.200 5.200 5.200 0 0 0 1.100 2.800 11.900 11.900 0 0 0 4.600 4c1.700.7 2.400.8 3.200.7a2.700 2.700 0 0 0 1.800-1.300 2.200 2.200 0 0 0 .2-1.300c-.1-.1-.3-.2-.6-.3z"/></svg></a></div>`);
   $('.up').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
-  addEventListener('scroll', () => $('.up').classList.toggle('show', scrollY > 600), { passive: true });
+  let upShown = false;
+  addEventListener('scroll', () => { const s = scrollY > 600; if (s !== upShown) { upShown = s; $('.up').classList.toggle('show', s); } }, { passive: true });
   $('.menu').onclick = e => { const o = $('#nav').classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', o); };
   $('#nav').addEventListener('click', e => { if (e.target.closest('a')) $('#nav').classList.remove('open'); });
   const header = $('#site-header');
-  addEventListener('scroll', () => header.classList.toggle('stuck', scrollY > 8), { passive: true });
+  let stuck = false;
+  addEventListener('scroll', () => { const s = scrollY > 8; if (s !== stuck) { stuck = s; header.classList.toggle('stuck', s); } }, { passive: true });
 }
 
 /* ---------- Dialogs and booking ---------- */
@@ -155,10 +161,14 @@ function home() {
   const grid = $('#trip-grid'), chips = $('#chips'), search = $('#search');
   let type = 'All';
   chips.innerHTML = ['All', ...new Set(TRIPS.map(t => t.type))].map(c => `<button class="chip" aria-pressed="${c === 'All'}">${c}</button>`).join('');
+  let firstRender = true;
   const render = () => {
     const q = search.value.trim().toLowerCase();
     const list = TRIPS.filter(t => (type === 'All' || t.type === type) && (!q || [t.title, t.region, t.summary, t.type, ...(t.locations || []), ...(t.activities || []), ...(t.highlights || []), ...(t.includes || [])].join(' ').toLowerCase().includes(q)));
     grid.innerHTML = list.length ? list.map(cardHTML).join('') : `<p class="empty">No trips match "${esc(q)}".${suggest(q)[0] ? ` Did you mean <button class="link" data-q="${esc(suggest(q)[0].label)}">${esc(suggest(q)[0].label)}</button>?` : ''} Or <a href="#contact">ask us for a custom trip</a>.</p>`;
+    // Filtering must feel instant: only the first paint animates in.
+    if (!firstRender) grid.querySelectorAll('.rv').forEach(el => el.classList.add('in'));
+    firstRender = false;
   };
   const q0 = new URLSearchParams(location.search).get('q'); if (q0) search.value = q0;
   grid.addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (b) { search.value = b.dataset.q; render(); done(); } });
@@ -204,7 +214,7 @@ function detail() {
   const s = status(t);
   const list = (h, a) => a && a.length ? `<section><h2>${h}</h2><ul class="ticks">${a.map(x => `<li>${esc(x)}</li>`).join('')}</ul></section>` : '';
   main.innerHTML = `
-  <section class="t-hero"><div class="t-media">${mediaHTML(t.media, t.title)}</div>
+  <section class="t-hero"><div class="t-media">${mediaHTML(t.media, t.title, null, 'hero')}</div>${t.media.type === 'video' ? '<button class="play t-play" type="button" aria-label="Play video"></button>' : ''}
     <div class="wrap"><p class="crumb"><a href="index.html#trips">All trips</a> / ${t.type}</p><h1>${esc(t.title)}</h1><p>${esc(t.desc)}</p></div></section>
   <div class="wrap t-grid"><div>
     ${list('Highlights', t.highlights)}${list('Where we go', t.locations)}${list('Activities', t.activities)}${list('Cost includes', t.includes)}
@@ -227,6 +237,52 @@ function detail() {
   }
 }
 
+/* ---------- Media and map: load only when the visitor asks for them ---------- */
+let slowNet = false;
+function setupVideos() {
+  const c = navigator.connection;
+  slowNet = !!(c && (c.saveData || /2g/.test(c.effectiveType || '')));
+  // Delegated so cards re-rendered by search/filter keep working.
+  document.addEventListener('pointerover', e => {
+    const a = e.target.closest && e.target.closest('.card-media');
+    if (!a || slowNet) return;
+    if (e.relatedTarget && a.contains(e.relatedTarget)) return;
+    const v = a.querySelector('video'); if (!v) return;
+    v.preload = 'auto'; v.play().catch(() => {}); a.classList.add('playing');
+  });
+  document.addEventListener('pointerout', e => {
+    const a = e.target.closest && e.target.closest('.card-media');
+    if (!a) return;
+    if (e.relatedTarget && a.contains(e.relatedTarget)) return;
+    const v = a.querySelector('video'); if (!v) return;
+    v.pause(); a.classList.remove('playing');
+  });
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.t-play');
+    if (!b) return;
+    const w = b.closest('.t-hero'), v = w.querySelector('.t-media video'); if (!v) return;
+    if (v.paused) { v.play().catch(() => {}); w.classList.add('playing'); b.setAttribute('aria-label', 'Pause video'); }
+    else { v.pause(); w.classList.remove('playing'); b.setAttribute('aria-label', 'Play video'); }
+  });
+  document.addEventListener('click', e => {
+    const v = e.target.closest && e.target.closest('.t-media video');
+    if (!v) return;
+    const b = v.closest('.t-hero').querySelector('.t-play'); if (b) b.click();
+  });
+}
+
+function setupMap() {
+  const box = $('#map'); if (!box) return;
+  const btn = box.querySelector('[data-map]'); if (!btn) return;
+  btn.addEventListener('click', () => {
+    const f = document.createElement('iframe');
+    f.src = btn.dataset.map;
+    f.title = 'Scenes Tours and Travels head office, Kikoni, Kampala';
+    f.loading = 'lazy'; f.referrerPolicy = 'no-referrer-when-downgrade'; f.allowFullscreen = true;
+    box.replaceChildren(f);
+  }, { once: true });
+}
+
 const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 }) : null;
 function reveal() { $$('.rv:not(.in)').forEach(el => io ? io.observe(el) : el.classList.add('in')); }
 function playlists() { /* videos with several clips play one after another, as on the original site */
@@ -238,9 +294,10 @@ function playlists() { /* videos with several clips play one after another, as o
 const done = () => { reveal(); playlists(); };
 
 document.addEventListener('DOMContentLoaded', () => {
-  injectChrome(); setupDialogs();
+  injectChrome(); setupDialogs(); setupMap();
   if ($('#trip-grid')) home();
   if ($('#trip')) detail();
+  setupVideos();
   done();
 });
 

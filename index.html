@@ -10,24 +10,24 @@
 <meta name="theme-color" content="#0f172a">
 <meta name="google-site-verification" content="4hERf2j91zFcSNJ-6kqhyYeDtpW4znjei68rtwmZmTc">
 <link rel="canonical" href="https://shema-k.github.io/scenes-tours/">
-<link rel="icon" href="logo.png">
+<link rel="icon" href="favicon.png" type="image/png">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Scenes Tours and Travel | See the World">
 <meta property="og:description" content="Group safaris, Rwanda adventures and custom trips from Kampala.">
-<meta property="og:image" content="https://shema-k.github.io/scenes-tours/logo.png">
+<meta property="og:image" content="https://shema-k.github.io/scenes-tours/og.jpg">
 <meta property="og:url" content="https://shema-k.github.io/scenes-tours/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Scenes Tours and Travel">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Scenes Tours and Travel | See the World">
 <meta name="twitter:description" content="Group safaris, Rwanda adventures and custom trips from Kampala.">
-<meta name="twitter:image" content="https://shema-k.github.io/scenes-tours/logo.png">
+<meta name="twitter:image" content="https://shema-k.github.io/scenes-tours/og.jpg">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/playfair.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="sunset.webp" as="image" fetchpriority="high">
+<link rel="stylesheet" href="styles.css?v=3">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"TravelAgency","name":"Scenes Tours and Travel","url":"https://shema-k.github.io/scenes-tours/","slogan":"See the World","telephone":"+256784066320","email":"bookingscenestravel@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Next to Lynn Modern Apartments, Kikoni-Makerere","addressLocality":"Kampala","addressCountry":"UG"}}
@@ -138,7 +138,14 @@
         <div class="info"><i>&#9906;</i><div><h3>Head office location</h3><p>Next to Lynn Modern Apartments, Kikoni-Makerere<br>Kampala, Uganda</p></div></div>
         <div class="info"><i>&#9993;</i><div><h3>Email</h3><p><a href="mailto:bookingscenestravel@gmail.com">bookingscenestravel@gmail.com</a></p></div></div>
       </div>
-      <iframe class="rv" title="Scenes Tours and Travels head office, Kikoni, Kampala" src="https://www.google.com/maps?q=Lynn+Apartments+kikoni+Kampala&hl=en&z=14&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      <div class="map rv" id="map">
+        <button type="button" data-map="https://www.google.com/maps?q=Lynn+Apartments+kikoni+Kampala&hl=en&z=14&output=embed">
+          <span class="pin" aria-hidden="true">&#9906;</span>
+          <b>Our head office</b>
+          <small>Next to Lynn Modern Apartments, Kikoni-Makerere &middot; Kampala</small>
+          <em>Open interactive map</em>
+        </button>
+      </div>
     </div>
   </section>
 </main>
@@ -147,7 +154,7 @@
 
 <noscript><p style="padding:1rem">Enable JavaScript to see trips. Call 0784 066 320 or 0700 907 617 to book.</p></noscript>
 
-<script src="data.js?v=2"></script>
-<script src="app.js?v=2"></script>
+<script src="data.js?v=3"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
