@@ -276,7 +276,7 @@ input:focus,select:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 4px
 .play:hover::before{border-left-color:var(--ink)}
 .card-media .play{pointer-events:none}
 .card-media.playing .play{opacity:0;transform:translate(-50%,-50%) scale(.85)}
-.t-hero .play{pointer-events:auto}
+.t-hero .play{pointer-events:auto;left:auto;right:clamp(.9rem,3vw,2rem);top:6.6rem;transform:none}
 .t-hero.playing .play{opacity:0}
 .t-hero.playing .play:hover,.t-hero.playing .play:focus-visible{opacity:1}
 .badge{
