@@ -29,7 +29,7 @@ function tripInfoHTML(t, chips) {
     + (chips && ups.length ? `<p class="deps"><b>Pick a date:</b> ${ups.map(d => `<button type="button" class="chip" data-date="${d.start}">${range(d)}</button>`).join('')}</p>` : '');
 }
 const priceText = t => t.price ? `${fmt(t.price.single)} single, ${fmt(t.price.double)} double` : (t.kind === 'tbc' ? 'Fee to be communicated' : 'Quoted per trip');
-const fromPrice = t => t.price ? `From ${fmt(t.price.single)} <small>per person</small>` : (t.kind === 'tbc' ? 'Fee to be announced' : 'Quoted per trip');
+const fromPrice = t => t.price ? `From ${fmt(t.price.single)} <small>per person</small>` : (t.kind === 'tbc' ? 'Fee to be announced' : 'Price on request');
 const plansFor = t => t.price
   ? [`Single traveller (${fmt(t.price.single)})`, `Double / couple (${fmt(t.price.double)})`, 'Group / custom size']
   : ['Solo traveller', 'Couple', 'Small group (3 to 6)', 'Large group (7+)'];
@@ -37,19 +37,28 @@ const mediaHTML = (m, alt) => m.type === 'video'
   ? `<video src="${m.preview || m.src}" ${m.poster ? `poster="${m.poster}"` : ''} autoplay muted loop playsinline preload="auto" aria-label="${esc(alt)}"></video>`
   : `<img src="${m.src}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
 
+const shorten = (s, n = 112) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n - 1).replace(/[\s,.;:-]+$/, '') + '…' : s; };
 function cardHTML(t, i = 0) {
   const s = status(t);
   return `<article class="card rv" style="--i:${i % 4}" data-type="${t.type}">
     <a class="card-media" href="trip.html?id=${t.id}">${mediaHTML(t.media, t.title)}<span class="badge badge-${s.key}">${t.type}</span></a>
     <div class="card-body">
+      <p class="kicker">${esc(t.group || t.region)}</p>
       <h3><a href="trip.html?id=${t.id}">${esc(t.title)}</a></h3>
       <p class="meta">${esc(t.region)} &middot; ${esc(t.duration)}</p>
-      <p>${esc(t.summary)}</p>
-      ${t.highlights ? `<ul class="mini">${t.highlights.slice(0, 3).map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}
+      <p>${esc(shorten(t.summary))}</p>
       <p class="when ${s.key}">${esc(s.label)}</p>
       <p class="price">${fromPrice(t)}</p>
-      <div class="actions"><button class="btn btn-primary" data-book="${t.id}">Book now</button><a class="btn btn-ghost" href="trip.html?id=${t.id}">Trip details</a></div>
+      <div class="actions"><button class="btn btn-primary" data-book="${t.id}">Book now</button><a class="btn btn-ghost" href="trip.html?id=${t.id}">Details</a></div>
     </div></article>`;
+}
+
+function featureHTML(t, i = 0) {
+  const s = status(t), src = t.feature || t.media.poster || t.media.src;
+  return `<a class="feature rv" style="--i:${i}" href="trip.html?id=${t.id}">
+    <span class="feature-img"><img src="${src}" alt="${esc(t.title)}" loading="lazy" decoding="async"><span class="badge badge-${s.key}">${t.type}</span></span>
+    <span class="feature-body"><span class="kicker">${esc(t.group || t.region)}</span><b>${esc(t.title)}</b>
+      <small>${esc(t.duration)} &middot; ${esc(s.label)}</small><span class="feature-cta">View trip &rarr;</span></span></a>`;
 }
 
 const ICONS = {
@@ -59,6 +68,11 @@ const ICONS = {
 };
 
 /* ---------- Shared header, footer and dialogs ---------- */
+const TRIP_GROUPS = ['Uganda', 'East Africa', 'Beyond East Africa'];
+const navTripLinks = () => TRIP_GROUPS.map(g => {
+  const list = TRIPS.filter(t => t.group === g);
+  return list.length ? `<span class="dd-label">${g}</span>${list.map(t => `<a href="trip.html?id=${t.id}">${esc(t.title)}</a>`).join('')}` : '';
+}).join('');
 function injectChrome() {
   const home = location.pathname.split('/').pop() !== 'trip.html' ? '' : 'index.html';
   const p0 = SITE.phones[0];
@@ -67,20 +81,38 @@ function injectChrome() {
     <a class="brand" href="index.html"><img src="logo-180.webp" alt="Scenes Tours logo" width="46" height="46"><span>${SITE.name}</span></a>
     <button class="menu" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
     <nav id="nav" aria-label="Main">
-      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">Trips<i></i></button><div class="dd-menu">${TRIPS.map(t => `<a href="trip.html?id=${t.id}">${esc(t.title)}</a>`).join('')}<a class="all" href="${home}#trips">View all trips</a></div></div>
-      <a href="${home}#world">Destinations</a><a href="${home}#services">Services</a><a href="${home}#save">Savings</a><a href="${home}#reviews">Reviews</a>
-      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">About<i></i></button><div class="dd-menu"><a href="${home}#about">Our story</a><a href="${home}#team">Our team</a><a href="${home}#faq">FAQ</a></div></div>
+      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">Safaris<i></i></button><div class="dd-menu trips-menu">${navTripLinks()}<a class="all" href="${home}#trips">View all trips</a></div></div>
+      <a href="${home}#world">Destinations</a>
+      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">Services<i></i></button><div class="dd-menu"><a href="${home}#services">All services</a><a href="${home}#services" data-service="Car hire and airport transfers">Car hire and transfers</a><a href="${home}#services" data-service="Flight booking">Flights</a><a href="${home}#save">Traveler's Savings Account</a></div></div>
+      <a href="${home}#guides">Travel guides</a><a href="${home}#gallery">Gallery</a>
+      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">About<i></i></button><div class="dd-menu"><a href="${home}#about">Our story</a><a href="${home}#team">Our team</a><a href="${home}#reviews">Reviews</a><a href="${home}#faq">FAQ</a></div></div>
       <a href="${home}#contact">Contact</a>
-      <button class="btn btn-primary" data-book="custom-trips">Plan a custom trip</button></nav></div>`;
+      <button class="btn btn-primary" data-book="custom-trips">Plan my trip</button></nav></div>`;
   const phones = SITE.phones.map(p => `<a href="tel:${p.tel}">${p.label}</a>`).join(' / ');
   $('#site-footer').innerHTML = `<div class="wrap foot">
-    <div><h3>Scenes<span> Tours &amp; Travels</span></h3><p>A youth-led, registered tour company in Kampala, Uganda. Seamless travel journeys and safaris across East Africa. ${SITE.tagline}.</p>
-      <p class="social">${SITE.social.map(s => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.name}">${ICONS[s.name]}</a>`).join('')}</p></div>
-    <div><h4>Trips</h4><ul>${TRIPS.map(t => `<li><a href="trip.html?id=${t.id}">${esc(t.title)}</a></li>`).join('')}</ul></div>
-    <div><h4>Company</h4><ul><li><a href="${home}#about">About us</a></li><li><a href="${home}#team">Our team</a></li><li><a href="${home}#services">Services</a></li><li><a href="${home}#save">Traveler's Savings Account</a></li><li><a href="${home}#faq">FAQ</a></li></ul></div>
+    <div><h3>Scenes<span> Tours &amp; Travels</span></h3><p>A youth-led, registered tour company in Kampala, Uganda. Safaris, beach escapes and private trips across East Africa. ${SITE.tagline}.</p>
+      <p class="social">${SITE.social.map(s => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.name}">${ICONS[s.name]}</a>`).join('')}</p>
+      <form id="news" class="news" novalidate><h4>Travel ideas in your inbox</h4><p>New dates, trip notes and honest advice. No spam.</p>
+        <div class="news-row"><input type="email" name="email" autocomplete="email" placeholder="Your email address" aria-label="Your email address" required><button class="btn btn-primary" type="submit">Join</button></div>
+        <p class="err" role="alert" hidden></p><p class="ok" hidden></p></form></div>
+    <div><h4>Popular trips</h4><ul>${TRIPS.slice(0, 6).map(t => `<li><a href="trip.html?id=${t.id}">${esc(t.title)}</a></li>`).join('')}<li><a href="${home}#trips"><b>View all trips</b></a></li></ul></div>
+    <div><h4>Explore</h4><ul><li><a href="${home}#world">Destinations</a></li><li><a href="${home}#guides">Travel guides</a></li><li><a href="${home}#gallery">Gallery</a></li><li><a href="${home}#services">Services</a></li><li><a href="${home}#save">Traveler's Savings Account</a></li><li><a href="${home}#reviews">Reviews</a></li><li><a href="${home}#about">About us</a></li><li><a href="${home}#team">Our team</a></li><li><a href="${home}#faq">FAQ</a></li></ul></div>
     <div><h4>Head office</h4><ul><li>${SITE.address}</li><li>${phones}</li><li><a href="mailto:${SITE.email}">${SITE.email}</a></li><li><a href="https://wa.me/${p0.wa}" target="_blank" rel="noopener">Chat on WhatsApp</a></li></ul></div>
     <div class="legal wrap"><span>&copy; ${new Date().getFullYear()} ${SITE.name}. All rights reserved.</span>
       <span><button data-legal="Privacy Policy">Privacy Policy</button><button data-legal="Terms of Service">Terms of Service</button></span></div></div>`;
+  const news = $('#news');
+  if (news) news.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = String(new FormData(news).get('email') || '').trim();
+    const err = $('.err', news), ok = $('.ok', news);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { err.textContent = 'Enter a valid email address.'; err.hidden = false; ok.hidden = true; return; }
+    err.hidden = true;
+    store.set('newsletter', email);
+    ok.textContent = 'Thanks! WhatsApp is opening so we can add you to the list.';
+    ok.hidden = false;
+    const msg = `Hello Scenes Tours, please add me to your travel list.\n\nEmail: ${email}`;
+    window.open(`https://wa.me/${SITE.phones[0].wa}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+  });
   document.body.insertAdjacentHTML('beforeend', `
   <dialog id="detail"><div class="dlg-head"><h3 id="detail-h">Place details</h3><button class="x" data-close aria-label="Close">&times;</button></div>
     <div class="detail-body"></div></dialog>
@@ -101,6 +133,8 @@ function injectChrome() {
     </form>
     <div id="book-done" hidden><h4>Your request is ready</h4><p>WhatsApp opened with your details. Press <strong>Send</strong> there. You can also send the same request to our second agent.</p>
       <p class="actions" id="wa-links"></p></div></dialog>
+  <dialog id="guide" aria-labelledby="guide-h"><div class="dlg-head"><h3 id="guide-h"></h3><button class="x" data-close aria-label="Close">&times;</button></div>
+    <div class="guide-body"></div></dialog>
   <dialog id="legal"><div class="dlg-head"><h3></h3><button class="x" data-close aria-label="Close">&times;</button></div><div class="legal-body"></div></dialog>
   <dialog id="pdlg" aria-labelledby="pdlg-h"><div class="dlg-head"><h3 id="pdlg-h"></h3><button class="x" data-close aria-label="Close">&times;</button></div><div class="pbody"></div></dialog>
   <dialog id="lightbox"><button class="x" data-close aria-label="Close">&times;</button><img alt=""><p></p></dialog>`);
@@ -112,6 +146,7 @@ function injectChrome() {
   $$('.dd-btn').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); const d = b.parentElement, o = !d.classList.contains('open'); $$('.dd').forEach(x => { x.classList.remove('open'); $('.dd-btn', x).setAttribute('aria-expanded', 'false'); }); if (o) { d.classList.add('open'); b.setAttribute('aria-expanded', 'true'); } }));
   document.addEventListener('click', () => $$('.dd').forEach(x => { x.classList.remove('open'); $('.dd-btn', x).setAttribute('aria-expanded', 'false'); }));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.dd').forEach(x => x.classList.remove('open')); });
+  document.addEventListener('click', e => { const b = e.target.closest('[data-service]'); if (!b) return; e.preventDefault(); openBooking('custom-trips', { destination: b.dataset.service, custom: true }); });
   $('.menu').onclick = e => { const o = $('#nav').classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', o); };
   $('#nav').addEventListener('click', e => { if (e.target.closest('a')) $('#nav').classList.remove('open'); });
   const header = $('#site-header');
@@ -149,6 +184,19 @@ const PLACE_BLURBS = {
 const placeBlurb = name => PLACE_BLURBS[name] || `We can design a private trip to ${name} around your dates, your group and your budget — guided, transported and looked after from start to finish.`;
 const normPlace = s => String(s || '').trim().replace(/\s+/g, ' ').toLowerCase();
 function placeMatch(name) { return normPlace(name) && DB.places().find(p => normPlace(p) === normPlace(name)) || DB.places().find(p => normPlace(p).startsWith(normPlace(name)) || normPlace(name).startsWith(normPlace(p))) || ''; }
+function openGuide(id) {
+  const g = GUIDES.find(x => x.id === id); if (!g) return;
+  const dl = $('#guide');
+  $('#guide-h').textContent = g.title;
+  $('.guide-body', dl).innerHTML = `<p class="kicker">${esc(g.date)} &middot; ${esc(g.read)}</p>
+    <img class="guide-hero" src="${g.img}" alt="${esc(g.title)}" loading="lazy" decoding="async">
+    <p class="guide-lede">${esc(g.excerpt)}</p>${g.body.map(p => `<p>${esc(p)}</p>`).join('')}
+    <div class="actions"><button class="btn btn-primary" id="guide-cta">Plan a trip like this</button><button class="btn btn-ghost" data-close>Close</button></div>`;
+  $('#guide-cta', dl).onclick = () => { dl.close(); openBooking('custom-trips', { destination: g.place || g.title, custom: true }); };
+  dl.showModal();
+}
+window.openGuide = openGuide;
+
 function openPlace(name, detail = true) {
   const place = placeMatch(name) || String(name || '').trim().replace(/\s+/g, ' ');
   if (!place) return;
@@ -241,7 +289,7 @@ const cio = 'IntersectionObserver' in window ? new IntersectionObserver(es => es
   const step = now => { const k = Math.min(1, (now - t0) / 1300); el.textContent = (el.dataset.pre || '') + Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString('en-US') + (el.dataset.suf || ''); if (k < 1) requestAnimationFrame(step); };
   requestAnimationFrame(step); }), { threshold: .5 }) : null;
 function company() {
-  $('#svc').innerHTML = SERVICES.map((s, i) => `<article class="svc rv" style="--i:${i % 4}"><i>${i + 1}</i><div><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></div></article>`).join('');
+  $('#svc').innerHTML = SERVICES.map((s, i) => `<article class="svc rv" style="--i:${i % 4}"><i>${i + 1}</i><div><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p><button type="button" class="link svc-cta" data-service="${esc(s.t)}">${esc(s.cta || 'Request a quote')} &rarr;</button></div></article>`).join('');
   $('#world-grid').innerHTML = WORLD.map((w, i) => `<article class="wcard rv" style="--i:${i}"><img src="${w.img}" alt="${esc(w.t)}" loading="lazy"><div><h3>${esc(w.t)}</h3><p>${esc(w.d)}</p></div></article>`).join('');
   $('#story').innerHTML = STORY.slice(0, 2).map(p => `<p>${esc(p)}</p>`).join('') + `<details class="readmore"><summary>Read our full story</summary>${STORY.slice(2).map(p => `<p>${esc(p)}</p>`).join('')}</details>`;
   $('#stats').innerHTML = STATS.map(s => `<div class="stat rv"><b data-to="${s.n}" data-pre="${s.pre || ''}" data-suf="${s.suf || ''}">${(s.pre || '') + s.n.toLocaleString('en-US') + (s.suf || '')}</b><span>${esc(s.l)}</span></div>`).join('');
@@ -266,30 +314,47 @@ function home() {
       <button class="btn btn-primary wide" data-book="custom-trips">Plan a trip with us</button>`;
   }
 
-  // Trip grid with search + type filter
+  // Four ways into the catalogue
+  $('#ways').innerHTML = WAYS.map((w, i) => `<button type="button" class="way rv" style="--i:${i}" data-way="${esc(w.filter)}"><i>0${i + 1}</i><h3>${esc(w.t)}</h3><p>${esc(w.d)}</p><span>Explore &rarr;</span></button>`).join('');
+
+  // Featured trips: three simple, image-led cards
+  const featured = TRIPS.filter(t => t.id !== 'custom-trips').slice(0, 3);
+  $('#featured').innerHTML = featured.map(featureHTML).join('');
+  $('#view-all').addEventListener('click', () => $('.grid-head').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+
+  // Trip grid with region filter + search
   const grid = $('#trip-grid'), chips = $('#chips'), search = $('#search');
-  let type = 'All';
-  chips.innerHTML = ['All', ...new Set(TRIPS.map(t => t.type))].map(c => `<button class="chip" aria-pressed="${c === 'All'}">${c}</button>`).join('');
-  const placeMatches = q => TRIPS.filter(t => [t.title, t.region, t.summary, t.type, ...(t.locations || []), ...(t.activities || []), ...(t.highlights || []), ...(t.includes || [])].join(' ').toLowerCase().includes(q));
+  let region = 'All';
+  const regionList = ['All', ...TRIP_GROUPS];
+  chips.innerHTML = regionList.map(r => `<button type="button" class="chip" data-region="${esc(r)}" aria-pressed="${r === 'All'}">${r === 'All' ? 'All trips' : esc(r)}</button>`).join('');
+  const placeMatches = q => TRIPS.filter(t => [t.title, t.region, t.group, t.summary, t.type, ...(t.locations || []), ...(t.activities || []), ...(t.highlights || []), ...(t.includes || [])].join(' ').toLowerCase().includes(q));
   const render = () => {
     const q = search.value.trim().toLowerCase();
-    const list = placeMatches(q).filter(t => type === 'All' || t.type === type);
-  const custom = !q || list.length ? '' : (() => {
+    const list = placeMatches(q).filter(t => region === 'All' || t.group === region);
+    const custom = !q || list.length ? '' : (() => {
       const raw = search.value.trim();
       const place = placeMatch(raw) || raw;
-      return `<div class="empty custom-empty"><h3>We do not have a set departure to “${esc(place)}”</h3><p>But we can plan a private trip there — we shape the route, transport, lodging and timing just for you.</p><p class="actions"><button class="btn btn-primary" data-place="${esc(place)}">View ${esc(place)} — book a private trip there</button></p></div>`;
+      return `<div class="empty custom-empty"><h3>We do not have a set departure to “${esc(place)}”</h3><p>But we can plan a private trip there — we shape the route, transport, lodging and timing just for you.</p><p class="actions"><button class="btn btn-primary" data-place="${esc(place)}">View ${esc(place)} — book a private trip there</button>${region !== 'All' ? ' <button class="btn btn-ghost" type="button" data-region-all>See all regions</button>' : ''}</p></div>`;
     })();
     grid.innerHTML = list.length ? list.map(cardHTML).join('') : custom;
   };
+  const setRegion = r => { region = r; $$('.chip', chips).forEach(x => x.setAttribute('aria-pressed', x.dataset.region === r)); render(); done(); };
   const q0 = new URLSearchParams(location.search).get('q'); if (q0) search.value = q0;
   grid.addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (b) { search.value = b.dataset.q; render(); done(); } });
   document.addEventListener('click', e => { const p = e.target.closest('[data-place]'); if (p) { e.preventDefault(); openPlace(p.dataset.place); } });
+  document.addEventListener('click', e => { if (e.target.closest('[data-region-all]')) setRegion('All'); });
   autosuggest(search, item => {
     if (['Place', 'Destination'].includes(item.kind) && (!item.ids || !item.ids.length)) { openPlace(item.label); return; }
     if (item.kind === 'Trip') location.href = 'trip.html?id=' + item.ids[0];
     else { search.value = item.label; render(); done(); }
   });
-  chips.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; type = c.textContent; $$('.chip', chips).forEach(x => x.setAttribute('aria-pressed', x === c)); render(); done(); });
+  chips.addEventListener('click', e => { const c = e.target.closest('.chip'); if (c) setRegion(c.dataset.region); });
+  $('#ways').addEventListener('click', e => {
+    const w = e.target.closest('[data-way]'); if (!w) return;
+    if (w.dataset.way === 'custom') { openBooking('custom-trips'); return; }
+    setRegion(w.dataset.way);
+    $('.grid-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
   search.addEventListener('input', () => { render(); done(); });
   const strip = DB.places().map(p => `<span>${p}</span>`).join(''); $('#places').innerHTML = strip; $('#places2').innerHTML = strip;
   render(); done();
@@ -302,20 +367,33 @@ function home() {
 
 function homeExtras() {
   // Photo mosaic: pictures from every trip in the database, mixed so each trip appears early
-  const shots = TRIPS.flatMap((t, ti) => (t.gallery || []).map((g, gi) => ({ ...g, trip: t.title, k: gi * 10 + ti }))).sort((a, b) => a.k - b.k).slice(0, 12);
-  $('#moments').hidden = !shots.length;
-  $('#moments-grid').innerHTML = shots.map((g, i) => `<button class="shot rv" style="--i:${i % 4}" data-src="${g.src}" data-cap="${esc(g.cap)}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy"><span><b>${esc(g.cap)}</b>${esc(g.trip)}</span></button>`).join('');
-  $('#moments-grid').addEventListener('click', e => { const b = e.target.closest('.shot'); if (!b) return; const lb = $('#lightbox'); $('img', lb).src = b.dataset.src; $('img', lb).alt = b.dataset.cap; $('p', lb).textContent = b.dataset.cap; lb.showModal(); });
+  const shots = TRIPS.flatMap((t, ti) => (t.gallery || []).map((g, gi) => ({ ...g, trip: t.title, k: gi * 10 + ti }))).sort((a, b) => a.k - b.k).slice(0, 16);
+  const mosaic = $('#moments');
+  if (mosaic) {
+    mosaic.innerHTML = shots.map((g, i) => `<button class="shot rv" style="--i:${i % 4}" data-src="${g.src}" data-cap="${esc(g.cap)}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy"><span><b>${esc(g.cap)}</b>${esc(g.trip)}</span></button>`).join('');
+    mosaic.addEventListener('click', e => { const b = e.target.closest('.shot'); if (!b) return; const lb = $('#lightbox'); $('img', lb).src = b.dataset.src; $('img', lb).alt = b.dataset.cap; $('p', lb).textContent = b.dataset.cap; lb.showModal(); });
+  }
+
+  // Travel guides
+  const guides = $('#guide-grid');
+  if (guides) {
+    guides.innerHTML = GUIDES.map((g, i) => `<button type="button" class="guide rv" style="--i:${i % 4}" data-guide="${g.id}">
+      <span class="guide-img"><img src="${g.img}" alt="${esc(g.title)}" loading="lazy" decoding="async"></span>
+      <span class="guide-body"><span class="kicker">${esc(g.date)} &middot; ${esc(g.read)}</span><b>${esc(g.title)}</b><small>${esc(g.excerpt)}</small><span class="guide-cta">Read guide &rarr;</span></span></button>`).join('');
+    guides.addEventListener('click', e => { const b = e.target.closest('[data-guide]'); if (b) openGuide(b.dataset.guide); });
+  }
 
   // Savings planner
   const priced = TRIPS.filter(t => t.price);
   const f = $('#plan'), st = store.get('plan', { trip: priced[0].id, seats: 'single', months: 2, saved: 0 });
   f.trip.innerHTML = priced.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('');
-  f.trip.value = st.trip; f.seats.value = st.seats; f.months.value = st.months; f.saved.value = st.saved || '';
+  f.trip.value = priced.some(t => t.id === st.trip) ? st.trip : priced[0].id;
+  f.seats.value = st.seats; f.months.value = st.months; f.saved.value = st.saved || '';
   const calc = () => {
     const t = byId(f.trip.value), goal = t.price[f.seats.value], months = +f.months.value;
     const saved = Math.min(Math.max(+f.saved.value || 0, 0), goal), left = goal - saved;
     pinfo.innerHTML = tripInfoHTML(t);
+    const bookBtn = $('#plan [data-book]'); if (bookBtn) { bookBtn.dataset.book = t.id; bookBtn.textContent = 'Reserve a seat'; }
     store.set('plan', { trip: t.id, seats: f.seats.value, months, saved });
     $('#months-out').textContent = months + (months === 1 ? ' month' : ' months');
     $('#per-month').textContent = fmt(Math.ceil(left / months / 1000) * 1000);
@@ -352,8 +430,18 @@ function detail() {
   <aside class="side"><p class="k">${esc(t.region)}</p><p class="price">${priceText(t)}</p>
     <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>Dates</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.deposit ? `<dt>Seat deposit</dt><dd>${fmt(t.deposit)}</dd>` : ''}</dl>
     ${t.saveNote ? `<p class="note">${esc(t.saveNote)} <a href="index.html#save">Try the savings planner</a></p>` : ''}
-    <button class="btn btn-primary wide" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book this trip'}</button></aside></div></section>
-  <section class="more bgs v-night dk" style="--photo:url('${photo2}')"><div class="wrap"><div class="more-head"><h2>More trips</h2><input id="search2" type="search" placeholder="Search all trips and places" aria-label="Search trips"></div><div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div class="rail">${TRIPS.filter(x => x.id !== t.id).map(cardHTML).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div></div></section>`;
+    <button class="btn btn-primary wide" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book this trip'}</button>
+    <button class="btn btn-ghost wide" id="share-trip" type="button">Share this trip</button></aside></div></section>
+  <section class="more bgs v-night dk" style="--photo:url('${photo2}')"><div class="wrap"><div class="more-head"><h2>More trips</h2><input id="search2" type="search" placeholder="Search all trips and places" aria-label="Search trips"></div><div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div class="rail">${TRIPS.filter(x => x.id !== t.id).map(cardHTML).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div></div></section>
+  <div class="sticky-book"><div><b>${fromPrice(t)}</b><small>${esc(s.label)}</small></div><button class="btn btn-primary" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book now'}</button></div>`;
+  document.body.classList.add('has-bookbar');
+  $('#share-trip').addEventListener('click', async e => {
+    const b = e.currentTarget, data = { title: t.title, text: t.summary, url: location.href };
+    try {
+      if (navigator.share) await navigator.share(data);
+      else { await navigator.clipboard.writeText(location.href); b.textContent = 'Link copied'; }
+    } catch { /* cancelled */ }
+  });
   const T = initTabs($('#ttabs'), $('#tpanels'), true, null);
   deepLink(T);
   autosuggest($('#search2'), item => { location.href = item.kind === 'Trip' ? 'trip.html?id=' + item.ids[0] : 'index.html?q=' + encodeURIComponent(item.label) + '#trips'; });
@@ -393,6 +481,28 @@ function setupVideos() {
   document.addEventListener('loadedmetadata', e => { if (e.target.tagName === 'VIDEO') arm(e.target); }, true);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') watch(); });
 }
+function setupHero() {
+  const bg = $('#hero-bg'); if (!bg) return;
+  bg.innerHTML = HERO_SLIDES.map((src, i) => `<span class="hero-slide${i === 0 ? ' on' : ''}" style="background-image:url('${src}')"></span>`).join('');
+  const slides = $$('.hero-slide', bg), dots = $('#hero-dots');
+  if (dots) {
+    dots.innerHTML = HERO_SLIDES.map((src, i) => `<button type="button" aria-label="Show background ${i + 1}" aria-current="${i === 0}"></button>`).join('');
+    const bs = $$('button', dots);
+    bs.forEach((b, i) => b.addEventListener('click', () => { go(i); reset(); }));
+  }
+  let i = 0;
+  const go = n => {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle('on', k === i));
+    if (dots) $$('button', dots).forEach((b, k) => b.setAttribute('aria-current', k === i));
+  };
+  let timer = null;
+  const start = () => { if (!timer && !matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => { if (!document.hidden) go(i + 1); }, 6500); };
+  const reset = () => { clearInterval(timer); timer = null; start(); };
+  start();
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { clearInterval(timer); timer = null; } else start(); });
+}
+
 function setupMap() {
   const box = $('#map'); if (!box) return;
   const btn = box.querySelector('[data-map]'); if (!btn) return;
@@ -408,7 +518,7 @@ function setupMap() {
 const done = () => { reveal(); playlists(); updateRails(); };
 
 document.addEventListener('DOMContentLoaded', () => {
-  injectChrome(); setupDialogs(); setupMap();
+  injectChrome(); setupDialogs(); setupMap(); setupHero();
   const setHH = () => document.documentElement.style.setProperty('--hh', $('#site-header').offsetHeight + 'px');
   setHH(); new ResizeObserver(setHH).observe($('#site-header'));
   if ($('#trip-grid')) { home(); stage(); }
@@ -446,14 +556,14 @@ function suggest(raw) {
   const order = { Trip: 0, Destination: 1, Place: 2, Type: 3, Activity: 4, Highlight: 5, Included: 6 };
   const seen = new Set();
   // Places and destinations the database knows, even if no trip goes there yet.
-  PLACES.forEach(p => { if (!seen.has(p.toLowerCase())) { seen.add(p.toLowerCase()); } });
   const base = DB.terms().map(t => ({ ...t, ids: [...t.ids] }));
   const covered = new Set(base.map(t => t.label.toLowerCase()));
   PLACES.forEach(p => { if (!covered.has(p.toLowerCase())) base.push({ label: p, kind: 'Place', ids: [] }); });
   const ranked = base.map(t => { const s = score(q, t.label); return { ...t, s: s && s + (hist.includes(t.label.toLowerCase()) ? 12 : 0) }; }).filter(t => t.s > 0)
     .sort((a, b) => b.s - a.s || order[a.kind] - order[b.kind]).filter(t => !seen.has(t.label.toLowerCase()) && seen.add(t.label.toLowerCase()));
   // Anything else the visitor typed is still a place we can take them to.
-  const extra = q.length >= 2 && !covered.has(q) ? [{ label: String(q).replace(/\s+/g, ' '), kind: 'Place', ids: [] }] : [];
+  const hasExact = ranked.some(t => t.label.toLowerCase() === q);
+  const extra = q.length >= 2 && !covered.has(q) && !hasExact ? [{ label: String(q).replace(/\s+/g, ' '), kind: 'Place', ids: [] }] : [];
   return ranked.concat(extra).slice(0, 8);
 }
 function autosuggest(input, onPick) {
@@ -516,10 +626,10 @@ const learn = e => { const el = e.target; if (el._i > 0) { const m = el.getAttri
 document.addEventListener('load', learn, true); document.addEventListener('loadedmetadata', learn, true);
 
 /* ---------- Tabs: one panel at a time keeps every page short ---------- */
-const ALIAS = { history: 'trips', moments: 'world', places: 'world', top: 'trips' };
+const ALIAS = { history: 'trips', moments: 'gallery', places: 'world', destinations: 'world', top: 'trips' };
 function initTabs(tabsEl, panelsEl, hash, anchor, before) {
   const panels = $$(':scope > .panel', panelsEl);
-  tabsEl.innerHTML = panels.map(p => `<button type="button" role="tab" data-id="${p.id}" aria-controls="${p.id}">${esc(p.dataset.title)}</button>`).join('');
+  tabsEl.innerHTML = panels.filter(p => p.dataset.tab !== 'off').map(p => `<button type="button" role="tab" data-id="${p.id}" aria-controls="${p.id}">${esc(p.dataset.title)}</button>`).join('');
   const bar = tabsEl.closest('.tabs-bar') || tabsEl;
   const show = (id, scroll, quiet, instant) => {
     id = ALIAS[id] || id; if (before) before(id);

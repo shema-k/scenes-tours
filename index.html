@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<title>Scenes Tours &amp; Travels | Safaris and trips from Kampala</title>
-<meta name="description" content="Scenes Tours and Travels is a youth-led, registered tour company in Kampala, Uganda. Join group safaris to Queen Elizabeth National Park, Rwanda and Diani Beach, or plan a custom trip. See the world.">
-<meta name="keywords" content="Scenes Tours, Kampala travel agency, Queen Elizabeth safari, Rwanda tours, Diani Beach, custom trips Uganda">
+<title>Scenes Tours &amp; Travels | Uganda safaris, East Africa trips and private tours</title>
+<meta name="description" content="Scenes Tours and Travels is a youth-led, registered tour company in Kampala, Uganda. Join small-group safaris in Uganda and East Africa, book a beach escape, or plan a private trip built around you.">
+<meta name="keywords" content="Scenes Tours, Kampala travel agency, Uganda safari, Queen Elizabeth safari, Bwindi gorillas, Murchison Falls, Rwanda tours, Diani Beach, Zanzibar, custom trips Uganda">
 <link rel="canonical" href="https://shema-k.github.io/scenes-tours/">
-<meta property="og:title" content="Scenes Tours and Travel | See the World"><meta property="og:description" content="Group safaris, Rwanda adventures and custom trips from Kampala.">
+<meta property="og:title" content="Scenes Tours &amp; Travels | Uganda safaris and private trips"><meta property="og:description" content="Small-group safaris, East Africa escapes and private trips planned around you.">
 <meta property="og:image" content="https://shema-k.github.io/scenes-tours/og.jpg"><meta property="og:url" content="https://shema-k.github.io/scenes-tours/"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="google-site-verification" content="4hERf2j91zFcSNJ-6kqhyYeDtpW4znjei68rtwmZmTc">
@@ -14,42 +14,77 @@
 <link rel="preload" href="fonts/playfair.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/playfair-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="sunset.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="styles.css?v=11">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Scenes Tours and Travel","url":"https://shema-k.github.io/scenes-tours/","slogan":"See the World","telephone":"+256784066320","email":"bookingscenestravels@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Next to Lynn Modern Apartments, Kikoni-Makerere","addressLocality":"Kampala","addressCountry":"UG"}}</script>
 </head><body>
 <header id="site-header"></header>
 <main>
-<section class="hero hero-sm" id="top" style="--photo:url('sunset.webp')"><div class="wrap hero-grid">
-  <div><span class="motto">See the world</span>
-  <h1>Where every <em>Adventure</em> writes a story to tell</h1>
-  <p>Some stories are read in books, while others are written beneath open skies, along winding paths, and across distant horizons and remarkable cultures of the savanna.</p>
+<section class="hero hero-sm" id="top">
+  <div class="hero-bg" id="hero-bg" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+  <div><span class="motto">See the world &middot; Uganda and beyond</span>
+  <h1>Extraordinary journeys, <em>planned around you</em></h1>
+  <p>Small-group safaris and private trips across Uganda and East Africa. Gorillas, big-game plains, lakes and coast &mdash; with local guides and clear prices.</p>
   <form id="quick" class="quick" aria-label="Plan your trip">
     <label>Where to?<select name="trip"></select></label>
     <label>Who is travelling?<select name="who"><option value="0">Just me</option><option value="1">A couple</option><option value="2">Small group (3 to 6)</option><option value="3">School or large group</option></select></label>
     <label>When?<input type="date" name="date"></label>
     <button class="btn btn-primary" type="submit">Plan my trip</button>
   </form>
-  <ul class="pills"><li>Youth-led</li><li>Registered company</li><li>5+ years of experience</li><li>Based in Kampala</li></ul></div>
+  <ul class="pills"><li>Local guides</li><li>Registered company</li><li>5+ years of experience</li><li>Kampala-based</li></ul></div>
   <div class="next" id="next" aria-live="polite"></div>
-</div></section>
+  </div>
+  <div class="hero-dots" id="hero-dots" aria-label="Choose a hero image"></div>
+</section>
 
 <div class="tabs-bar"><div class="wrap"><div class="tabs" id="tabs" role="tablist" aria-label="Browse our website"></div></div></div>
 
 <div class="stage bgs v-warm" style="--photo:url('queen-elizabeth.webp')"><div class="wrap" id="panels">
 
-<section class="panel" id="trips" data-title="Trips">
-  <div class="panel-head"><div><span class="tagline">Featured excursions</span><h2>Choose your trip</h2></div>
-    <div class="tools"><div id="chips" class="chips" role="group" aria-label="Filter by trip type"></div><input id="search" type="search" placeholder="Search trips or places" aria-label="Search trips"></div></div>
+<section class="panel" id="trips" data-title="Safaris">
+  <div class="panel-head"><div><span class="tagline">Signature safari experiences</span><h2>Find your next adventure</h2></div>
+    <p class="meta">Uganda, East Africa and beyond &mdash; small groups, local guides and transparent pricing.</p></div>
+
+  <div id="ways" class="ways"></div>
+
+  <div class="featured-head"><h3 class="sub">Featured trips</h3><button type="button" class="link" id="view-all">View all trips &rarr;</button></div>
+  <div id="featured" class="featured"></div>
+
+  <div class="panel-head grid-head"><div><h3 class="sub">All trips and packages</h3></div>
+    <div class="tools"><div id="chips" class="chips" role="group" aria-label="Filter by region"></div><input id="search" type="search" placeholder="Search trips or places" aria-label="Search trips"></div></div>
   <div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div id="trip-grid" class="rail"></div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div>
   <div class="past"><b>Previous trips</b><div id="history-list" class="past-list"></div></div>
+</section>
+
+<section class="panel" id="world" data-title="Destinations" hidden>
+  <div class="panel-head"><div><span class="tagline">Destinations</span><h2>Where we go</h2></div><p class="meta">Wildlife, coastlines, cities and living cultures across Uganda, East Africa and beyond. Pick a place and we will shape a trip around it.</p></div>
+  <div id="world-grid" class="world-grid"></div>
+  <div class="marquee mini-marquee" aria-hidden="true"><div id="places"></div><div id="places2"></div></div>
+  <p class="actions"><a class="btn btn-primary" href="#trips">Browse trips</a><button class="btn btn-ghost" data-book="custom-trips">Plan a private trip</button></p>
+</section>
+
+<section class="panel" id="services" data-title="Services" hidden>
+  <div class="panel-head"><div><span class="tagline">More ways we help</span><h2>Travel services</h2></div><p class="meta">One team for the whole journey: route, vehicle, flights, beds and the small details in between.</p></div>
+  <div id="svc" class="svc-grid"></div>
+</section>
+
+<section class="panel" id="guides" data-title="Travel guides" hidden>
+  <div class="panel-head"><div><span class="tagline">Travel journal</span><h2>Guides and stories</h2></div><p class="meta">Practical advice from the road &mdash; when to go, what it costs and what to pack.</p></div>
+  <div id="guide-grid" class="guide-grid"></div>
+</section>
+
+<section class="panel" id="gallery" data-title="Gallery" hidden>
+  <div class="panel-head"><div><span class="tagline">Moments from our trips</span><h2>Gallery</h2></div><p class="meta">Real places, real departures. Tap any photo to open it full size.</p></div>
+  <div id="moments" class="mosaic"></div>
+  <p class="actions"><a class="btn btn-primary" href="#trips">Find a trip</a><a class="btn btn-ghost" href="https://www.instagram.com/scenestours" target="_blank" rel="noopener">Follow on Instagram</a></p>
 </section>
 
 <section class="panel" id="save" data-title="Savings" hidden>
   <div class="save">
     <div><img class="cash" src="brochure-savings.webp" alt="Scenes Traveler's Savings Account" width="760" height="760" loading="lazy" decoding="async">
-      <span class="tagline">Introducing</span><h2>Scenes Traveler's Savings Account</h2>
-      <p>Start with as low as <b>UGX 50,000</b> and start saving for your next adventure. Put aside small amounts of money regularly, save at your own pace and turn your travel dreams into a real experience.</p>
-      <p>Pick a trip, choose how many months you have, and see what to set aside each week. Our Queen Elizabeth Safari lets you save 175K over 2 months and reserve your seat with a 50K booking. Your plan stays on this device.</p>
+      <span class="tagline">Save for travel</span><h2>Scenes Traveler's Savings Account</h2>
+      <p>Start with as low as <b>UGX 50,000</b> and put small amounts aside regularly. Save at your own pace and turn the balance into a real departure.</p>
+      <p>Pick a trip, choose how many months you have, and see what to set aside each week. Your plan stays on this device.</p>
       <p style="font-size:.85rem;color:var(--muted)">Terms and conditions apply.</p></div>
     <form id="plan" class="planner rv">
     <div class="row"><label>Trip<select name="trip"></select></label><label>Travelling<select name="seats"><option value="single">Single</option><option value="double">Double / couple</option></select></label></div>
@@ -59,21 +94,9 @@
     <div class="out"><div><span>Per month</span><b id="per-month"></b></div><div><span>Per week</span><b id="per-week"></b></div></div>
     <div class="progress" role="progressbar" aria-label="Savings progress"><i id="bar"></i></div>
     <p class="meta" style="margin-top:.6rem"><span id="pct"></span> of <span id="goal"></span></p>
-    <button class="btn btn-primary wide" type="button" data-book="queen-elizabeth">Reserve a seat</button>
+    <button class="btn btn-primary wide" type="button" data-book="custom-trips">Start planning</button>
   </form>
   </div>
-</section>
-
-<section class="panel" id="services" data-title="Services" hidden>
-  <div class="panel-head"><div><span class="tagline">What we do</span><h2>Our services</h2></div><p class="meta">From planning to the journey home, we look after every part of your trip.</p></div>
-  <div id="svc" class="svc-grid"></div>
-</section>
-
-<section class="panel" id="world" data-title="Destinations" hidden>
-  <div class="panel-head"><div><span class="tagline">Destinations</span><h2>See the world</h2></div><p class="meta">Coastlines, wildlife, cities and living cultures across Uganda, East Africa and beyond.</p></div>
-  <div id="world-grid" class="world-grid"></div>
-  <div class="marquee mini-marquee" aria-hidden="true"><div id="places"></div><div id="places2"></div></div>
-  <div id="moments" hidden><h3 class="sub">Moments from our trips</h3><div id="moments-grid" class="rail photos"></div></div>
 </section>
 
 <section class="panel" id="reviews" data-title="Reviews" hidden>
@@ -91,11 +114,6 @@
   </div>
 </section>
 
-<section class="panel" id="faq" data-title="FAQ" hidden>
-  <div class="panel-head"><div><span class="tagline">Good to know</span><h2>Frequently asked questions</h2></div><p class="meta">Still unsure? <a href="#contact" style="text-decoration:underline;font-weight:600">Ask us anything</a>.</p></div>
-  <div id="faq-list" class="faq"></div>
-</section>
-
 <section class="panel" id="about" data-title="About us" hidden>
   <div class="about">
     <div class="story-media"><div class="ring"><img src="brochure-founder.webp" alt="Founder of Scenes Tours &amp; Travels" width="472" height="707" loading="lazy" decoding="async"></div>
@@ -108,9 +126,14 @@
   <div class="stats" id="stats"></div>
 </section>
 
-<section class="panel" id="team" data-title="Our team" hidden>
+<section class="panel" id="team" data-title="Our team" data-tab="off" hidden>
   <div class="panel-head"><div><span class="tagline">Our people</span><h2>Company structure and leadership</h2></div><p class="meta">Led by the Managing Director and supported by the Deputy Managing Director. Select a post to read about the role.</p></div>
   <div id="org" class="org"></div>
+</section>
+
+<section class="panel" id="faq" data-title="FAQ" data-tab="off" hidden>
+  <div class="panel-head"><div><span class="tagline">Good to know</span><h2>Frequently asked questions</h2></div><p class="meta">Still unsure? <a href="#contact" style="text-decoration:underline;font-weight:600">Ask us anything</a>.</p></div>
+  <div id="faq-list" class="faq"></div>
 </section>
 
 <section class="panel" id="contact" data-title="Contact" hidden>
@@ -131,5 +154,5 @@
 </main>
 <footer id="site-footer" class="bg-photo foot-bg" style="--photo:url('gorilla.webp')"></footer>
 <noscript><p style="padding:1rem">Enable JavaScript to see trips. Call 0784 066 320 or 0700 907 617 to book.</p></noscript>
-<script src="data.js?v=10"></script><script src="app.js?v=10"></script>
+<script src="data.js?v=11"></script><script src="app.js?v=11"></script>
 </body></html>
