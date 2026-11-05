@@ -79,7 +79,9 @@ const SEED_TRIPS = [
   }
 ];
 
-const PLACES = ['Queen Elizabeth National Park', 'Kazinga Channel', 'Kiwa Hot Springs', 'Amabere Caves', 'Mubuku Irrigation Scheme', 'Diani Beach, Kenya', 'Mombasa', 'Fort Jesus', 'Kigali', 'Volcanoes National Park', 'Lake Kivu', 'Kampala'];
+const PLACES = ['Queen Elizabeth National Park', 'Kazinga Channel', 'Kiwa Hot Springs', 'Amabere Caves', 'Mubuku Irrigation Scheme', 'Diani Beach, Kenya', 'Mombasa', 'Fort Jesus', 'Kigali', 'Volcanoes National Park', 'Lake Kivu', 'Kampala',
+  'Murchison Falls', 'Kibale Forest', 'Bwindi Impenetrable Forest', 'Lake Victoria', 'Jinja and Busoga', 'Fort Portal', 'Kasese', 'Mbale and Sipi Falls', 'Karamoja', 'Lake Bunyonyi', 'Lake Mburo', 'Mgahinga Gorilla Park', 'Kidepo Valley', 'Entebbe', 'Lake George',
+  'Serengeti', 'Masai Mara', 'Zanzibar', 'Nairobi', 'Dar es Salaam', 'Arusha', 'Kilimanjaro', 'Gorilla trekking', 'White water rafting', 'Source of the Nile'];
 
 const LEGAL = {
   'Privacy Policy': '<p>We respect your privacy. Information you share through booking or enquiry forms is used only to process your request, contact you, and support your travel plans. We do not sell your personal details to third parties.</p><p>We may store your name, phone number, email address and travel preferences to improve our service and follow up on booking requests. By using this site, you consent to this data being used for travel coordination and customer support.</p>',
@@ -87,11 +89,15 @@ const LEGAL = {
 };
 
 /* Records exported from admin.html go here so every visitor sees them. */
-const PUBLISHED = { trips: [], dates: {} };
+const PUBLISHED = { trips: [], dates: {}, reviews: [] };
+/* Real customer reviews go here (or add them in admin.html). Example: { name: 'Name', from: 'Kampala', trip: 'queen-elizabeth', rating: 5, text: 'Their words.', date: 'Aug 2026' } */
+const REVIEWS = [];
 
 const DB = {
   KEY: 'stt_db_v1',
-  load() { try { const x = JSON.parse(localStorage.getItem(this.KEY)); return { trips: x.trips || [], dates: x.dates || {} }; } catch { return { trips: [], dates: {} }; } },
+  load() { try { const x = JSON.parse(localStorage.getItem(this.KEY)); return { trips: x.trips || [], dates: x.dates || {}, reviews: x.reviews || [] }; } catch { return { trips: [], dates: {}, reviews: [] }; } },
+  /* Customer feedback: published reviews plus any added in admin.html. Each: { name, from, trip (trip id), rating 1-5, text, date } */
+  reviews() { return REVIEWS.concat(PUBLISHED.reviews || [], this.load().reviews).filter(r => r && r.text && r.rating); },
   save(x) { try { localStorage.setItem(this.KEY, JSON.stringify(x)); return true; } catch { return false; } },
   /* Every trip, with all of its departure dates sorted (seed + published + added in admin). */
   trips() {
@@ -128,7 +134,7 @@ function mediaCandidates(src, alts = []) {
   [src, ...alts].forEach(base => {
     const m = base.match(/^(.*\/)?([^/]+?)(\.[A-Za-z0-9]+)?$/); if (!m) return;
     const stem = m[2], ext = m[3] || '', video = /^\.(mp4|webm|mov|m4v)$/i.test(ext);
-    const others = video ? ['.mp4', '.MP4', '.webm', '.mov'] : ['.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG', '.WEBP'];
+    const others = video ? ['.mp4', '.MP4', '.webm', '.mov'] : ['.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG'];
     add(base); add(learned + stem + ext);
     dirs.forEach(d => add(d + stem + ext));
     others.forEach(e => add(stem + e));
@@ -159,12 +165,11 @@ const SERVICES = [
   { t: 'Accommodation and Travel Booking', d: 'From cozy lodges to top-tier hotels, we compare and book the best stays within your budget.' },
   { t: 'Transport and Transfers', d: 'Reliable rides from pickup to your destination. We arrange safe, comfortable transport.' }
 ];
-/* The four destination cards use photos already in the site folder. */
 const WORLD = [
-  { t: 'Beaches and Coastlines', img: 'poster-beachview.webp', d: 'Zanzibar turquoise water, sandbanks, beaches, L. Victoria, Nakuru, Malawi, R. Nile, and many more.' },
-  { t: 'Wildlife and Safari', img: 'queen-elizabeth.webp', d: 'In national parks, zoos and sanctuaries in Uganda, East Africa and beyond.' },
-  { t: 'Explore Major Cities', img: 'rwanda3.webp', d: 'Kampala, Mombasa, Arusha, Entebbe, Dar es Salaam and more.' },
-  { t: 'Culture and Heritage', img: 'custom3.webp', d: 'Explore African culture, food, dances, songs and dressing of all African tribes.' }
+  { t: 'Beaches and Coastlines', img: 'world-beach.webp', d: 'Zanzibar turquoise water, sandbanks, beaches, L. Victoria, Nakuru, Malawi, R. Nile, and many more.' },
+  { t: 'Wildlife and Safari', img: 'world-wildlife.webp', d: 'In national parks, zoos and sanctuaries in Uganda, East Africa and beyond.' },
+  { t: 'Explore Major Cities', img: 'world-cities.webp', d: 'Kampala, Mombasa, Arusha, Entebbe, Dar es Salaam and more.' },
+  { t: 'Culture and Heritage', img: 'world-culture.webp', d: 'Explore African culture, food, dances, songs and dressing of all African tribes.' }
 ];
 /* Trips already completed (no dates on record). Add dates later through admin.html if you wish. */
 const PAST_TRIPS = ['Rwanda Get-Away', 'Global Citizen Ft Doja Cat', 'Campus Connect 1st Edition', 'Open Game Park Package', 'Campus Connect 2nd Edition'];
@@ -189,3 +194,14 @@ const TEAM = {
         { title: 'Media Team', photo: '', name: '', bio: 'Captures and publishes photo, video and social content that documents every trip and promotes our packages.' }] }
   ]
 };
+
+const FAQ = [
+  { q: 'Who is Scenes Tours & Travels?', a: 'We are a youth-led, registered Ugandan tour company based in Kampala. With over five years of experience, we have organized group, family, school and customized trips within Uganda and beyond.' },
+  { q: 'How do I book a trip?', a: 'Choose a trip, press Book now and send your details on WhatsApp. Our team replies to confirm your seat. You can also call 0700 907 617 or 0784 066 320, or visit our office in Kampala.' },
+  { q: 'How much is the deposit?', a: 'Seats on our Queen Elizabeth Safari are reserved with a UGX 50,000 deposit, and you can save towards the remaining amount over about two months. Deposits are non-refundable unless otherwise stated in our Terms of Service.' },
+  { q: 'What is included in the Queen Elizabeth Safari?', a: 'Accommodation, feeding, park entrance fees, the boat cruise and transport. Pickup is at Oryx Lugogo and Rubis Kansanga.' },
+  { q: 'Can I save towards a trip?', a: 'Yes. The Scenes Traveler\'s Savings Account lets you start with as little as UGX 50,000 and save at your own pace towards your next adventure. Terms and conditions apply.' },
+  { q: 'Can you organize a trip for my school, family or group?', a: 'Yes. We handle the logistics for student, school, family and group trips so the adventure stays affordable for the whole squad.' },
+  { q: 'Can a trip be tailored to my budget?', a: 'Yes. Tell us your budget, interests and dates and we tailor a package around them, including lodging, transport and activities.' },
+  { q: 'Can the itinerary change?', a: 'Itineraries may be adjusted because of weather, safety or other operational factors. Full terms are available on request at our head office.' }
+];

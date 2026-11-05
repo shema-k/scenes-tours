@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
-<meta name="theme-color" content="#0f172a">
-<title>Trip database admin | Scenes Tours &amp; Travels</title>
-<link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/playfair.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=9"></head>
-<body><header id="site-header" class="stuck"><div class="wrap bar"><a class="brand" href="index.html"><span>Scenes Tours &amp; Travels: trip database</span></a><a class="btn btn-primary" href="index.html">View website</a></div></header>
-<main class="wrap admin">
+<title>Trip database admin | Scenes Tours &amp; Travels</title><link rel="icon" href="favicon.png"><link rel="stylesheet" href="styles.css?v=10"></head>
+<body class="inner"><header id="site-header" class="stuck"><div class="wrap bar"><a class="brand" href="index.html"><span>Scenes Tours &amp; Travels: trip database</span></a><a class="btn btn-primary" href="index.html">View website</a></div></header>
+<div class="bgs v-warm" style="--photo:url('sunset.webp')"><main class="wrap admin">
 <p class="meta">Anything you add here shows on the website in this browser straight away (cards, booking form, planner, search, history). To show it to every customer, copy the export at the bottom into <b>PUBLISHED</b> in <b>data.js</b>.</p>
 <h2 style="margin-top:1.5rem">Add a new trip</h2>
 <form id="tf" class="planner"><div class="row"><label>Title<input name="title" required></label><label>Type<input name="type" list="types" placeholder="Safari, Beach, Regional, Custom" required></label></div><datalist id="types"></datalist>
@@ -21,13 +17,17 @@
 <button class="btn btn-primary wide" type="submit">Add trip to database</button></form>
 <h2>Add a new date to an existing trip</h2>
 <form id="df" class="planner"><div class="row"><label>Trip<select name="trip"></select></label><span></span></div><div class="row"><label>Start<input name="start" type="date" required></label><label>End<input name="end" type="date" required></label></div><button class="btn btn-primary wide" type="submit">Add date</button></form>
-<h2>Photo and video check</h2>
-<p class="meta">Checks every file the website uses. If one shows Missing, save it in the same folder as index.html with exactly that name. The site also finds files automatically when they are in a common images, photos or media folder.</p>
+<h2>Customer feedback (reviews)</h2><p class="meta">Add real feedback customers have sent you (for example from WhatsApp). It shows in the Reviews tab and on that trip's page.</p>
+<form id="rf" class="planner"><div class="row"><label>Customer name<input name="name" required></label><label>From (city or country)<input name="from"></label></div>
+<div class="row"><label>Trip<select name="trip"></select></label><label>Rating<select name="rating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label></div>
+<label>Month and year (optional)<input name="date" placeholder="e.g. Aug 2026"></label><label>Their feedback, in their own words<input name="text" required></label>
+<button class="btn btn-primary wide" type="submit">Add review</button></form><div id="rl"></div>
+<h2>Photo and video check</h2><p class="meta">Checks every file the website uses. If one shows Missing, save it in the same folder as index.html with exactly that name.</p>
 <div class="planner"><p id="msum" class="meta"></p><div id="mlist"></div><p class="actions"><button class="btn btn-ghost" id="mre" type="button">Check again</button></p></div>
 <h2>Added in this browser</h2><div id="mine"></div>
 <h2 style="margin-top:2rem">Export for data.js</h2><textarea id="out" readonly></textarea><p class="actions"><button class="btn btn-ghost" id="copy" type="button">Copy export</button></p>
-</main>
-<script src="data.js?v=9"></script>
+</main></div>
+<script src="data.js?v=10"></script>
 <script>
 const $=s=>document.querySelector(s), list=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
 function render(){
@@ -36,7 +36,9 @@ function render(){
   $('#df [name=trip]').innerHTML=all.map(t=>`<option value="${t.id}">${t.title}</option>`).join('');
   $('#mine').innerHTML=(db.trips.map(t=>`<div class="arow"><span><b>${t.title}</b> (trip)</span><button class="btn btn-ghost" data-t="${t.id}">Delete</button></div>`).join('')
    +Object.entries(db.dates).flatMap(([id,a])=>a.map((d,i)=>`<div class="arow"><span>${(all.find(t=>t.id===id)||{title:id}).title}: ${d.start} to ${d.end}</span><button class="btn btn-ghost" data-d="${id}:${i}">Delete</button></div>`)).join(''))||'<p class="meta">Nothing added yet.</p>';
-  $('#out').value=JSON.stringify({trips:db.trips,dates:db.dates},null,2);
+  $('#out').value=JSON.stringify({trips:db.trips,dates:db.dates,reviews:db.reviews},null,2);
+  $('#rf [name=trip]').innerHTML=all.map(t=>`<option value="${t.id}">${t.title}</option>`).join('')+'<option value="other">Another trip</option>';
+  $('#rl').innerHTML=db.reviews.map((r,i)=>`<div class="arow"><span><b>${r.name}</b> (${r.rating}/5): ${r.text.slice(0,70)}</span><button class="btn btn-ghost" data-r="${i}">Delete</button></div>`).join('');
 }
 $('#tf').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),db=DB.load();
   let id=f.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); const taken=DB.trips().map(t=>t.id); while(taken.includes(id)) id+='-2';
@@ -45,29 +47,23 @@ $('#tf').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData
     highlights:list(f.highlights),locations:list(f.locations),activities:list(f.activities),includes:list(f.includes)};
   if(f.start){t.start=f.start;t.end=f.end||f.start} if(f.deposit)t.deposit=+f.deposit; if(f.pickup)t.pickup=f.pickup;
   db.trips.push(t); DB.save(db); e.target.reset(); render(); alert('Trip added. Open the website to see it.');};
+$('#rf').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),db=DB.load();db.reviews.push({name:f.name,from:f.from,trip:f.trip,rating:+f.rating,text:f.text,date:f.date});DB.save(db);e.target.reset();render();};
+$('#rl').onclick=e=>{const b=e.target.closest('[data-r]');if(!b)return;const db=DB.load();db.reviews.splice(+b.dataset.r,1);DB.save(db);render();};
 $('#df').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),db=DB.load();(db.dates[f.trip]=db.dates[f.trip]||[]).push({start:f.start,end:f.end});DB.save(db);e.target.reset();render();};
 $('#mine').onclick=e=>{const db=DB.load(),b=e.target.closest('button');if(!b)return;
   if(b.dataset.t)db.trips=db.trips.filter(t=>t.id!==b.dataset.t); if(b.dataset.d){const[id,i]=b.dataset.d.split(':');db.dates[id].splice(+i,1)} DB.save(db);render();};
 $('#copy').onclick=()=>{navigator.clipboard.writeText($('#out').value);$('#copy').textContent='Copied'};
 render();
-
 function probe(src, alts) {
   const vid = /\.(mp4|webm|mov)$/i.test(src), c = mediaCandidates(src, alts || []);
   return new Promise(res => { let i = 0; const next = () => { if (i >= c.length) return res(null); const p = c[i++], el = vid ? document.createElement('video') : new Image(); el.onload = el.onloadedmetadata = () => res(p); el.onerror = next; if (vid) el.preload = 'metadata'; el.src = p; }; next(); });
 }
 async function mediaCheck() {
   const files = new Map(); const add = (s, alt) => s && !files.has(s) && files.set(s, alt);
-  add('logo-180.webp'); add('sunset.webp'); add('lakeview.webp'); add('crater.webp'); add('queen-elizabeth.webp'); add('gorilla.webp');
-  add('whatsapp-qr.png'); add('team-deputy.webp'); add('team-guide1.webp'); add('team-guide2.webp');
+  add('logo-180.webp'); add('whatsapp-qr.png'); add('brochure-founder.webp'); add('brochure-team.webp'); add('brochure-savings.webp'); add('sunset.webp'); add('gorilla.webp'); add('lakeview.webp'); add('queen-elizabeth.webp');
   WORLD.forEach(w => add(w.img));
-  const addPerson = p => { if (p.photo) add(p.photo); (p.photos || []).forEach(s => add(s)); };
-  addPerson(TEAM.lead); addPerson(TEAM.deputy);
-  TEAM.depts.forEach(d => { addPerson(d.head); d.members.forEach(addPerson); });
-  DB.trips().forEach(t => {
-    add(t.media.src, t.media.alt); add(t.media.poster); add(t.media.preview);
-    (t.media.alt || []).forEach(a => add(a));
-    (t.gallery || []).forEach(g => add(g.src)); (t.videos || []).forEach(v => add(v));
-  });
+  [TEAM.lead, TEAM.deputy, ...TEAM.depts.flatMap(d => [d.head, ...d.members])].forEach(p => (p.photos || [p.photo]).forEach(s => add(s)));
+  DB.trips().forEach(t => { add(t.media.src, t.media.alt); add(t.media.poster); add(t.media.preview); (t.gallery || []).forEach(g => add(g.src)); (t.videos || []).forEach(v => add(v)); });
   $('#mlist').innerHTML = '<p class="meta">Checking...</p>';
   const rows = await Promise.all([...files].map(async ([s, alt]) => ({ s, f: await probe(s, alt) })));
   const ok = rows.filter(r => r.f).length;
