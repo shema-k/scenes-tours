@@ -79,7 +79,7 @@ function newsHTML() {
         <span class="news-kicker">${esc(n.kicker)}</span>
         <h5><a href="trip.html?id=${t.id}">${esc(n.headline)}</a></h5>
         <div class="news-meta"><span>${esc(t.duration)}</span><span>${esc(s.label)}</span></div>
-        <button type="button" class="news-book" data-book="${t.id}" aria-label="Book ${esc(t.title)}">Book this trip &rarr;</button>
+        <div class="news-item-links"><a class="news-read" href="trip.html?id=${t.id}">Read trip &rarr;</a><button type="button" class="news-book" data-book="${t.id}" aria-label="Book ${esc(t.title)}">Book this trip</button></div>
       </div>
     </article>`;
   }).join('')}</div>`;

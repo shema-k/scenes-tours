@@ -575,7 +575,9 @@ nav .dd-menu .dd-label+ a{padding-top:.35rem}
 .news-num{position:absolute;right:1.1rem;top:.85rem;color:#64748b;font:700 .66rem var(--sans);letter-spacing:.08em}
 .news-item-body{min-width:0;padding-right:1.5rem}
 .news-item h5{font:700 .99rem/1.25 var(--serif);color:#fff;margin:0 0 .3rem}
-.news-book{border:0;background:none;padding:0;margin-top:.4rem;color:#fbbf24;font:700 .74rem var(--sans);text-align:left;cursor:pointer}
+.news-item-links{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .8rem;margin-top:.4rem}
+.news-item .news-read{font-size:.72rem}
+.news-book{border:0;background:none;padding:0;color:#fbbf24;font:700 .74rem var(--sans);text-align:left;cursor:pointer}
 .news-book:hover{color:#fff;text-decoration:underline}
 .grid-head{margin-top:.5rem;align-items:center}
 @media(max-width:860px){
