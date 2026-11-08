@@ -37,6 +37,7 @@ const mediaHTML = (m, alt) => m.type === 'video'
   ? `<video src="${m.preview || m.src}" ${m.poster ? `poster="${m.poster}"` : ''} autoplay muted loop playsinline preload="auto" aria-label="${esc(alt)}"></video>`
   : `<img src="${m.src}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
 
+const titleCase = s => String(s || '').trim().replace(/\s+/g, ' ').replace(/\b[a-z]/g, c => c.toUpperCase());
 const shorten = (s, n = 112) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n - 1).replace(/[\s,.;:-]+$/, '') + '…' : s; };
 function cardHTML(t, i = 0) {
   const s = status(t);
@@ -198,7 +199,7 @@ function openGuide(id) {
 window.openGuide = openGuide;
 
 function openPlace(name, detail = true) {
-  const place = placeMatch(name) || String(name || '').trim().replace(/\s+/g, ' ');
+  const place = placeMatch(name) || titleCase(name);
   if (!place) return;
   const dl = $('#detail');
   $('#detail-h').textContent = place;
@@ -310,8 +311,8 @@ function home() {
       <p>${status(next).label}<br>${next.pickup ? 'Pickup: ' + esc(next.pickup) : ''}</p>${next.deposit ? `<p>Reserve a seat with ${fmt(next.deposit)}.</p>` : ''}
       <button class="btn btn-primary wide" data-book="${next.id}">Reserve a seat</button>`;
   } else {
-    box.innerHTML = `<p class="k">Next departure</p><h2>New dates are coming</h2><p>Our last departure has left. Tell us when you want to travel and we will plan it around you.</p>
-      <button class="btn btn-primary wide" data-book="custom-trips">Plan a trip with us</button>`;
+    box.innerHTML = `<p class="k">Plan your next trip</p><h2>Your dates, your way</h2><p>Our scheduled 2026 group dates have departed. Tell us when you can travel and we will plan a private trip or add you to the next group.</p>
+      <button class="btn btn-primary wide" data-book="custom-trips">Start planning</button>`;
   }
 
   // Four ways into the catalogue
@@ -333,7 +334,7 @@ function home() {
     const list = placeMatches(q).filter(t => region === 'All' || t.group === region);
     const custom = !q || list.length ? '' : (() => {
       const raw = search.value.trim();
-      const place = placeMatch(raw) || raw;
+      const place = placeMatch(raw) || titleCase(raw);
       return `<div class="empty custom-empty"><h3>We do not have a set departure to “${esc(place)}”</h3><p>But we can plan a private trip there — we shape the route, transport, lodging and timing just for you.</p><p class="actions"><button class="btn btn-primary" data-place="${esc(place)}">View ${esc(place)} — book a private trip there</button>${region !== 'All' ? ' <button class="btn btn-ghost" type="button" data-region-all>See all regions</button>' : ''}</p></div>`;
     })();
     grid.innerHTML = list.length ? list.map(cardHTML).join('') : custom;
@@ -563,7 +564,7 @@ function suggest(raw) {
     .sort((a, b) => b.s - a.s || order[a.kind] - order[b.kind]).filter(t => !seen.has(t.label.toLowerCase()) && seen.add(t.label.toLowerCase()));
   // Anything else the visitor typed is still a place we can take them to.
   const hasExact = ranked.some(t => t.label.toLowerCase() === q);
-  const extra = q.length >= 2 && !covered.has(q) && !hasExact ? [{ label: String(q).replace(/\s+/g, ' '), kind: 'Place', ids: [] }] : [];
+  const extra = q.length >= 2 && !covered.has(q) && !hasExact ? [{ label: titleCase(raw), kind: 'Place', ids: [] }] : [];
   return ranked.concat(extra).slice(0, 8);
 }
 function autosuggest(input, onPick) {

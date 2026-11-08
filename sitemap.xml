@@ -7,22 +7,72 @@
   </url>
   <url>
     <loc>https://shema-k.github.io/scenes-tours/trip.html?id=queen-elizabeth</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shema-k.github.io/scenes-tours/trip.html?id=diani-beach</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://shema-k.github.io/scenes-tours/trip.html?id=rwanda-adventures</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://shema-k.github.io/scenes-tours/trip.html?id=custom-trips</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=murchison-falls</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=bwindi-gorillas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=lake-bunyonyi</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=jinja-nile</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=kidepo-valley</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=zanzibar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=masai-mara</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=kilimanjaro</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=dubai-stopover</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shema-k.github.io/scenes-tours/trip.html?id=cape-town</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 </urlset>

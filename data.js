@@ -89,7 +89,7 @@ const SEED_TRIPS = [
     activities: ['Game drives', 'Boat cruise', 'Waterfall walk', 'Bird watching', 'Photography'],
     gallery: [
       { src: 'custom4.webp', cap: 'The falls and the Nile' }, { src: 'sunset.webp', cap: 'Sunset on the savanna' },
-      { src: 'gorilla.webp', cap: 'Wildlife on the northern bank' }, { src: 'hills.webp', cap: 'Uganda\'s open plains' }
+      { src: 'queen-elizabeth.webp', cap: 'Wildlife on the plains' }, { src: 'hills.webp', cap: 'Uganda\'s open plains' }
     ]
   },
   {
@@ -133,7 +133,7 @@ const SEED_TRIPS = [
     locations: ['Jinja', 'Source of the Nile', 'Busoga'],
     activities: ['Rafting', 'Tubing', 'Quad biking', 'Boat rides', 'Market walks'],
     gallery: [
-      { src: 'custom5.webp', cap: 'Water adventures on the Nile' }, { src: 'custom6.webp', cap: 'Evening in Jinja' },
+      { src: 'custom5.webp', cap: 'Water adventures on the Nile' }, { src: 'custom2.webp', cap: 'A riverside stay' },
       { src: 'hills.webp', cap: 'Busoga hills' }
     ]
   },
@@ -148,7 +148,7 @@ const SEED_TRIPS = [
     locations: ['Kidepo Valley', 'Karamoja', 'Moroto'],
     activities: ['Game drives', 'Cultural visits', 'Hiking', 'Photography', 'Bird watching'],
     gallery: [
-      { src: 'sunset.webp', cap: 'Kidepo sunsets' }, { src: 'gorilla.webp', cap: 'Wildlife' },
+      { src: 'sunset.webp', cap: 'Kidepo sunsets' }, { src: 'queen-elizabeth.webp', cap: 'Wildlife on the plains' },
       { src: 'hills.webp', cap: 'The valley' }
     ]
   },
@@ -208,7 +208,7 @@ const SEED_TRIPS = [
     locations: ['Dubai', 'Abu Dhabi on request'],
     activities: ['City tour', 'Desert safari', 'Shopping', 'Dhow dinner cruise'],
     gallery: [
-      { src: 'world-cities.webp', cap: 'City skylines' }, { src: 'world-culture.webp', cap: 'Old Dubai' }
+      { src: 'world-cities.webp', cap: 'City skylines' }, { src: 'sunset.webp', cap: 'Desert sunset' }
     ]
   },
   {
@@ -222,8 +222,8 @@ const SEED_TRIPS = [
     locations: ['Cape Town', 'Cape Peninsula', 'Stellenbosch'],
     activities: ['Mountain cableway', 'Coastal drive', 'Wine tasting', 'Beach time', 'City walks'],
     gallery: [
-      { src: 'world-beach.webp', cap: 'Atlantic coast' }, { src: 'world-cities.webp', cap: 'Cape Town' },
-      { src: 'hills.webp', cap: 'Mountain views' }
+      { src: 'world-cities.webp', cap: 'Cape Town' }, { src: 'hills.webp', cap: 'Mountain views' },
+      { src: 'sunset.webp', cap: 'Evening on the coast' }
     ]
   }
 ];
