@@ -36,7 +36,7 @@ const SEED_TRIPS = [
       { src: 'lakeview.webp', cap: 'Lake view' }, { src: 'crater.webp', cap: 'Crater lakes' },
       { src: 'hills.webp', cap: 'Hills at Queen Elizabeth' }, { src: 'gorilla.webp', cap: 'Animals at Queen Elizabeth' }
     ],
-    videos: ['hotsprings.mp4', 'Animals.mp4', 'Tourists(1).mp4']
+    videos: ['preview-hotsprings.mp4', 'preview-animals.mp4', 'preview-tourists.mp4']
   },
   {
     id: 'diani-beach', type: 'Beach', group: 'East Africa', feature: 'world-beach.webp', title: 'Diani Beach Holiday', region: 'Diani Beach, Kenya',
@@ -45,7 +45,7 @@ const SEED_TRIPS = [
     desc: 'Experience the cool ocean breeze, beautiful sun-soaked beaches, historic Fort Jesus walks, snorkeling adventures, and premium beachfront hotel accommodation in Kenya.',
     media: { type: 'video', src: 'beachview.mp4', poster: 'poster-beachview.webp', preview: 'preview-beachview.mp4' },
     highlights: ['Sun-soaked beaches', 'Fort Jesus walks', 'Snorkeling adventures', 'Beachfront hotels'],
-    videos: ['beachview.mp4', 'Camelwalk(1).mp4', 'Masai.mp4']
+    videos: ['preview-beachview.mp4', 'preview-camelwalk.mp4', 'preview-masai.mp4']
   },
   {
     id: 'rwanda-adventures', type: 'Regional', group: 'East Africa', feature: 'rwanda.webp', title: 'Rwanda Adventures and Safari Packages', region: 'Rwanda',
@@ -60,7 +60,7 @@ const SEED_TRIPS = [
       { src: 'rwanda5.webp', cap: 'Research team' }, { src: 'rwanda6.webp', cap: 'Adventure awaits' },
       { src: 'rwanda7.webp', cap: 'Golden hour' }
     ],
-    videos: ['rwanda8.mp4']
+    videos: ['preview-rwanda8.mp4']
   },
   {
     id: 'custom-trips', type: 'Custom', group: 'Uganda', title: 'Custom Made Trips Across Uganda', region: 'Uganda and East Africa',
@@ -75,7 +75,7 @@ const SEED_TRIPS = [
       { src: 'custom5.webp', cap: 'Water adventures' }, { src: 'custom6.webp', cap: 'Night safaris' },
       { src: 'custom7.webp', cap: 'Community encounters' }
     ],
-    videos: ['Zebra(2).mp4']
+    videos: ['preview-zebra.mp4']
   },
   {
     id: 'murchison-falls', type: 'Safari', group: 'Uganda', title: 'Murchison Falls Safari', region: 'North-Western Uganda',
