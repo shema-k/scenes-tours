@@ -34,7 +34,7 @@ const plansFor = t => t.price
   ? [`Single traveller (${fmt(t.price.single)})`, `Double / couple (${fmt(t.price.double)})`, 'Group / custom size']
   : ['Solo traveller', 'Couple', 'Small group (3 to 6)', 'Large group (7+)'];
 const mediaHTML = (m, alt) => m.type === 'video'
-  ? `<video src="${m.preview || m.src}" ${m.poster ? `poster="${m.poster}"` : ''} autoplay muted loop playsinline preload="auto" aria-label="${esc(alt)}"></video>`
+  ? `<video src="${m.preview || m.src}" ${m.poster ? `poster="${m.poster}"` : ''} muted loop playsinline preload="none" aria-label="${esc(alt)}"></video>`
   : `<img src="${m.src}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
 
 const titleCase = s => String(s || '').trim().replace(/\s+/g, ' ').replace(/\b[a-z]/g, c => c.toUpperCase());
@@ -421,7 +421,7 @@ function detail() {
   const block = (h, a) => a && a.length ? `<div><h3>${h}</h3><ul class="ticks">${a.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
   const revs = DB.reviews().filter(r => r.trip === t.id);
   const panels = `<section class="panel" id="overview" data-title="Overview"><div class="lists">${block('Highlights', t.highlights)}${block('Where we go', t.locations)}${block('Activities', t.activities)}${block('Cost includes', t.includes)}</div></section>
-    ${t.gallery || t.videos ? `<section class="panel" id="gallery" data-title="Photos and videos" hidden>${t.gallery ? `<div class="gallery">${t.gallery.map((g, i) => `<button data-i="${i}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy"><span>${esc(g.cap)}</span></button>`).join('')}</div>` : ''}${t.videos ? `<div class="videos">${t.videos.map(v => `<video src="${v}" controls autoplay muted loop playsinline preload="auto"></video>`).join('')}</div>` : ''}</section>` : ''}
+    ${t.gallery || t.videos ? `<section class="panel" id="gallery" data-title="Photos and videos" hidden>${t.gallery ? `<div class="gallery">${t.gallery.map((g, i) => `<button data-i="${i}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy"><span>${esc(g.cap)}</span></button>`).join('')}</div>` : ''}${t.videos ? `<div class="videos">${t.videos.map(v => `<video src="${v}" muted loop playsinline preload="none"></video>`).join('')}</div>` : ''}</section>` : ''}
     <section class="panel" id="feedback" data-title="Customer feedback (${revs.length})" hidden>${revs.length ? `<div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous">&lsaquo;</button><div class="rail reviews">${revs.map(reviewCard).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next">&rsaquo;</button></div>` : '<p class="empty">No reviews for this trip yet.</p>'}<p class="actions"><a class="btn btn-ghost" href="index.html#reviews">Share your experience</a></p></section>`;
   main.innerHTML = `
   <section class="t-hero"><div class="t-media">${mediaHTML(t.media, t.title)}</div>
