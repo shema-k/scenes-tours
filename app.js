@@ -54,12 +54,35 @@ function cardHTML(t, i = 0) {
     </div></article>`;
 }
 
-function featureHTML(t, i = 0) {
-  const s = status(t), src = t.feature || t.media.poster || t.media.src;
-  return `<a class="feature rv" style="--i:${i}" href="trip.html?id=${t.id}">
-    <span class="feature-img"><img src="${src}" alt="${esc(t.title)}" loading="lazy" decoding="async"><span class="badge badge-${s.key}">${t.type}</span></span>
-    <span class="feature-body"><span class="kicker">${esc(t.group || t.region)}</span><b>${esc(t.title)}</b>
-      <small>${esc(t.duration)} &middot; ${esc(s.label)}</small><span class="feature-cta">View trip &rarr;</span></span></a>`;
+function newsHTML() {
+  const items = TRIP_NEWS.map(n => ({ ...n, t: byId(n.trip) })).filter(x => x.t);
+  if (!items.length) return '';
+  const lead = items[0], side = items.slice(1);
+  const img = t => t.feature || (t.gallery && t.gallery[0] && t.gallery[0].src) || (t.media && (t.media.poster || t.media.src)) || 'sunset.webp';
+  const l = lead.t, ls = status(l);
+  return `<article class="news-lead">
+    <a class="news-lead-media" href="trip.html?id=${l.id}" aria-label="Read ${esc(l.title)}">
+      <img src="${img(l)}" alt="${esc(l.title)}" loading="lazy" decoding="async">
+    </a>
+    <span class="news-kicker">${esc(lead.kicker)}</span>
+    <h4><a href="trip.html?id=${l.id}">${esc(lead.headline)}</a></h4>
+    <p>${esc(lead.note)}</p>
+    <div class="news-meta"><span>${esc(l.region)}</span><span>${esc(l.duration)}</span><span>${esc(ls.label)}</span></div>
+    <div class="news-actions"><a class="news-read" href="trip.html?id=${l.id}">Read the full trip &rarr;</a><button type="button" class="btn btn-primary" data-book="${l.id}" aria-label="Book ${esc(l.title)}">Book this trip</button></div>
+  </article>
+  <div class="news-side">${side.map((n, i) => {
+    const t = n.t, s = status(t);
+    return `<article class="news-item">
+      <span class="news-num">0${i + 2}</span>
+      <a class="news-thumb" href="trip.html?id=${t.id}" aria-label="Read ${esc(t.title)}"><img src="${img(t)}" alt="${esc(t.title)}" loading="lazy" decoding="async"></a>
+      <div class="news-item-body">
+        <span class="news-kicker">${esc(n.kicker)}</span>
+        <h5><a href="trip.html?id=${t.id}">${esc(n.headline)}</a></h5>
+        <div class="news-meta"><span>${esc(t.duration)}</span><span>${esc(s.label)}</span></div>
+        <button type="button" class="news-book" data-book="${t.id}" aria-label="Book ${esc(t.title)}">Book this trip &rarr;</button>
+      </div>
+    </article>`;
+  }).join('')}</div>`;
 }
 
 const ICONS = {
@@ -318,10 +341,8 @@ function home() {
   // Four ways into the catalogue
   $('#ways').innerHTML = WAYS.map((w, i) => `<button type="button" class="way rv" style="--i:${i}" data-way="${esc(w.filter)}"><i>0${i + 1}</i><h3>${esc(w.t)}</h3><p>${esc(w.d)}</p><span>Explore &rarr;</span></button>`).join('');
 
-  // Featured trips: three simple, image-led cards
-  const featured = TRIPS.filter(t => t.id !== 'custom-trips').slice(0, 3);
-  $('#featured').innerHTML = featured.map(featureHTML).join('');
-  $('#view-all').addEventListener('click', () => $('.grid-head').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  // Travel desk: each story opens the trip and can be booked directly
+  $('#news-grid').innerHTML = newsHTML();
 
   // Trip grid with region filter + search
   const grid = $('#trip-grid'), chips = $('#chips'), search = $('#search');
@@ -359,11 +380,6 @@ function home() {
   search.addEventListener('input', () => { render(); done(); });
   const strip = DB.places().map(p => `<span>${p}</span>`).join(''); $('#places').innerHTML = strip; $('#places2').innerHTML = strip;
   render(); done();
-
-  // Trip history: every departure in the database that has already happened
-  const past = TRIPS.flatMap(t => (t.deps || []).filter(d => new Date(d.end + 'T23:59:59') < new Date()).map(d => ({ t, d }))).sort((a, b) => b.d.start.localeCompare(a.d.start));
-  $('#history-list').innerHTML = past.map(({ t, d }) => `<a class="pastpill" href="trip.html?id=${t.id}">${esc(t.title)} <small>${range(d)}</small></a>`).join('') + PAST_TRIPS.map(p => `<span class="pastpill">${esc(p)}</span>`).join('');
-
 }
 
 function homeExtras() {

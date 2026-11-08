@@ -14,7 +14,7 @@
 <link rel="preload" href="fonts/playfair.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/playfair-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="sunset.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="styles.css?v=17">
+<link rel="stylesheet" href="styles.css?v=18">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Scenes Tours and Travel","url":"https://shema-k.github.io/scenes-tours/","slogan":"See the World","telephone":"+256784066320","email":"bookingscenestravels@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Next to Lynn Modern Apartments, Kikoni-Makerere","addressLocality":"Kampala","addressCountry":"UG"}}</script>
 </head><body>
 <header id="site-header"></header>
@@ -47,13 +47,20 @@
 
   <div id="ways" class="ways"></div>
 
-  <div class="featured-head"><h3 class="sub">Featured trips</h3><button type="button" class="link" id="view-all">View all trips &rarr;</button></div>
-  <div id="featured" class="featured"></div>
+  <section class="news-desk" id="trip-news" aria-labelledby="news-title">
+    <div class="news-mast">
+      <p class="news-eyebrow">The Scenes Journal <span>Trip notes &middot; 2026</span></p>
+      <div class="news-mast-row">
+        <h3 id="news-title">Stories worth packing for</h3>
+        <p>Field notes from the road, fresh routes and the trips behind them. Read the story, then book the journey.</p>
+      </div>
+    </div>
+    <div class="news-layout" id="news-grid"></div>
+  </section>
 
   <div class="panel-head grid-head"><div><h3 class="sub">All trips and packages</h3></div>
     <div class="tools"><div id="chips" class="chips" role="group" aria-label="Filter by region"></div><input id="search" type="search" placeholder="Search trips or places" aria-label="Search trips"></div></div>
   <div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div id="trip-grid" class="rail"></div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div>
-  <div class="past"><b>Previous trips</b><div id="history-list" class="past-list"></div></div>
 </section>
 
 <section class="panel" id="world" data-title="Destinations" hidden>
@@ -154,5 +161,5 @@
 </main>
 <footer id="site-footer" class="bg-photo foot-bg" style="--photo:url('gorilla.webp')"></footer>
 <noscript><p style="padding:1rem">Enable JavaScript to see trips. Call 0784 066 320 or 0700 907 617 to book.</p></noscript>
-<script src="data.js?v=17"></script><script src="app.js?v=17"></script>
+<script src="data.js?v=18"></script><script src="app.js?v=18"></script>
 </body></html>

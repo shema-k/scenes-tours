@@ -392,14 +392,40 @@ const GUIDES = [
     ]
   }
 ];
+/* The travel desk. Each story points at a real trip and can be booked from the card. */
+const TRIP_NEWS = [
+  {
+    trip: 'queen-elizabeth', kicker: 'On safari · Uganda',
+    headline: 'A safari that begins on the water',
+    note: 'Game drives across the savanna, a slow boat down the Kazinga Channel and campfires after dark. Our three-day Queen Elizabeth escape is built around the moments between the sightings.'
+  },
+  {
+    trip: 'murchison-falls', kicker: 'River and falls · Uganda',
+    headline: 'Where the Nile turns into thunder',
+    note: 'The river squeezes through a seven-metre gorge, then a launch cruise takes you to the foot of the falls. A compact three-day safari with big-game plains on the northern bank.'
+  },
+  {
+    trip: 'rwanda-adventures', kicker: 'Gorillas · East Africa',
+    headline: 'Gorillas, volcanoes and a weekend in Kigali',
+    note: 'Trek into Volcanoes National Park, then trade the trail for Kigali\'s galleries, markets and coffee bars. A flexible Rwanda itinerary that works for private groups.'
+  },
+  {
+    trip: 'zanzibar', kicker: 'Island time · Tanzania',
+    headline: 'The Indian Ocean, at your own pace',
+    note: 'White sand at Nungwi and Paje, a spice farm, a dhow at sunset and Stone Town\'s lanes — a five-day reset with room to do nothing at all.'
+  },
+  {
+    trip: 'cape-town', kicker: 'City and coast · South Africa',
+    headline: 'Table Mountain, penguins and the Cape winelands',
+    note: 'A six-day route that pairs Cape Town\'s markets and mountains with the coastal drive, Boulders Beach and a slow afternoon in Stellenbosch.'
+  }
+];
 const WORLD = [
   { t: 'Beaches and Coastlines', img: 'world-beach.webp', d: 'Zanzibar turquoise water, sandbanks, beaches, L. Victoria, Nakuru, Malawi, R. Nile, and many more.' },
   { t: 'Wildlife and Safari', img: 'world-wildlife.webp', d: 'In national parks, zoos and sanctuaries in Uganda, East Africa and beyond.' },
   { t: 'Explore Major Cities', img: 'world-cities.webp', d: 'Kampala, Mombasa, Arusha, Entebbe, Dar es Salaam and more.' },
   { t: 'Culture and Heritage', img: 'world-culture.webp', d: 'Explore African culture, food, dances, songs and dressing of all African tribes.' }
 ];
-/* Trips already completed (no dates on record). Add dates later through admin.html if you wish. */
-const PAST_TRIPS = ['Rwanda Get-Away', 'Global Citizen Ft Doja Cat', 'Campus Connect 1st Edition', 'Open Game Park Package', 'Campus Connect 2nd Edition'];
 /* Organisation chart. Put each person's photo in the site folder with the file name shown, and type their name in `name`. */
 const TEAM = {
   lead: { title: 'Managing Director', photo: '', name: '', bio: 'Provides strategic leadership and overall direction of the company, sets annual targets, builds partnerships and represents Scenes Tours & Travels to clients, regulators and industry partners.' },

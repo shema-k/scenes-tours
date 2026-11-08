@@ -8,7 +8,7 @@ Official website for Scenes Tours and Travels, a youth-led, registered travel co
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Home page: rotating hero and quick enquiry, four ways into the catalogue, featured trips, all trips with region filters and search, destinations, travel services, travel guides, gallery, savings planner, reviews, about/story, team, FAQ and contact |
+| `index.html` | Home page: rotating hero and quick enquiry, four ways into the catalogue, a travel-desk news section, all trips with region filters and search, destinations, travel services, travel guides, gallery, savings planner, reviews, about/story, team, FAQ and contact |
 | `trip.html` | Trip details page, loaded with `?id=queen-elizabeth`, `?id=murchison-falls`, etc. Includes highlights, photos and videos, booking, sharing and a sticky mobile booking bar |
 | `admin.html` | Local trip database editor and media checker (not indexed) |
 
@@ -31,7 +31,7 @@ The main page uses tabs for Safaris, Destinations, Services, Travel guides, Gall
 ## The visitor flow
 
 1. **Hero** — a short value proposition, a quick enquiry form and a plan-your-trip card. Background images rotate slowly and respect reduced-motion settings.
-2. **Safaris** — four ways into the catalogue (Uganda, East Africa, Beyond East Africa, custom), three featured trips, then the full catalogue with region chips and instant search. Searches for places outside the database still offer a private trip to that place.
+2. **Safaris** — four ways into the catalogue (Uganda, East Africa, Beyond East Africa, custom), a news-style travel desk with one lead story and three trip notes, then the full catalogue with region chips and instant search. Every story links to its trip and can be booked directly. Searches for places outside the database still offer a private trip to that place.
 3. **Destinations → Services → Travel guides → Gallery** — less detail per block, more ways to explore.
 4. **Savings → Reviews → About → Contact** — plan, check feedback, meet the company and start a conversation.
 
@@ -46,7 +46,7 @@ Trips in `SEED_TRIPS` use `group: 'Uganda' | 'East Africa' | 'Beyond East Africa
 
 ## Company content
 
-The story, statistics, services, destination cards, previous trips, travel guides and team structure are defined in `data.js` as `STORY`, `STATS`, `SERVICES`, `WORLD`, `PAST_TRIPS`, `GUIDES`, `HERO_SLIDES`, `WAYS` and `TEAM`. Replace a team photo by dropping a new image in this folder and updating its file name in `TEAM`. Team members without a photo show their initials instead.
+The story, statistics, services, destination cards, travel-desk stories, travel guides and team structure are defined in `data.js` as `STORY`, `STATS`, `SERVICES`, `WORLD`, `TRIP_NEWS`, `GUIDES`, `HERO_SLIDES`, `WAYS` and `TEAM`. Replace a team photo by dropping a new image in this folder and updating its file name in `TEAM`. Team members without a photo show their initials instead.
 
 ## Media and performance
 
