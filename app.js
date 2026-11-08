@@ -546,8 +546,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if ($('#trip-grid')) { home(); stage(); }
   if ($('#trip')) detail();
   setupVideos(); done();
-  // All media paths are checked by admin.html; no background repair probe is
-  // needed on every visit, so nothing competes with the main thread after load.
+  // All media paths are checked by the private local editor; no background
+  // repair probe is needed on every visit, so nothing competes with the main thread.
 });
 
 /* ---------- Search suggestions: typing + the trip database + what the visitor searched before ---------- */

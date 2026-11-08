@@ -1,5 +1,5 @@
-/* TRIP DATABASE. Every trip, price, date and place on the site is read from here (plus anything added in admin.html).
-   To publish trips added in admin.html to ALL visitors, paste the exported JSON into PUBLISHED below. */
+/* TRIP DATABASE. Every trip, price, date and place on the site is read from here (plus anything added in the private local editor).
+   To publish edits to ALL visitors, paste the editor export into PUBLISHED below. */
 const SITE = {
   name: 'Scenes Tours & Travels',
   tagline: 'See the world',
@@ -237,18 +237,18 @@ const LEGAL = {
   'Terms of Service': '<p>By using this website and booking any of our travel packages, you agree to our terms. All bookings are subject to availability and confirmation. Deposits are non-refundable unless otherwise stated.</p><p>Scenes Tours and Travels may modify itineraries because of weather, safety or other operational factors. We are not liable for personal injury, loss or damage to property during tours beyond our control.</p><p>Full terms are available on request at our head office.</p>'
 };
 
-/* Records exported from admin.html go here so every visitor sees them. */
+/* Records exported from the private editor go here so every visitor sees them. */
 const PUBLISHED = { trips: [], dates: {}, reviews: [] };
-/* Real customer reviews go here (or add them in admin.html). Example: { name: 'Name', from: 'Kampala', trip: 'queen-elizabeth', rating: 5, text: 'Their words.', date: 'Aug 2026' } */
+/* Real customer reviews go here (or add them in the private editor). Example: { name: 'Name', from: 'Kampala', trip: 'queen-elizabeth', rating: 5, text: 'Their words.', date: 'Aug 2026' } */
 const REVIEWS = [];
 
 const DB = {
   KEY: 'stt_db_v1',
   load() { try { const x = JSON.parse(localStorage.getItem(this.KEY)); return { trips: x.trips || [], dates: x.dates || {}, reviews: x.reviews || [] }; } catch { return { trips: [], dates: {}, reviews: [] }; } },
-  /* Customer feedback: published reviews plus any added in admin.html. Each: { name, from, trip (trip id), rating 1-5, text, date } */
+  /* Customer feedback: published reviews plus any added in the private editor. Each: { name, from, trip (trip id), rating 1-5, text, date } */
   reviews() { return REVIEWS.concat(PUBLISHED.reviews || [], this.load().reviews).filter(r => r && r.text && r.rating); },
   save(x) { try { localStorage.setItem(this.KEY, JSON.stringify(x)); return true; } catch { return false; } },
-  /* Every trip, with all of its departure dates sorted (seed + published + added in admin). */
+  /* Every trip, with all of its departure dates sorted (seed + published + local preview edits). */
   trips() {
     const local = this.load();
     return SEED_TRIPS.concat(PUBLISHED.trips, local.trips).map(t => {

@@ -10,7 +10,6 @@ Official website for Scenes Tours and Travels, a youth-led, registered travel co
 | --- | --- |
 | `index.html` | Home page: rotating hero and quick enquiry, four ways into the catalogue, a travel-desk news section, all trips with region filters and search, destinations, travel services, travel guides, gallery, savings planner, reviews, about/story, team, FAQ and contact |
 | `trip.html` | Trip details page, loaded with `?id=queen-elizabeth`, `?id=murchison-falls`, etc. Includes highlights, photos and videos, booking, sharing and a sticky mobile booking bar |
-| `admin.html` | Local trip database editor and media checker (not indexed) |
 
 The main page uses tabs for Safaris, Destinations, Services, Travel guides, Gallery, Savings, Reviews, About us and Contact. The team and FAQ panels are kept for deep links (`#team`, `#faq`) and are linked from the About menu.
 
@@ -37,10 +36,12 @@ The main page uses tabs for Safaris, Destinations, Services, Travel guides, Gall
 
 ## Adding or changing trips
 
-1. Open `admin.html` in a browser.
-2. Add a trip or a new date. It appears on the site in that browser immediately.
-3. Copy the export at the bottom of the admin page into `PUBLISHED` in `data.js` to publish it to every visitor.
-4. Run the media check on the admin page to confirm every photo and video filename resolves.
+The trip editor is deliberately not part of this public repository or the live site. It is kept in the owner's private local folder, outside the website, and is never deployed.
+
+1. Start the private editor from its local folder and open it in a browser.
+2. Add a trip or a new date. It appears in the local site preview immediately.
+3. Copy the export at the bottom of the editor into `PUBLISHED` in `data.js` to publish it to every visitor.
+4. Run the media check in the editor to confirm every photo and video filename resolves.
 
 Trips in `SEED_TRIPS` use `group: 'Uganda' | 'East Africa' | 'Beyond East Africa'` for the region filter and navigation. Use `kind: 'request'` with `price: null` for a trip that is quoted around the traveller's dates; use `kind: 'dated'` with `start`/`end` for scheduled departures.
 
@@ -58,4 +59,8 @@ The story, statistics, services, destination cards, travel-desk stories, travel 
 
 ## Deployment
 
-The site is plain static HTML, CSS and JavaScript. Push to `main` and GitHub Pages publishes it. Bump `?v=` in `index.html`, `trip.html` and `admin.html` when CSS or JS changes so returning visitors receive the new files.
+The site is plain static HTML, CSS and JavaScript. Push to `main` and GitHub Pages publishes it. Bump `?v=` in `index.html` and `trip.html` when CSS or JS changes so returning visitors receive the new files.
+
+## Admin access
+
+The public site contains no trip editor. The editor is intentionally excluded from this repository and from GitHub Pages, so the live URL cannot serve it. Keep the private copy outside the website folder and do not add client-side passwords as a substitute for real access control. If the editor ever needs to be used remotely, put it behind real server-side authentication or a private VPN rather than publishing it as a static page.
