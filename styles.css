@@ -653,3 +653,10 @@ nav .dd-menu .dd-label+ a{padding-top:.35rem}
 /* Reserve the loaded heading height so a late webfont cannot move the form */
 @media(max-width:443px){.hero-sm h1{min-height:3.36em}}
 @media(min-width:444px) and (max-width:600px){.hero-sm h1{min-height:2.24em}}
+
+/* Keep the quick-plan controls the same height before and after webfonts load */
+@media(max-width:600px){
+  .quick select{height:40px}
+  .quick input{height:44px}
+  .quick .btn{height:42px}
+}
