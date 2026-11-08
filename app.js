@@ -484,16 +484,20 @@ function setupVideos() {
 }
 function setupHero() {
   const bg = $('#hero-bg'); if (!bg) return;
-  bg.innerHTML = HERO_SLIDES.map((src, i) => `<span class="hero-slide${i === 0 ? ' on' : ''}" style="background-image:url('${src}')"></span>`).join('');
+  // Only the first slide is requested up front. The others load just before
+  // they are needed, so the hero does not compete with the page's LCP.
+  bg.innerHTML = HERO_SLIDES.map((src, i) => `<span class="hero-slide${i === 0 ? ' on' : ''}"${i === 0 ? ` style="background-image:url('${src}')"` : ` data-bg="${src}"`}></span>`).join('');
   const slides = $$('.hero-slide', bg), dots = $('#hero-dots');
+  const load = el => { if (el && el.dataset.bg) { el.style.backgroundImage = `url('${el.dataset.bg}')`; delete el.dataset.bg; } };
   if (dots) {
     dots.innerHTML = HERO_SLIDES.map((src, i) => `<button type="button" aria-label="Show background ${i + 1}" aria-current="${i === 0}"></button>`).join('');
     const bs = $$('button', dots);
-    bs.forEach((b, i) => b.addEventListener('click', () => { go(i); reset(); }));
+    bs.forEach((b, i) => b.addEventListener('click', () => { load(slides[i]); go(i); reset(); }));
   }
   let i = 0;
   const go = n => {
     i = (n + slides.length) % slides.length;
+    load(slides[i]); load(slides[(i + 1) % slides.length]);
     slides.forEach((s, k) => s.classList.toggle('on', k === i));
     if (dots) $$('button', dots).forEach((b, k) => b.setAttribute('aria-current', k === i));
   };
@@ -501,6 +505,7 @@ function setupHero() {
   const start = () => { if (!timer && !matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => { if (!document.hidden) go(i + 1); }, 6500); };
   const reset = () => { clearInterval(timer); timer = null; start(); };
   start();
+  if (slides.length > 1) setTimeout(() => load(slides[1]), 3200);
   document.addEventListener('visibilitychange', () => { if (document.hidden) { clearInterval(timer); timer = null; } else start(); });
 }
 
