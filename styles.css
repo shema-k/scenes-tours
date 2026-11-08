@@ -644,3 +644,8 @@ nav .dd-menu .dd-label+ a{padding-top:.35rem}
   .bar{padding:.65rem 0}
   .hero-sm{padding:7.4rem 0 2rem}
 }
+
+/* Phones: keep the photography, skip full-page motion that costs paint time */
+@media(max-width:900px){
+  body::before,.bgs::before,.hero-slide.on,.t-media img,.t-media video,.next{animation:none}
+}
