@@ -1,2 +1,4 @@
-# Owner-only admin tools are kept outside this public website folder.
-/admin*.html
+# Local-only previews and secrets must never be committed.
+/admin.local.html
+.env
+.env.*

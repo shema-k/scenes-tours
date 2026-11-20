@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src 'self' https://api.github.com; font-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Owner trip editor | Scenes Tours &amp; Travels</title><link rel="icon" href="favicon.png"><link rel="stylesheet" href="styles.css?v=20"></head>
+<body class="inner"><header id="site-header" class="stuck"><div class="wrap bar"><a class="brand" href="index.html"><span>Scenes Tours &amp; Travels: owner editor</span></a><a class="btn btn-primary" href="index.html">View website</a></div></header>
+<div class="bgs v-warm"><main class="wrap admin">
+
+  <section id="lock" class="admin-gate">
+    <p class="meta">This is the owner-only trip editor. It writes directly to <b>data.js</b> through the GitHub API, and GitHub Pages publishes the change to the live website.</p>
+    <h2>Connect to GitHub</h2>
+    <form id="auth" class="planner">
+      <label>Fine-grained GitHub token
+        <input id="token" name="token" type="password" autocomplete="off" spellcheck="false" autocapitalize="off" placeholder="github_pat_..." required>
+      </label>
+      <label class="admin-check"><input id="remember" type="checkbox"> Remember this token on this device</label>
+      <button class="btn btn-primary wide" type="submit">Connect</button>
+      <div id="authStatus" class="admin-status" role="status"></div>
+    </form>
+    <details class="admin-details">
+      <summary>How to create the token</summary>
+      <ol>
+        <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained tokens → Generate new token</a>.</li>
+        <li>Repository access: <b>Only select repositories</b> → <b>scenes-tours</b>.</li>
+        <li>Repository permissions → <b>Contents: Read and write</b>. Metadata is added automatically.</li>
+        <li>Set a short expiration, generate the token, and paste it above. Do not share it.</li>
+      </ol>
+      <p class="meta">The token stays in this browser and is never written into the website files. Use a private device and a short-lived token. Anyone can open this page, but only a valid token can publish changes.</p>
+    </details>
+  </section>
+
+  <section id="panel" hidden>
+    <div class="admin-bar">
+      <div><b>Connected</b> <span id="who" class="meta"></span><br><a id="repoLink" class="meta" target="_blank" rel="noopener">Open data.js on GitHub</a></div>
+      <div class="admin-bar-actions">
+        <button class="btn btn-ghost" id="reload" type="button">Reload from GitHub</button>
+        <button class="btn btn-ghost" id="disconnect" type="button">Disconnect</button>
+      </div>
+    </div>
+    <div id="status" class="admin-status" role="status"></div>
+    <p id="count" class="meta"></p>
+
+    <h2>Add a trip</h2>
+    <form id="tf" class="planner">
+      <div class="row"><label>Title<input name="title" required></label><label>Type<input name="type" list="types" placeholder="Safari, Beach, Regional, Custom" required></label></div><datalist id="types"></datalist>
+      <div class="row"><label>Region / destination<input name="region" required></label><label>Duration<input name="duration" placeholder="3 days / 2 nights"></label></div>
+      <label>Short summary<input name="summary" required></label><label>Full description<input name="desc"></label>
+      <div class="row"><label>Start date<input name="start" type="date"></label><label>End date<input name="end" type="date"></label></div>
+      <div class="row"><label>Single price (UGX)<input name="single" type="number" min="0"></label><label>Double price (UGX)<input name="double" type="number" min="0"></label></div>
+      <div class="row"><label>Seat deposit (UGX)<input name="deposit" type="number" min="0"></label><label>Pickup points<input name="pickup"></label></div>
+      <label>Places to visit (comma separated)<input name="locations"></label><label>Activities (comma separated)<input name="activities"></label>
+      <label>Highlights (comma separated)<input name="highlights"></label><label>Cost includes (comma separated)<input name="includes"></label>
+      <label>Photo or video file name<input name="media" placeholder="e.g. murchison.webp or murchison.mp4"></label>
+      <button class="btn btn-primary wide" type="submit">Add trip to draft</button>
+    </form>
+
+    <h2>Add a new date to an existing trip</h2>
+    <form id="df" class="planner"><div class="row"><label>Trip<select name="trip"></select></label><span></span></div><div class="row"><label>Start<input name="start" type="date" required></label><label>End<input name="end" type="date" required></label></div><button class="btn btn-primary wide" type="submit">Add date to draft</button></form>
+
+    <h2>Customer feedback (reviews)</h2><p class="meta">Add real feedback customers have sent you (for example from WhatsApp). It shows in the Reviews tab and on that trip's page after publishing.</p>
+    <form id="rf" class="planner"><div class="row"><label>Customer name<input name="name" required></label><label>From (city or country)<input name="from"></label></div>
+      <div class="row"><label>Trip<select name="trip"></select></label><label>Rating<select name="rating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label></div>
+      <label>Month and year (optional)<input name="date" placeholder="e.g. Aug 2026"></label><label>Their feedback, in their own words<input name="text" required></label>
+      <button class="btn btn-primary wide" type="submit">Add review to draft</button>
+    </form>
+    <div id="rl"></div>
+
+    <h2>In PUBLISHED</h2>
+    <p class="meta">These are the trips, dates and reviews currently in <b>PUBLISHED</b> in <b>data.js</b>. Remove an item here, then publish to take it off the live website.</p>
+    <div id="mine"></div>
+
+    <h2>Publish to the live website</h2>
+    <div class="planner">
+      <p class="meta">Publishing commits the JSON below into <b>PUBLISHED</b> in <b>data.js</b> on <b>main</b>. GitHub Pages usually updates within a minute.</p>
+      <button class="btn btn-primary wide" id="publish" type="button">Publish changes to GitHub</button>
+      <p class="meta" id="lastCommitWrap" hidden><a id="lastCommit" target="_blank" rel="noopener">View the latest commit</a></p>
+      <p class="actions"><button class="btn btn-ghost" id="clearLocal" type="button">Clear old local browser draft</button></p>
+      <p class="meta">Use the button above only if an old local editor left duplicate trips in this browser. It does not change the live website.</p>
+    </div>
+
+    <h2>Backup export</h2>
+    <textarea id="out" readonly aria-label="PUBLISHED JSON backup"></textarea><p class="actions"><button class="btn btn-ghost" id="copy" type="button">Copy JSON</button></p>
+
+    <h2>Photo and video check</h2><p class="meta">Checks every file the website uses, including trips added above. If one shows Missing, add it to the website folder with exactly that name.</p>
+    <div class="planner"><p id="msum" class="meta"></p><div id="mlist"></div><p class="actions"><button class="btn btn-ghost" id="mre" type="button">Check again</button></p></div>
+  </section>
+</main></div>
+<script src="data.js?v=20"></script><script src="admin.js?v=20"></script></body></html>

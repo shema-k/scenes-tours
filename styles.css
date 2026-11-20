@@ -699,3 +699,66 @@ nav .dd-menu .dd-label+ a{padding-top:.35rem}
   .quick input{height:44px}
   .quick .btn{height:42px}
 }
+
+
+/* =====================================================================
+   RESPONSIVE FIXES (v20). Layout and sizing only; no content changes.
+   Placed last so it wins over earlier rules of equal specificity.
+   To undo everything, delete from here to the end of the file.
+   ===================================================================== */
+
+/* 1. Images with width/height attributes (e.g. height="760") must not stretch */
+img,video{height:auto}
+
+/* 2. Grid and flex children may shrink instead of forcing sideways scrolling */
+.hero-grid>*,.save>*,.about>*,.contact>*,.rev-layout>*,.t-grid>*,.foot>*,
+.quick>*,.row>*,.out>*,.panel-head>*,.news-layout>*,.news-mast-row>*,.org-depts>*,.faq>*{min-width:0}
+input,select,textarea{min-width:0;max-width:100%}
+
+/* 3. Mobile rules that later desktop rules had cancelled */
+@media(max-width:860px){
+  .save{grid-template-columns:1fr;gap:1.6rem}
+  .about{grid-template-columns:1fr;gap:1.6rem}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){.foot{grid-template-columns:1fr}}
+
+/* 4. Auto-fit grids: never demand more width than a 280px phone has */
+.grid{grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr))}
+.svc-grid{grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr))}
+.hist-grid{grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr))}
+.videos{grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr))}
+.gallery{grid-template-columns:repeat(auto-fill,minmax(min(190px,100%),1fr))}
+.stats{grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr))}
+.lists{grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
+
+/* 5. Carousel arrows stay on screen on tablets and small laptops */
+@media(max-width:1240px){.rail-btn.prev{left:-10px}.rail-btn.next{right:-10px}}
+
+/* 6. Mobile menu: scrolls if taller than the screen; trips menu fits narrow phones */
+@media(max-width:860px){
+  nav{max-height:calc(100vh - 7rem);max-height:calc(100dvh - 7rem);overflow-y:auto;overscroll-behavior:contain}
+  .trips-menu{min-width:0;max-height:none;overflow:visible}
+}
+
+/* 7. Savings figures, contact details and forms on narrow screens */
+.out b{font-size:clamp(1.1rem,2.2vw + .5rem,1.5rem);overflow-wrap:anywhere}
+.info>div{min-width:0}
+.info a,.info p{overflow-wrap:anywhere}
+.qr{flex-wrap:wrap}
+.tools{width:100%}
+@media(max-width:600px){
+  .planner{padding:1.25rem}
+  .dark-card{padding:1.25rem}
+  .out{padding:1rem;gap:.7rem}
+  .ac{width:100%}
+  .panel-head .meta{max-width:none}
+}
+
+/* 8. Large monitors and TVs: use the extra room, keep the same arrangement */
+@media(min-width:1600px){.wrap{width:min(1380px,100% - 4rem)}}
+@media(min-width:2200px){html{font-size:118%}.wrap{width:min(1600px,100% - 4rem)}}
+
+/* 9. Pop-ups on short screens and landscape phones */
+dialog{max-height:92vh;max-height:92dvh;overflow:auto}
+@media(max-height:500px) and (orientation:landscape){.stage{min-height:0}}
