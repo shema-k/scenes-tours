@@ -22,8 +22,8 @@ const SEED_TRIPS = [
   {
     id: 'queen-elizabeth', type: 'Safari', group: 'Uganda', feature: 'queen-elizabeth.webp', title: 'Queen Elizabeth Safari', region: 'Western Uganda',
     duration: '3 days / 2 nights', kind: 'dated', start: '2026-08-28', end: '2026-08-30',
-    price: { single: 250000, double: 450000 }, deposit: 50000, saveNote: 'Save 175K over 2 months to join.',
-    pickup: 'Oryx Lugogo and Rubis Kansanga',
+    price: null, pickup: 'Oryx Lugogo and Rubis Kansanga',
+    bestTime: 'June to September and December to February are the driest months, ideal for game drives and the Kazinga Channel boat cruise. March to May and October to November are greener with fewer crowds and beautiful scenery, though short showers are possible.',
     summary: 'Game loops with elephants, lions and buffaloes, the Kazinga Channel boat cruise, and campfires under the African sky.',
     desc: 'A 3-day, 2-night journey through one of Uganda\'s most spectacular wildlife destinations: savanna game drives, a boat cruise on the Kazinga Channel, campfires, music on board and lodging under the stars.',
     media: { type: 'video', src: 'hotsprings.mp4', poster: 'poster-hotsprings.webp', preview: 'preview-hotsprings.mp4' },
@@ -41,6 +41,7 @@ const SEED_TRIPS = [
   {
     id: 'diani-beach', type: 'Beach', group: 'East Africa', feature: 'world-beach.webp', title: 'Diani Beach Holiday', region: 'Diani Beach, Kenya',
     duration: 'To be communicated', kind: 'tbc', price: null,
+    bestTime: 'July to October and January to March offer the sunniest beach weather, calm seas and great snorkeling. April to June brings the long rains, while November has short showers but fewer visitors.',
     summary: 'Cool ocean breeze, sun-soaked beaches, snorkeling and premium beachfront hotels on the Kenyan coast.',
     desc: 'Experience the cool ocean breeze, beautiful sun-soaked beaches, historic Fort Jesus walks, snorkeling adventures, and premium beachfront hotel accommodation in Kenya.',
     media: { type: 'video', src: 'beachview.mp4', poster: 'poster-beachview.webp', preview: 'preview-beachview.mp4' },
@@ -50,6 +51,7 @@ const SEED_TRIPS = [
   {
     id: 'rwanda-adventures', type: 'Regional', group: 'East Africa', feature: 'rwanda.webp', title: 'Rwanda Adventures and Safari Packages', region: 'Rwanda',
     duration: 'Flexible', kind: 'yearround', price: null,
+    bestTime: 'June to September and December to February are the best months for gorilla trekking and volcano hikes, with drier trails. Rwanda is welcoming year-round; the greener months bring lush views and lighter crowds.',
     summary: 'Mountain gorillas, volcanoes, luxury lodges and Kigali city trips, as private or group tours.',
     desc: 'Explore Rwanda\'s mountain gorillas, volcanoes, luxury lodges and breathtaking landscapes. We organize private and group tours throughout the year with customizable itineraries.',
     media: { type: 'image', src: 'rwanda.webp' },
@@ -65,6 +67,7 @@ const SEED_TRIPS = [
   {
     id: 'custom-trips', type: 'Custom', group: 'Uganda', title: 'Custom Made Trips Across Uganda', region: 'Uganda and East Africa',
     duration: 'Your choice', kind: 'request', price: null,
+    bestTime: 'The best time depends on where you want to go: Uganda’s dry seasons (June–September and December–February) suit most safaris and treks, while the green seasons offer lush scenery and quieter parks. Tell us your destination and dates and we’ll recommend the ideal timing.',
     summary: 'Journeys designed around your interests and budget, to any destination in Uganda.',
     desc: 'Tailor-made trips across Uganda and East Africa, designed around your budget, interests and travel dreams. Tell us your vision and we handle the logistics.',
     media: { type: 'image', src: 'custom1.webp' },
@@ -80,6 +83,7 @@ const SEED_TRIPS = [
   {
     id: 'murchison-falls', type: 'Safari', group: 'Uganda', title: 'Murchison Falls Safari', region: 'North-Western Uganda',
     duration: '3 days / 2 nights', kind: 'request', price: null,
+    bestTime: 'December to February and June to September are best for wildlife viewing on the northern bank. The falls are powerful year-round; the wetter months (March–May, October–November) are greener with fewer visitors.',
     summary: 'The Nile forcing itself through a rock gorge, a launch cruise to the falls and big-game plains on the northern bank.',
     desc: 'Stand at the top of the world\'s most powerful waterfall, cruise the Nile to its base and explore the savanna plains where elephants, giraffes, lions and buffaloes roam. A compact, high-impact safari from Kampala.',
     media: { type: 'image', src: 'custom4.webp' },
@@ -95,6 +99,7 @@ const SEED_TRIPS = [
   {
     id: 'bwindi-gorillas', type: 'Safari', group: 'Uganda', title: 'Bwindi Gorilla Trekking', region: 'South-Western Uganda',
     duration: '3 to 4 days', kind: 'request', price: null,
+    bestTime: 'June to August and December to February make trekking easier with drier forest trails. Gorilla permits are available year-round; in the rainy seasons trails can be muddier but the forest is at its most lush.',
     summary: 'One hour with a mountain gorilla family in an ancient rainforest, plus Lake Bunyonyi and community walks.',
     desc: 'Track mountain gorillas through the misty Bwindi Impenetrable Forest with a ranger guide, then unwind on the terraced shores of Lake Bunyonyi. We help with permits, lodging and the long drive from Kampala.',
     media: { type: 'image', src: 'gorilla.webp' },
@@ -110,6 +115,7 @@ const SEED_TRIPS = [
   {
     id: 'lake-bunyonyi', type: 'Nature', group: 'Uganda', title: 'Lake Bunyonyi Escape', region: 'South-Western Uganda',
     duration: '3 days / 2 nights', kind: 'request', price: null,
+    bestTime: 'Lake Bunyonyi is beautiful year-round. The driest, clearest months are June to August and December to February, perfect for canoeing, hiking and lake views.',
     summary: '29 islands, dugout canoes, terraced hills and quiet lakeside lodges — Uganda at its most peaceful.',
     desc: 'Slow down on one of Africa\'s most beautiful lakes. Paddle between islands, visit hill communities, hike to viewpoints and sleep beside the water.',
     media: { type: 'image', src: 'lakeview.webp' },
@@ -155,6 +161,7 @@ const SEED_TRIPS = [
   {
     id: 'zanzibar', type: 'Beach', group: 'East Africa', title: 'Zanzibar Island Holiday', region: 'Zanzibar, Tanzania',
     duration: '5 days / 4 nights', kind: 'request', price: null,
+    bestTime: 'June to October offers dry, pleasantly warm beach weather, while December to February is hot and sunny. The long rains fall around March to May and short rains in November, when it’s quieter.',
     summary: 'Turquoise water, spice tours, dhow cruises and the white sand of Nungwi and Paje.',
     desc: 'Fly out to the Indian Ocean for a relaxed beach stay with a spice-farm visit, a dhow sunset cruise and time in Stone Town.',
     media: { type: 'image', src: 'world-beach.webp' },
@@ -200,6 +207,7 @@ const SEED_TRIPS = [
   {
     id: 'dubai-stopover', type: 'City', group: 'Beyond East Africa', title: 'Dubai City and Desert Stopover', region: 'Dubai, UAE',
     duration: '4 days / 3 nights', kind: 'request', price: null,
+    bestTime: 'November to March is the most comfortable time, with pleasant temperatures for city tours and desert safaris. May to September is very hot, though indoor attractions and deals are plentiful.',
     summary: 'A modern-city stopover with a desert safari, old Dubai and easy connections onward.',
     desc: 'Add a Dubai stopover to your East African trip: skyline views, the old creek and souks, a desert dune safari and time to shop or rest before flying home.',
     media: { type: 'image', src: 'world-cities.webp' },
@@ -214,6 +222,7 @@ const SEED_TRIPS = [
   {
     id: 'cape-town', type: 'City', group: 'Beyond East Africa', title: 'Cape Town and the Cape Coast', region: 'Cape Town, South Africa',
     duration: '6 days / 5 nights', kind: 'request', price: null,
+    bestTime: 'November to March (summer) is ideal for beaches, Table Mountain and coastal drives. June to August is cooler and wetter but great for whale watching and winelands visits with fewer crowds.',
     summary: 'Table Mountain, the Cape Peninsula, wine country and Atlantic beaches.',
     desc: 'A longer international escape combining Cape Town\'s mountains and markets with the Cape Peninsula drive, penguins at Boulders and a day in the winelands.',
     media: { type: 'image', src: 'world-beach.webp' },
@@ -234,7 +243,7 @@ const PLACES = ['Queen Elizabeth National Park', 'Kazinga Channel', 'Kiwa Hot Sp
 
 const LEGAL = {
   'Privacy Policy': '<p>We respect your privacy. Information you share through booking or enquiry forms is used only to process your request, contact you, and support your travel plans. We do not sell your personal details to third parties.</p><p>We may store your name, phone number, email address and travel preferences to improve our service and follow up on booking requests. By using this site, you consent to this data being used for travel coordination and customer support.</p>',
-  'Terms of Service': '<p>By using this website and booking any of our travel packages, you agree to our terms. All bookings are subject to availability and confirmation. Deposits are non-refundable unless otherwise stated.</p><p>Scenes Tours and Travels may modify itineraries because of weather, safety or other operational factors. We are not liable for personal injury, loss or damage to property during tours beyond our control.</p><p>Full terms are available on request at our head office.</p>'
+  'Terms of Service': '<p>By using this website and booking any of our travel packages, you agree to our terms. All bookings are subject to availability and confirmation. Any booking commitments or deposits, where applicable, are handled according to the terms shared at confirmation and may be non-refundable unless otherwise stated.</p><p>Scenes Tours and Travels may modify itineraries because of weather, safety or other operational factors. We are not liable for personal injury, loss or damage to property during tours beyond our control.</p><p>Full terms are available on request at our head office.</p>'
 };
 
 /* Records exported from the private editor go here so every visitor sees them. */
@@ -303,7 +312,7 @@ const STORY = [
 ];
 const STATS = [
   { n: 5, suf: '+', l: 'Years of experience' }, { n: 7, l: 'Core travel services' },
-  { n: 50000, pre: 'UGX ', l: 'Starts a savings account' }, { n: 4, l: 'Trip types: group, family, school, custom' }
+  { n: 4, l: 'Trip types: group, family, school, custom' }, { n: 1, suf: '+', l: 'Easy way to start saving for travel' }
 ];
 const SERVICES = [
   { t: 'Custom and private trips', d: 'A route, pace and budget built around you — not a fixed group departure.', cta: 'Plan a private trip' },
@@ -338,7 +347,7 @@ const GUIDES = [
     body: [
       'Uganda is a year-round destination, but the experience changes with the rains. The drier months from December to February and June to September are easiest for game drives, gorilla trekking and long road trips. Tracks are firmer, parks are busy and the savanna is shorter, which makes animals easier to spot.',
       'The green seasons bring fewer travellers, lower lodge rates and dramatic skies. Waterfalls are fuller, the forests are lush and birding is excellent. Expect short afternoon downpours and allow extra time on murram roads, especially in the west.',
-      'Gorilla permits are limited every day of the year, so the best time is often simply the date you can secure a permit. Tell us your window and we will build the route around it.'
+      'Gorilla permits are limited every day of the year, so the best time is often simply the date you can secure a permit. Select any destination on our site to see its best time to visit, and tell us your window — we will build an affordable route around it.'
     ]
   },
   {
@@ -352,13 +361,13 @@ const GUIDES = [
     ]
   },
   {
-    id: 'safari-cost', title: 'How much does a Uganda safari cost?', date: 'Sep 2026', read: '4 min read',
+    id: 'safari-cost', title: 'What affects the cost of a Uganda safari?', date: 'Sep 2026', read: '4 min read',
     img: 'custom4.webp', place: 'Murchison Falls',
-    excerpt: 'What drives the price — parks, lodges, transport and group size — and where you can save without losing the experience.',
+    excerpt: 'Why prices vary by season, parks, lodges and group size — and how we keep every trip affordable.',
     body: [
-      'A safari price is mostly park fees, accommodation, transport and guide time. Group size matters: sharing a 4x4 and a guide across four travellers usually costs less per person than a private trip for two.',
-      'Lodges are the biggest swing. A comfortable mid-range camp, a budget guesthouse and a luxury lodge can differ several times over for the same view. We quote each option clearly so you can choose.',
-      'Our scheduled Queen Elizabeth Safari starts at UGX 250,000 single and UGX 450,000 double, with a UGX 50,000 seat deposit. Custom trips are quoted after we agree the route, dates and standard of lodging.'
+      'Safari costs are shaped by park fees, accommodation, transport and guide time — and they vary depending on the time of year, availability and the style of trip you choose. Peak travel seasons and holiday periods can differ from quieter months, so timing matters.',
+      'Group size and lodging make a big difference. Sharing a 4x4 and a guide across travellers often brings the cost down per person, and there are comfortable options at different budget levels. Our trips are designed to be affordable without losing the experience.',
+      'Every trip is quoted around your destination, dates and preferences. Select a destination to learn the best time to visit, and we’ll recommend the right season and an option that fits your budget.'
     ]
   },
   {
@@ -378,7 +387,7 @@ const GUIDES = [
     body: [
       'Diani is a long, white-sand beach south of Mombasa. The reef keeps the water calm, which makes it good for swimming and snorkeling, and the beach is lined with hotels, cafes and small tour operators.',
       'Give yourself at least one day in Mombasa for Fort Jesus and the old town. The fort tells the story of the Swahili coast and is an easy, worthwhile break from the beach.',
-      'We can book flights, airport transfers and beachfront hotels, then add a safari or a few days in Nairobi if you want a combined trip. Prices depend on season and hotel choice, so ask for a quote.'
+      'We can book flights, airport transfers and beachfront hotels, then add a safari or a few days in Nairobi if you want a combined trip. Costs vary by season and hotel choice, so ask for an affordable quote tailored to when you travel.'
     ]
   },
   {
@@ -428,8 +437,8 @@ const WORLD = [
 ];
 /* Organisation chart. Put each person's photo in the site folder with the file name shown, and type their name in `name`. */
 const TEAM = {
-  lead: { title: 'Managing Director', photo: '', name: '', bio: 'Provides strategic leadership and overall direction of the company, sets annual targets, builds partnerships and represents Scenes Tours & Travels to clients, regulators and industry partners.' },
-  deputy: { title: 'Deputy Managing Director', photo: 'team-deputy.webp', name: '', bio: 'Second in command. Deputizes for the Managing Director, supervises the department heads and oversees day-to-day operations so company plans and trip standards are delivered.' },
+  lead: { title: 'Managing Director', photo: 'brochure-founder.webp', name: 'Mr. Mukisa Shear-Jashub', bio: 'Provides strategic leadership and overall direction of the company, sets annual targets, builds partnerships and represents Scenes Tours & Travels to clients, regulators and industry partners.' },
+  deputy: { title: 'Deputy Managing Director', photo: 'team-deputy.webp', name: 'Mr. Shema Kevine', bio: 'Second in command. Deputizes for the Managing Director, supervises the department heads and oversees day-to-day operations so company plans and trip standards are delivered.' },
   depts: [
     { name: 'Operations and Tour Delivery',
       head: { title: 'Operations Manager', photo: '', name: '', bio: 'Plans and coordinates itineraries, transport, suppliers, lodging and schedules so every departure runs smoothly and on time.' },
@@ -444,17 +453,17 @@ const TEAM = {
     { name: 'Marketing and Communications',
       head: { title: 'Public Relations Officer', photo: '', name: '', bio: 'Manages the company\'s reputation, media relations, partnerships and community engagement.' },
       members: [
-        { title: 'Media Team', photo: '', name: '', bio: 'Captures and publishes photo, video and social content that documents every trip and promotes our packages.' }] }
+        { title: 'Media Team', photo: 'team-media.webp', name: '', bio: 'Captures and publishes photo, video and social content that documents every trip and promotes our packages.' }] }
   ]
 };
 
 const FAQ = [
   { q: 'Who is Scenes Tours & Travels?', a: 'We are a youth-led, registered Ugandan tour company based in Kampala. With over five years of experience, we have organized group, family, school and customized trips within Uganda and beyond.' },
-  { q: 'How do I book a trip?', a: 'Choose a trip, press Book now and send your details on WhatsApp. Our team replies to confirm your seat. You can also call 0700 907 617 or 0784 066 320, or visit our office in Kampala.' },
-  { q: 'How much is the deposit?', a: 'Seats on our Queen Elizabeth Safari are reserved with a UGX 50,000 deposit, and you can save towards the remaining amount over about two months. Deposits are non-refundable unless otherwise stated in our Terms of Service.' },
-  { q: 'What is included in the Queen Elizabeth Safari?', a: 'Accommodation, feeding, park entrance fees, the boat cruise and transport. Pickup is at Oryx Lugogo and Rubis Kansanga.' },
+  { q: 'How do I book a trip?', a: 'Choose a trip, press Book now and send your details on WhatsApp. Our team replies to confirm availability and guide you on the next steps. You can also call 0700 907 617 or 0784 066 320, or visit our office in Kampala.' },
+  { q: 'How much do trips cost?', a: 'Our trips are affordable and tailored to your needs. Prices vary depending on the destination, group size, travel style and the time of year you choose to travel. Select a destination to see the best time to visit, then contact us for a quote that fits your plan and budget.' },
+  { q: 'What is included in the Queen Elizabeth Safari?', a: 'Typically accommodation, meals, park entrance fees, the boat cruise and transport, with pickup arranged in Kampala. Inclusions can vary by season and package — we’ll confirm the full details when you enquire.' },
   { q: 'Can I save towards a trip?', a: 'Yes. The Scenes Traveler\'s Savings Account lets you start with as little as UGX 50,000 and save at your own pace towards your next adventure. Terms and conditions apply.' },
   { q: 'Can you organize a trip for my school, family or group?', a: 'Yes. We handle the logistics for student, school, family and group trips so the adventure stays affordable for the whole squad.' },
-  { q: 'Can a trip be tailored to my budget?', a: 'Yes. Tell us your budget, interests and dates and we tailor a package around them, including lodging, transport and activities.' },
+  { q: 'Can a trip be tailored to my budget?', a: 'Yes. Our trips are affordable and flexible — tell us your budget, interests and dates and we’ll tailor a package around them. Prices vary by season and availability, and we’ll recommend the best time to visit your chosen destination for the best experience and value.' },
   { q: 'Can the itinerary change?', a: 'Itineraries may be adjusted because of weather, safety or other operational factors. Full terms are available on request at our head office.' }
 ];

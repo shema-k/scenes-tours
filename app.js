@@ -22,17 +22,15 @@ function status(t) {
 }
 function tripInfoHTML(t, chips) {
   const s = status(t);
-  const rows = [['Where', t.region], ['Duration', t.duration], ['Dates', s.label], ['Price', priceText(t)], t.deposit && ['Seat deposit', fmt(t.deposit)], t.pickup && ['Pickup', t.pickup]].filter(Boolean);
+  const rows = [['Where', t.region], ['Duration', t.duration], ['Dates', s.label], ['Pricing', priceText(t)], t.bestTime && ['Best time to visit', t.bestTime], t.pickup && ['Pickup', t.pickup]].filter(Boolean);
   const ups = (t.deps || []).filter(d => new Date(d.end + 'T23:59:59') >= new Date());
   return `<h4>${esc(t.title)}</h4><p>${esc(t.summary)}</p><dl>${rows.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>`
     + (t.includes ? `<p class="inc"><b>Includes:</b> ${t.includes.map(esc).join(', ')}</p>` : '')
     + (chips && ups.length ? `<p class="deps"><b>Pick a date:</b> ${ups.map(d => `<button type="button" class="chip" data-date="${d.start}">${range(d)}</button>`).join('')}</p>` : '');
 }
-const priceText = t => t.price ? `${fmt(t.price.single)} single, ${fmt(t.price.double)} double` : (t.kind === 'tbc' ? 'Fee to be communicated' : 'Quoted per trip');
-const fromPrice = t => t.price ? `From ${fmt(t.price.single)} <small>per person</small>` : (t.kind === 'tbc' ? 'Fee to be announced' : 'Price on request');
-const plansFor = t => t.price
-  ? [`Single traveller (${fmt(t.price.single)})`, `Double / couple (${fmt(t.price.double)})`, 'Group / custom size']
-  : ['Solo traveller', 'Couple', 'Small group (3 to 6)', 'Large group (7+)'];
+const priceText = t => 'Affordable and flexible — prices vary depending on the destination, travel dates and time of year. Contact us for a quote tailored to your plan.';
+const fromPrice = t => 'Affordable rates <small>vary by season</small>';
+const plansFor = () => ['Solo traveller', 'Couple', 'Small group (3 to 6)', 'Large group (7+)'];
 const mediaHTML = (m, alt) => m.type === 'video'
   ? `<video src="${m.preview || m.src}" ${m.poster ? `poster="${m.poster}"` : ''} muted loop playsinline preload="none" aria-label="${esc(alt)}"></video>`
   : `<img src="${m.src}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
@@ -147,7 +145,7 @@ function injectChrome() {
       <label>Destination<select name="trip" required>${TRIPS.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('')}</select></label></div>
       <div class="row" id="custom-fields" hidden><label>Where do you want to go?<input name="destination" placeholder="e.g. Murchison Falls"></label>
         <label>Number of travellers<input name="travellers" inputmode="numeric" placeholder="e.g. 2"></label></div>
-      <div class="row" id="custom-fields-2" hidden><label>Estimated budget (UGX, optional)<input name="budget" inputmode="numeric" placeholder="e.g. 500000"></label>
+      <div class="row" id="custom-fields-2" hidden><label>Estimated budget (optional)<input name="budget" inputmode="text" placeholder="e.g. flexible / tell us your range"></label>
         <label>What catches your eye?<input name="interest" placeholder="e.g. gorillas, rafting, culture"></label></div>
       <div class="row"><label>Package<select name="plan" required></select></label><label>Preferred date<input name="date" type="date" required></label></div>
       <div id="trip-info" class="tinfo" aria-live="polite"></div>
@@ -249,7 +247,7 @@ function setupDialogs() {
     $('#custom-fields').hidden = !custom; $('#custom-fields-2').hidden = !custom;
     const dest = (form.destination && form.destination.value) || (window._customDestination || '');
     const customPlans = ['Private trip — just for us', 'Group / custom size', 'Solo traveller', 'Couple'];
-    form.plan.innerHTML = (custom ? customPlans : plansFor(byId(tripSel.value))).map(p => `<option>${esc(p)}</option>`).join('');
+    form.plan.innerHTML = (custom ? customPlans : plansFor()).map(p => `<option>${esc(p)}</option>`).join('');
     $('#trip-info').innerHTML = tripInfoHTML(byId(tripSel.value), true);
     if (custom && dest) {
       const info = $('#trip-info');
@@ -285,7 +283,7 @@ function setupDialogs() {
     const extra = custom ? [
       `Destination: ${f.get('destination') || 'To be discussed'}`,
       `Travellers: ${f.get('travellers') || 'To be discussed'}`,
-      `Budget: ${f.get('budget') ? 'UGX ' + f.get('budget') : 'Open'}`,
+      `Budget: ${f.get('budget') || 'Open'}`,
       `Interest: ${f.get('interest') || 'Open'}`
     ] : [];
     const text = `*NEW BOOKING REQUEST*\n\nName: ${f.get('name')}\nPhone: ${phone}\nDestination: ${t.title}\nPackage: ${f.get('plan')}\nTravel date: ${f.get('date')}\nComments: ${f.get('note') || 'None'}${extra.length ? '\n' + extra.join('\n') : ''}`;
@@ -331,7 +329,7 @@ function home() {
   if (next) {
     const days = Math.max(0, Math.ceil((new Date(status(next).dep.start + 'T00:00:00') - new Date()) / 864e5));
     box.innerHTML = `<p class="k">Next departure</p><h2>${esc(next.title)}</h2><p class="count"><b>${days}</b> days to go</p>
-      <p>${status(next).label}<br>${next.pickup ? 'Pickup: ' + esc(next.pickup) : ''}</p>${next.deposit ? `<p>Reserve a seat with ${fmt(next.deposit)}.</p>` : ''}
+      <p>${status(next).label}<br>${next.pickup ? 'Pickup: ' + esc(next.pickup) : ''}</p><p>Affordable trips — prices vary by season and time of year.</p>${next.bestTime ? `<p><b>Best time to visit:</b> ${esc(next.bestTime)}</p>` : ''}
       <button class="btn btn-primary wide" data-book="${next.id}">Reserve a seat</button>`;
   } else {
     box.innerHTML = `<p class="k">Plan your next trip</p><h2>Your dates, your way</h2><p>Our scheduled 2026 group dates have departed. Tell us when you can travel and we will plan a private trip or add you to the next group.</p>
@@ -401,25 +399,36 @@ function homeExtras() {
   }
 
   // Savings planner
-  const priced = TRIPS.filter(t => t.price);
-  const f = $('#plan'), st = store.get('plan', { trip: priced[0].id, seats: 'single', months: 2, saved: 0 });
-  f.trip.innerHTML = priced.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('');
-  f.trip.value = priced.some(t => t.id === st.trip) ? st.trip : priced[0].id;
-  f.seats.value = st.seats; f.months.value = st.months; f.saved.value = st.saved || '';
-  const calc = () => {
-    const t = byId(f.trip.value), goal = t.price[f.seats.value], months = +f.months.value;
-    const saved = Math.min(Math.max(+f.saved.value || 0, 0), goal), left = goal - saved;
-    pinfo.innerHTML = tripInfoHTML(t);
-    const bookBtn = $('#plan [data-book]'); if (bookBtn) { bookBtn.dataset.book = t.id; bookBtn.textContent = 'Reserve a seat'; }
-    store.set('plan', { trip: t.id, seats: f.seats.value, months, saved });
-    $('#months-out').textContent = months + (months === 1 ? ' month' : ' months');
-    $('#per-month').textContent = fmt(Math.ceil(left / months / 1000) * 1000);
-    $('#per-week').textContent = fmt(Math.ceil(left / (months * 4.33) / 500) * 500);
-    $('#goal').textContent = fmt(goal);
-    $('#bar').style.width = Math.round(saved / goal * 100) + '%';
-    $('#pct').textContent = Math.round(saved / goal * 100) + '% saved';
-  };
+  const f = $('#plan'), st = store.get('plan', { trip: TRIPS[0].id, goal: 0, months: 3, saved: 0 });
+  f.trip.innerHTML = TRIPS.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('');
+  f.trip.value = TRIPS.some(t => t.id === st.trip) ? st.trip : TRIPS[0].id;
+  if (f.goal) f.goal.value = st.goal || '';
+  f.months.value = st.months || 3; f.saved.value = st.saved || '';
   const pinfo = $('#plan-info');
+  const calc = () => {
+    const t = byId(f.trip.value) || TRIPS[0], months = Math.max(1, +f.months.value || 1);
+    const goal = Math.max(0, +(f.goal ? f.goal.value : 0) || 0);
+    const saved = Math.min(Math.max(+f.saved.value || 0, 0), goal || Infinity), left = goal ? Math.max(goal - saved, 0) : 0;
+    pinfo.innerHTML = tripInfoHTML(t) + '<p class="meta" style="margin-top:.6rem">Our trips are affordable, and prices vary depending on the destination and the time of year. Select a destination to see the best time to visit, then set a savings goal that works for you.</p>';
+    const bookBtn = $('#plan [data-book]'); if (bookBtn) { bookBtn.dataset.book = t.id; bookBtn.textContent = 'Enquire about this trip'; }
+    store.set('plan', { trip: t.id, goal, months, saved });
+    $('#months-out').textContent = months + (months === 1 ? ' month' : ' months');
+    const fmtAmt = n => 'UGX ' + Math.round(n).toLocaleString('en-US');
+    if (goal > 0) {
+      $('#per-month').textContent = fmtAmt(Math.ceil(left / months / 1000) * 1000);
+      $('#per-week').textContent = fmtAmt(Math.ceil(left / (months * 4.33) / 500) * 500);
+      $('#goal').textContent = fmtAmt(goal);
+      const pct = goal ? Math.round(saved / goal * 100) : 0;
+      $('#bar').style.width = pct + '%';
+      $('#pct').textContent = pct + '% saved';
+    } else {
+      $('#per-month').textContent = '—';
+      $('#per-week').textContent = '—';
+      $('#goal').textContent = 'Set a goal';
+      $('#bar').style.width = '0%';
+      $('#pct').textContent = 'Set a savings goal to see your plan';
+    }
+  };
   f.addEventListener('input', calc); f.addEventListener('submit', e => e.preventDefault()); calc();  done();
 }
 
@@ -444,13 +453,13 @@ function detail() {
     <div class="wrap"><p class="crumb"><a href="index.html#trips">All trips</a> / ${t.type}</p><h1>${esc(t.title)}</h1><p>${esc(t.desc)}</p></div></section>
   <section class="bgs v-warm t-body" style="--photo:url('${photo}')"><div class="wrap t-grid"><div>
     <div class="tabs-bar t-tabs"><div class="tabs" id="ttabs" role="tablist"></div></div><div id="tpanels">${panels}</div></div>
-  <aside class="side"><p class="k">${esc(t.region)}</p><p class="price">${priceText(t)}</p>
-    <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>Dates</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.deposit ? `<dt>Seat deposit</dt><dd>${fmt(t.deposit)}</dd>` : ''}</dl>
-    ${t.saveNote ? `<p class="note">${esc(t.saveNote)} <a href="index.html#save">Try the savings planner</a></p>` : ''}
+  <aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Affordable &amp; flexible</p>
+    <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>Dates</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.bestTime ? `<dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd>` : ''}</dl>
+    <p class="note">Trips are affordable and prices vary depending on the destination and time of year. <a href="index.html#save">Use the savings planner</a> or ask us for a tailored quote.</p>
     <button class="btn btn-primary wide" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book this trip'}</button>
     <button class="btn btn-ghost wide" id="share-trip" type="button">Share this trip</button></aside></div></section>
   <section class="more bgs v-night dk" style="--photo:url('${photo2}')"><div class="wrap"><div class="more-head"><h2>More trips</h2><input id="search2" type="search" placeholder="Search all trips and places" aria-label="Search trips"></div><div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div class="rail">${TRIPS.filter(x => x.id !== t.id).map(cardHTML).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div></div></section>
-  <div class="sticky-book"><div><b>${fromPrice(t)}</b><small>${esc(s.label)}</small></div><button class="btn btn-primary" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book now'}</button></div>`;
+  <div class="sticky-book"><div><b>Affordable trip</b><small>${esc(s.label)} · prices vary by season</small></div><button class="btn btn-primary" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book now'}</button></div>`;
   document.body.classList.add('has-bookbar');
   $('#share-trip').addEventListener('click', async e => {
     const b = e.currentTarget, data = { title: t.title, text: t.summary, url: location.href };

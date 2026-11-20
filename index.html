@@ -24,7 +24,7 @@
   <div class="wrap hero-grid">
   <div><span class="motto">See the world &middot; Uganda and beyond</span>
   <h1>Extraordinary journeys, <em>planned around you</em></h1>
-  <p>Small-group safaris and private trips across Uganda and East Africa. Gorillas, big-game plains, lakes and coast &mdash; with local guides and clear prices.</p>
+  <p>Small-group safaris and private trips across Uganda and East Africa. Gorillas, big-game plains, lakes and coast &mdash; with local guides, affordable options and prices that vary by season and time of year. Select any destination to see the best time to visit.</p>
   <form id="quick" class="quick" aria-label="Plan your trip">
     <label>Where to?<select name="trip"></select></label>
     <label>Who is travelling?<select name="who"><option value="0">Just me</option><option value="1">A couple</option><option value="2">Small group (3 to 6)</option><option value="3">School or large group</option></select></label>
@@ -90,11 +90,11 @@
   <div class="save">
     <div><img class="cash" src="brochure-savings.webp" alt="Scenes Traveler's Savings Account" width="760" height="760" loading="lazy" decoding="async">
       <span class="tagline">Save for travel</span><h2>Scenes Traveler's Savings Account</h2>
-      <p>Start with as low as <b>UGX 50,000</b> and put small amounts aside regularly. Save at your own pace and turn the balance into a real departure.</p>
-      <p>Pick a trip, choose how many months you have, and see what to set aside each week. Your plan stays on this device.</p>
+      <p>Our trips are affordable, and you can start with a small amount and save at your own pace. Prices vary depending on the destination and the time of year, so saving ahead makes planning easy.</p>
+      <p>Pick a destination to see the best time to visit, set a savings goal, choose how many months you have, and see what to set aside each week. Your plan stays on this device.</p>
       <p style="font-size:.85rem;color:var(--muted)">Terms and conditions apply.</p></div>
     <form id="plan" class="planner rv">
-    <div class="row"><label>Trip<select name="trip"></select></label><label>Travelling<select name="seats"><option value="single">Single</option><option value="double">Double / couple</option></select></label></div>
+    <div class="row"><label>Trip<select name="trip"></select></label><label>Savings goal (UGX)<input type="number" name="goal" min="0" step="5000" inputmode="numeric" placeholder="e.g. 500000"></label></div>
     <div id="plan-info" class="tinfo" aria-live="polite"></div>
     <label>Time to save: <strong id="months-out"></strong><input type="range" name="months" min="1" max="12" step="1"></label>
     <label>Already saved (UGX)<input type="number" name="saved" min="0" step="5000" inputmode="numeric" placeholder="0"></label>
@@ -123,7 +123,7 @@
 
 <section class="panel" id="about" data-title="About us" hidden>
   <div class="about">
-    <div class="story-media"><div class="ring"><img src="brochure-founder.webp" alt="Founder of Scenes Tours &amp; Travels" width="472" height="707" loading="lazy" decoding="async"></div>
+    <div class="story-media"><div class="ring"><img src="brochure-founder.webp" alt="Managing Director of Scenes Tours &amp; Travels" width="472" height="707" loading="lazy" decoding="async"></div>
       <img class="teamshot" src="brochure-team.webp" alt="The Scenes Tours &amp; Travels team in Kigali" width="1080" height="640" loading="lazy" decoding="async"></div>
     <div><span class="tagline">About us &middot; Our story</span><h2>A youth-led travel company from Kampala</h2>
       <p><b>Scenes Tours &amp; Travels is a youth-led, registered Ugandan tour company based in Kampala,</b> dedicated to making travel more accessible, affordable and memorable. Through quality services and cost-friendly packages, we connect travelers to breathtaking destinations while shaping the future of tourism.</p>
@@ -161,5 +161,5 @@
 </main>
 <footer id="site-footer" class="bg-photo foot-bg" style="--photo:url('gorilla.webp')"></footer>
 <noscript><p style="padding:1rem">Enable JavaScript to see trips. Call 0784 066 320 or 0700 907 617 to book.</p></noscript>
-<script src="data.js?v=19"></script><script src="app.js?v=19"></script>
+<script src="data.js?v=20"></script><script src="app.js?v=20"></script>
 </body></html>
