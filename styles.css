@@ -765,3 +765,13 @@ input,select,textarea{min-width:0;max-width:100%}
 /* 9. Pop-ups on short screens and landscape phones */
 dialog{max-height:92vh;max-height:92dvh;overflow:auto}
 @media(max-height:500px) and (orientation:landscape){.stage{min-height:0}}
+
+
+/* Trip cost estimator */
+.estimator .row{grid-template-columns:1fr 1fr;gap:.6rem}
+.estimator label{margin:0;font-size:.85rem}
+.estimator input[type=number]{margin-top:.25rem;padding:.55rem .6rem}
+.estimator .fee-val{display:block;font-weight:700;color:var(--dark);margin-top:.25rem;font-size:.95rem}
+.estimator .fee-range{width:100%;margin:.45rem 0 .1rem;accent-color:var(--gold);height:8px}
+.estimator .est-total{color:var(--dark);font-size:1rem}
+@media(max-width:420px){.estimator .row{grid-template-columns:1fr}}

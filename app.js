@@ -16,7 +16,7 @@ function status(t) {
   if (t.kind === 'dated') {
     const n = nextDep(t);
     if (n) return { key: 'open', label: range(n), dep: n };
-    return { key: 'past', label: 'This trip\'s last departure has passed. Ask us about the next date or a similar trip.' };
+    return { key: 'past', label: 'Discover this experience with Scenes' };
   }
   return { key: t.kind, label: { yearround: 'Available all year', request: 'Planned around your dates', tbc: 'Dates to be announced' }[t.kind] };
 }
@@ -55,7 +55,7 @@ function cardHTML(t, i = 0) {
   const s = status(t), past = isPast(t);
   const actions = past
     ? `<a class="btn btn-primary" href="trip.html?id=${t.id}">Explore this experience</a><a class="btn btn-ghost" href="index.html#services">Our services</a>`
-    : `<button class="btn btn-primary" data-action="book" data-trip="${t.id}">Book / Plan</button><a class="btn btn-ghost" href="trip.html?id=${t.id}">Details</a>`;
+    : `<button class="btn btn-primary" data-action="book" data-trip="${t.id}">Book / Plan</button><a class="btn btn-ghost" href="trip.html?id=${t.id}">Details &amp; savings plan</a>`;
   const sub = past ? 'A Scenes experience · plan something similar' : `${esc(t.region)} · ${esc(t.duration)}`;
   return `<article class="card rv" style="--i:${i % 4}" data-type="${t.type}">
     <a class="card-media" href="trip.html?id=${t.id}">${mediaHTML(t.media, t.title)}<span class="badge badge-${s.key}">${t.type}</span></a>
@@ -124,8 +124,8 @@ function injectChrome() {
       <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">Safaris<i></i></button><div class="dd-menu trips-menu">${navTripLinks()}<a class="all" href="${home}#trips">View all trips</a></div></div>
       <a href="${home}#world">Destinations</a>
       <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">Services<i></i></button><div class="dd-menu"><a href="${home}#services">All services</a><a href="${home}#services" data-service="Car hire and airport transfers">Car hire and transfers</a><a href="${home}#services" data-service="Flight booking">Flights</a><a href="${home}#save">Traveler's Savings Account</a></div></div>
-      <a href="${home}#guides">Travel guides</a><a href="${home}#gallery">Gallery</a>
-      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">About<i></i></button><div class="dd-menu"><a href="${home}#about">Our story</a><a href="${home}#team">Our team</a><a href="${home}#reviews">Reviews</a><a href="${home}#faq">FAQ</a></div></div>
+      <a href="${home}#guides">Travel guides</a><a href="${home}#gallery">Gallery</a><a href="${home}#faq">FAQ</a>
+      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">About<i></i></button><div class="dd-menu"><a href="${home}#about">Our story</a><a href="${home}#team">Our team</a><a href="${home}#reviews">Reviews</a></div></div>
       <a href="${home}#contact">Contact</a>
       <button class="btn btn-primary" data-book="custom-trips">Plan my trip</button></nav></div>`;
   const phones = SITE.phones.map(p => `<a href="tel:${p.tel}">${p.label}</a>`).join(' / ');
@@ -295,7 +295,12 @@ function setupDialogs() {
     tripSel.value = custom ? 'custom-trips' : t.id; refreshPlans();
     const min = new Date().toISOString().slice(0, 10);
     form.date.min = min; form.date.value = status(byId(tripSel.value)).dep ? status(byId(tripSel.value)).dep.start : '';
+    // for non-custom package booking, show traveller/budget fields so estimator details can be included
+    if (!custom) { $('#custom-fields').hidden = false; $('#custom-fields-2').hidden = false; if (form.destination) form.destination.value = t.title; }
     if (custom && window._customDestination && form.destination) form.destination.value = window._customDestination;
+    if (opts.travellers && form.travellers) form.travellers.value = opts.travellers;
+    if (opts.budget && form.budget) form.budget.value = opts.budget;
+    if (opts.estimateNote && form.note) form.note.value = opts.estimateNote;
     $('#book-done').hidden = true; form.hidden = false; $('.err', form).hidden = true;
     if (opts.date) form.date.value = opts.date;
     if (opts.who != null) form.plan.selectedIndex = Math.min(opts.who, form.plan.options.length - 1);
@@ -311,14 +316,17 @@ function setupDialogs() {
     if (!f.get('date')) problems.push('Choose a preferred date.');
     if (problems.length) { err.textContent = problems.join(' '); err.hidden = false; return; }
     const t = byId(f.get('trip'));
-    const custom = !$('#custom-fields').hidden;
-    const extra = custom ? [
-      `Destination: ${f.get('destination') || 'To be discussed'}`,
-      `Travellers: ${f.get('travellers') || 'To be discussed'}`,
-      `Budget: ${f.get('budget') || 'Open'}`,
-      `Interest: ${f.get('interest') || 'Open'}`
-    ] : [];
-    const text = `*NEW BOOKING REQUEST*\n\nName: ${f.get('name')}\nPhone: ${phone}\nDestination: ${t.title}\nPackage: ${f.get('plan')}\nTravel date: ${f.get('date')}\nComments: ${f.get('note') || 'None'}${extra.length ? '\n' + extra.join('\n') : ''}`;
+    const customTrip = t.id === 'custom-trips';
+    const travellers = f.get('travellers');
+    const budget = f.get('budget');
+    const interest = f.get('interest');
+    const extra = (customTrip || travellers || budget || interest) ? [
+      `Destination: ${f.get('destination') || t.title}`,
+      travellers ? `Travellers: ${travellers}` : '',
+      budget ? `Estimated budget: ${budget}` : '',
+      interest ? `Interest: ${interest}` : ''
+    ].filter(Boolean) : [];
+    const text = `*NEW BOOKING REQUEST*\n\nName: ${f.get('name')}\nPhone: ${phone}\nTrip: ${t.title}\nPackage: ${f.get('plan')}\nTravel date: ${f.get('date')}\nComments: ${f.get('note') || 'None'}${extra.length ? '\n' + extra.join('\n') : ''}`;
     const link = p => `https://wa.me/${p.wa}?text=${encodeURIComponent(text)}`;
     window.open(link(SITE.phones[0]), '_blank');
     $('#wa-links').innerHTML = SITE.phones.map((p, i) => `<a class="btn ${i ? 'btn-ghost' : 'btn-primary'}" target="_blank" rel="noopener" href="${link(p)}">${i ? 'Also send to' : 'Open again:'} ${p.label}</a>`).join('');
@@ -541,10 +549,41 @@ function openPlanDialog(tripId) {
   };
   dlg.showModal();
 }
+
+function estimatorHTML(t) {
+  if (isPast(t)) return '';
+  return `<div class="tinfo estimator" data-est="${t.id}">
+    <div class="row" style="margin-top:0;gap:.6rem"><label style="margin:0">Travellers<input type="number" name="travellers" min="1" max="50" value="1" inputmode="numeric"></label>
+    <label style="margin:0">Fee per person<output class="fee-val">UGX 200,000</output></label></div>
+    <input class="fee-range" type="range" name="fee" min="50000" max="3000000" step="10000" value="200000" aria-label="Fee per person">
+    <p class="meta" style="margin:.4rem 0 0;display:flex;justify-content:space-between;align-items:center;gap:.5rem"><span>Estimated total</span><b class="est-total">UGX 200,000</b></p>
+    <button type="button" class="btn btn-primary wide" data-est-book="${t.id}" style="margin-top:.7rem">Book this trip</button>
+  </div>`;
+}
+function initEstimator(t) {
+  const box = document.querySelector(`.estimator[data-est="${t.id}"]`);
+  if (!box) return;
+  const tr = box.querySelector('[name="travellers"]'), fee = box.querySelector('[name="fee"]');
+  const feeVal = box.querySelector('.fee-val'), total = box.querySelector('.est-total');
+  const fmtA = n => 'UGX ' + Math.round(n).toLocaleString('en-US');
+  const calc = () => {
+    const n = Math.max(1, parseInt(tr.value || '1', 10));
+    const f = Math.max(0, parseInt(fee.value || '0', 10));
+    tr.value = n; feeVal.textContent = fmtA(f); total.textContent = fmtA(n * f);
+  };
+  tr.addEventListener('input', calc); fee.addEventListener('input', calc); calc();
+  const btn = box.querySelector('[data-est-book]');
+  if (btn) btn.onclick = () => {
+    const n = Math.max(1, parseInt(tr.value || '1', 10));
+    const f = Math.max(0, parseInt(fee.value || '0', 10));
+    openBooking(t.id, { travellers: String(n), budget: fmtA(n * f), estimateNote: `Estimated: ${n} traveller(s) × ${fmtA(f)} per person = ${fmtA(n*f)}` });
+  };
+}
+
 function planBoxInner(t) {
   if (isPast(t)) return '';
   const p = pkgPlans.get(t.id);
-  return p ? planStatusHTML(t, p) : `<div class="tinfo"><p><b>Pay in installments:</b> start a package plan for this trip, set your start and finish dates, and track a timer until your plan is complete and the trip is due.</p><p style="margin-top:.5rem"><button type="button" class="btn btn-ghost" data-start-plan="${t.id}">Start installment plan</button></p></div>`;
+  return p ? planStatusHTML(t, p) : `<div class="tinfo"><p><b>Payment savings plan:</b> this trip is affordable — you can pay in installments. Start a plan, set when you begin and when you intend to finish, and track your timer until the trip is due.</p><p style="margin-top:.5rem"><button type="button" class="btn btn-ghost" data-start-plan="${t.id}">Start installment plan</button></p></div>`;
 }
 function openBookChoice(tripId) {
   const t = byId(tripId);
@@ -555,7 +594,7 @@ function openBookChoice(tripId) {
   const dep = status(t).dep ? `Next departure: ${status(t).label}` : status(t).label;
   body.innerHTML = `<p><b>${esc(t.title)}</b></p><p class="meta">${esc(dep)}</p>
     ${t.bestTime ? `<p class="meta" style="margin-top:.4rem"><b>Best time to visit:</b> ${esc(t.bestTime)}</p>` : ''}
-    <p style="margin-top:.8rem">Choose how you’d like to go ahead. You can book now, or start an installment plan and pay over time until your chosen dates.</p>
+    <p style="margin-top:.8rem">This trip is affordable and can be planned around the best time to visit. Choose to book now, or start a payment savings/installment plan and pay over time until your chosen dates.</p>
     <div class="actions" style="margin-top:1rem">
       <button type="button" class="btn btn-primary" data-choose-book="${t.id}">Book this trip</button>
       <button type="button" class="btn btn-ghost" data-choose-plan="${t.id}">Start installment plan</button>
@@ -580,30 +619,31 @@ function detail() {
   const pics = [t.media, ...(t.gallery || [])].filter(x => x.src && x.type !== 'video').map(x => x.src);
   const photo = pics[0] || 'sunset.webp', photo2 = pics[1] || pics[0] || 'hills.webp';
   const block = (h, a) => a && a.length ? `<div><h3>${h}</h3><ul class="ticks">${a.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
-  const revs = DB.reviews().filter(r => r.trip === t.id);
   const overview = past
-    ? `<div class="lists">${block('Experience highlights', t.highlights)}${block('Places we explore', t.locations)}${block('Activities', t.activities)}</div>
-       <div class="note" style="margin-top:1rem"><h3 style="margin:0 0 .4rem;font-size:1.1rem">Plan your next journey with Scenes</h3>
-       <p>This departure has passed, but the experience lives on. We design affordable, season-aware trips across Uganda, East Africa and beyond.</p>
-       <p class="actions" style="margin-top:.8rem"><a class="btn btn-primary" href="index.html#services">Explore our services</a><a class="btn btn-ghost" href="index.html#trips">Browse trips</a><a class="btn btn-ghost" href="index.html#contact">Talk to us</a></p></div>`
-    : `<div class="lists">${block('Highlights', t.highlights)}${block('Where we go', t.locations)}${block('Activities', t.activities)}${block('Cost includes', t.includes)}</div>`;
-  const panels = `<section class="panel" id="overview" data-title="Overview">${overview}</section>
-    ${t.gallery || t.videos ? `<section class="panel" id="gallery" data-title="Photos and videos" hidden>${t.gallery ? `<div class="gallery">${t.gallery.map((g, i) => `<button data-i="${i}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy"><span>${esc(g.cap)}</span></button>`).join('')}</div>` : ''}${t.videos ? `<div class="videos">${t.videos.map(v => `<video src="${v}" muted loop playsinline preload="none"></video>`).join('')}</div>` : ''}</section>` : ''}
-    <section class="panel" id="feedback" data-title="Customer feedback (${revs.length})" hidden>${revs.length ? `<div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous">&lsaquo;</button><div class="rail reviews">${revs.map(reviewCard).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next">&rsaquo;</button></div>` : '<p class="empty">No reviews for this trip yet.</p>'}<p class="actions"><a class="btn btn-ghost" href="index.html#reviews">Share your experience</a></p></section>`;
+    ? `<div class="lists">${block('Experience highlights', t.highlights)}${block('Places you’ll explore', t.locations)}${block('Activities', t.activities)}</div>
+       <div class="note" style="margin-top:1rem"><h3 style="margin:0 0 .4rem;font-size:1.1rem">Discover this experience with Scenes</h3>
+       <p>${esc(t.desc)}</p>
+       <p>We make trips like this <b>affordable and flexible</b>, with options that suit your budget and the best time to visit. Let us plan a similar journey for you.</p>
+       <p class="actions" style="margin-top:.8rem"><a class="btn btn-primary" href="index.html#services">Explore our services</a><a class="btn btn-ghost" href="index.html#trips">Browse trips</a><a class="btn btn-ghost" href="index.html#contact">Plan with us</a></p></div>`
+    : `<p style="margin-bottom:1rem;color:var(--text2)">${esc(t.desc)}</p>
+       <p class="note" style="margin-bottom:1rem"><b>Affordable &amp; flexible:</b> this trip is designed to be budget-friendly, with costs that vary by season and travel dates. We’ll help you choose the best time to go and an option that fits your plan.</p>
+       <div class="lists">${block('Highlights', t.highlights)}${block('Where we go', t.locations)}${block('Activities', t.activities)}${block('What’s included', t.includes)}</div>`;
+  const panels = `<section class="panel" id="overview" data-title="About this trip">${overview}</section>
+    ${t.gallery || t.videos ? `<section class="panel" id="gallery" data-title="Photos and videos" hidden>${t.gallery ? `<div class="gallery">${t.gallery.map((g, i) => `<button data-i="${i}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy"><span>${esc(g.cap)}</span></button>`).join('')}</div>` : ''}${t.videos ? `<div class="videos">${t.videos.map(v => `<video src="${v}" muted loop playsinline preload="none"></video>`).join('')}</div>` : ''}</section>` : ''}`;
 
   const side = past
-    ? `<aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Scenes experience</p>
-        <p>${esc(s.label)}</p>
-        <p class="note">This trip’s dates have passed, so booking and payment details aren’t available here. Discover more of what we offer and let us plan a similar, affordable trip for you.</p>
+    ? `<aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Affordable experience</p>
+        ${t.bestTime ? `<dl><dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd></dl>` : ''}
+        <p class="note">Interested in a trip like this? Scenes Tours &amp; Travels offers affordable, well-planned experiences across Uganda, East Africa and beyond. Tell us your dates and we’ll tailor a similar journey for you.</p>
         <a class="btn btn-primary wide" href="index.html#services">Explore our services</a>
         <a class="btn btn-ghost wide" href="index.html#contact">Plan a similar trip</a>
-        <button class="btn btn-ghost wide" id="share-trip" type="button">Share this trip</button></aside>`
+        <button class="btn btn-ghost wide" id="share-trip" type="button">Share</button></aside>`
     : `<aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Affordable &amp; flexible</p>
-        <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>Dates</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.bestTime ? `<dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd>` : ''}</dl>
-        <p class="note">Trips are affordable and prices vary by destination and time of year. You can book now or start an installment plan and pay over time.</p>
-        <div id="plan-box" data-plan-box="${t.id}">${planBoxInner(t)}</div>
-        <button class="btn btn-primary wide" data-action="book" data-trip="${t.id}">${t.kind === 'request' ? 'Book / Start plan' : 'Book or start installment plan'}</button>
-        <button class="btn btn-ghost wide" id="share-trip" type="button">Share this trip</button></aside>`;
+        <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>When to go</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.bestTime ? `<dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd>` : ''}</dl>
+        ${estimatorHTML(t)}
+        <div id="plan-box" data-plan-box="${t.id}" style="margin-top:.8rem">${planBoxInner(t)}</div>
+        <button class="btn btn-ghost wide" data-action="book" data-trip="${t.id}" style="margin-top:.6rem">More booking options</button>
+        <button class="btn btn-ghost wide" id="share-trip" type="button">Share</button></aside>`;
 
   main.innerHTML = `
   <section class="t-hero"><div class="t-media">${mediaHTML(t.media, t.title)}</div>
@@ -611,6 +651,7 @@ function detail() {
   <section class="bgs v-warm t-body" style="--photo:url('${photo}')"><div class="wrap t-grid"><div>
     <div class="tabs-bar t-tabs"><div class="tabs" id="ttabs" role="tablist"></div></div><div id="tpanels">${panels}</div></div>
   ${side}</div></section>
+  <section class="bgs v-mint" style="--photo:url('${photo2}')"><div class="wrap" style="padding:2rem 0 1rem"><div class="panel-head" style="margin-bottom:1rem"><div><span class="tagline">Good to know</span><h2 style="font-size:1.5rem">FAQ</h2></div><a class="btn btn-ghost" href="index.html#contact">Ask us</a></div><div id="faq-list" class="faq"></div></div></section>
   <section class="more bgs v-night dk" style="--photo:url('${photo2}')"><div class="wrap"><div class="more-head"><h2>More trips</h2><input id="search2" type="search" placeholder="Search all trips and places" aria-label="Search trips"></div><div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div class="rail">${TRIPS.filter(x => x.id !== t.id).map(cardHTML).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div></div></section>
   ${past ? '' : `<div class="sticky-book"><div><b>Affordable trip</b><small>${esc(s.label)} · book or pay in installments</small></div><button class="btn btn-primary" data-action="book" data-trip="${t.id}">Book / Plan</button></div>`}`;
   if (!past) document.body.classList.add('has-bookbar'); else document.body.classList.remove('has-bookbar');
@@ -631,7 +672,12 @@ function detail() {
     lb.addEventListener('keydown', e => { if (e.key === 'ArrowRight') show(i + 1); if (e.key === 'ArrowLeft') show(i - 1); });
     $('img', lb).addEventListener('click', () => show(i + 1));
   }
-  if (!past && pkgPlans.get(t.id)) startPlanTimerTick();
+  if (!past) { initEstimator(t); if (pkgPlans.get(t.id)) startPlanTimerTick(); }
+  const fl = $('#faq-list');
+  if (fl && !fl.children.length) {
+    fl.innerHTML = FAQ.map((f, i) => `<details${i === 0 ? ' open' : ''}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
+    fl.addEventListener('toggle', e => { if (e.target.open) $$('details', fl).forEach(d => { if (d !== e.target) d.open = false; }); }, true);
+  }
 }
 
 const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 }) : null;
