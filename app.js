@@ -16,12 +16,26 @@ function status(t) {
   if (t.kind === 'dated') {
     const n = nextDep(t);
     if (n) return { key: 'open', label: range(n), dep: n };
-    return { key: 'past', label: 'Last departure ' + shortDate(t.deps[t.deps.length - 1].start) + '. Next dates soon' };
+    return { key: 'past', label: 'This trip\'s last departure has passed. Ask us about the next date or a similar trip.' };
   }
   return { key: t.kind, label: { yearround: 'Available all year', request: 'Planned around your dates', tbc: 'Dates to be announced' }[t.kind] };
 }
+const isPast = t => status(t).key === 'past';
+const canPlan = t => !isPast(t);
+const pkgPlans = {
+  key: 'stt_pkg_plans',
+  all() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch { return {}; } },
+  get(id) { return this.all()[id] || null; },
+  set(id, v) { const a = this.all(); a[id] = v; try { localStorage.setItem(this.key, JSON.stringify(a)); } catch {} },
+  del(id) { const a = this.all(); delete a[id]; try { localStorage.setItem(this.key, JSON.stringify(a)); } catch {} }
+};
 function tripInfoHTML(t, chips) {
-  const s = status(t);
+  const s = status(t), past = isPast(t);
+  if (past) {
+    return `<h4>${esc(t.title)}</h4><p>${esc(t.summary)}</p>
+      <p>This trip experience is part of what we do at Scenes Tours &amp; Travels. While this departure has passed, we can help you plan a similar journey or another experience that suits your dates.</p>
+      <p><b>Explore with us:</b> <a href="index.html#services">Our services</a> · <a href="index.html#trips">All trips</a> · <a href="index.html#contact">Talk to us</a></p>`;
+  }
   const rows = [['Where', t.region], ['Duration', t.duration], ['Dates', s.label], ['Pricing', priceText(t)], t.bestTime && ['Best time to visit', t.bestTime], t.pickup && ['Pickup', t.pickup]].filter(Boolean);
   const ups = (t.deps || []).filter(d => new Date(d.end + 'T23:59:59') >= new Date());
   return `<h4>${esc(t.title)}</h4><p>${esc(t.summary)}</p><dl>${rows.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>`
@@ -38,17 +52,21 @@ const mediaHTML = (m, alt) => m.type === 'video'
 const titleCase = s => String(s || '').trim().replace(/\s+/g, ' ').replace(/\b[a-z]/g, c => c.toUpperCase());
 const shorten = (s, n = 112) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n - 1).replace(/[\s,.;:-]+$/, '') + '…' : s; };
 function cardHTML(t, i = 0) {
-  const s = status(t);
+  const s = status(t), past = isPast(t);
+  const actions = past
+    ? `<a class="btn btn-primary" href="trip.html?id=${t.id}">Explore this experience</a><a class="btn btn-ghost" href="index.html#services">Our services</a>`
+    : `<button class="btn btn-primary" data-action="book" data-trip="${t.id}">Book / Plan</button><a class="btn btn-ghost" href="trip.html?id=${t.id}">Details</a>`;
+  const sub = past ? 'A Scenes experience · plan something similar' : `${esc(t.region)} · ${esc(t.duration)}`;
   return `<article class="card rv" style="--i:${i % 4}" data-type="${t.type}">
     <a class="card-media" href="trip.html?id=${t.id}">${mediaHTML(t.media, t.title)}<span class="badge badge-${s.key}">${t.type}</span></a>
     <div class="card-body">
       <p class="kicker">${esc(t.group || t.region)}</p>
       <h3><a href="trip.html?id=${t.id}">${esc(t.title)}</a></h3>
-      <p class="meta">${esc(t.region)} &middot; ${esc(t.duration)}</p>
+      <p class="meta">${sub}</p>
       <p>${esc(shorten(t.summary))}</p>
       <p class="when ${s.key}">${esc(s.label)}</p>
-      <p class="price">${fromPrice(t)}</p>
-      <div class="actions"><button class="btn btn-primary" data-book="${t.id}">Book now</button><a class="btn btn-ghost" href="trip.html?id=${t.id}">Details</a></div>
+      ${past ? '<p class="price">Plan a similar trip with Scenes Tours &amp; Travels</p>' : `<p class="price">${fromPrice(t)}</p>`}
+      <div class="actions">${actions}</div>
     </div></article>`;
 }
 
@@ -66,7 +84,7 @@ function newsHTML() {
     <h4><a href="trip.html?id=${l.id}">${esc(lead.headline)}</a></h4>
     <p>${esc(lead.note)}</p>
     <div class="news-meta"><span>${esc(l.region)}</span><span>${esc(l.duration)}</span><span>${esc(ls.label)}</span></div>
-    <div class="news-actions"><a class="news-read" href="trip.html?id=${l.id}">Read the full trip &rarr;</a><button type="button" class="btn btn-primary" data-book="${l.id}" aria-label="Book ${esc(l.title)}">Book this trip</button></div>
+    <div class="news-actions"><a class="news-read" href="trip.html?id=${l.id}">Read the full trip &rarr;</a>${isPast(l) ? `<a class="btn btn-primary" href="index.html#services">Explore services</a>` : `<button type="button" class="btn btn-primary" data-action="book" data-trip="${l.id}" aria-label="Book or plan ${esc(l.title)}">Book / Plan</button>`}</div>
   </article>
   <div class="news-side">${side.map((n, i) => {
     const t = n.t, s = status(t);
@@ -77,7 +95,7 @@ function newsHTML() {
         <span class="news-kicker">${esc(n.kicker)}</span>
         <h5><a href="trip.html?id=${t.id}">${esc(n.headline)}</a></h5>
         <div class="news-meta"><span>${esc(t.duration)}</span><span>${esc(s.label)}</span></div>
-        <div class="news-item-links"><a class="news-read" href="trip.html?id=${t.id}">Read trip &rarr;</a><button type="button" class="news-book" data-book="${t.id}" aria-label="Book ${esc(t.title)}">Book this trip</button></div>
+        <div class="news-item-links"><a class="news-read" href="trip.html?id=${t.id}">Read trip &rarr;</a>${isPast(t) ? `<a class="news-read" href="index.html#services">Our services &rarr;</a>` : `<button type="button" class="news-book" data-action="book" data-trip="${t.id}" aria-label="Book or plan ${esc(t.title)}">Book / Plan</button>`}</div>
       </div>
     </article>`;
   }).join('')}</div>`;
@@ -155,6 +173,19 @@ function injectChrome() {
     </form>
     <div id="book-done" hidden><h4>Your request is ready</h4><p>WhatsApp opened with your details. Press <strong>Send</strong> there. You can also send the same request to our second agent.</p>
       <p class="actions" id="wa-links"></p></div></dialog>
+  <dialog id="book-choice" aria-labelledby="bch-h"><div class="dlg-head"><h3 id="bch-h">Book or start a plan</h3><button class="x" data-close aria-label="Close">&times;</button></div>
+    <div id="bch-body"></div></dialog>
+  <dialog id="plan-dlg" aria-labelledby="plan-h"><div class="dlg-head"><h3 id="plan-h">Installment plan</h3><button class="x" data-close aria-label="Close">&times;</button></div>
+    <form id="plan-form" novalidate>
+      <p id="plan-trip-name" class="meta"></p>
+      <div id="plan-existing" class="tinfo" hidden></div>
+      <label>Plan start date (when you begin paying in installments)<input type="date" name="start" required></label>
+      <div class="row"><label>Finish-by date (when you intend to complete the plan)<input type="date" name="finish" required></label>
+      <label>Trip due date<input type="date" name="due" required></label></div>
+      <p class="meta" style="margin-top:.5rem">Set these dates to track your installment plan. You can adjust them anytime.</p>
+      <p class="err" role="alert" hidden></p>
+      <div class="actions"><button class="btn btn-primary" type="submit">Save plan &amp; start timer</button><button class="btn btn-ghost" type="button" id="plan-cancel">Cancel</button><button class="btn btn-ghost" type="button" id="plan-remove" hidden>Remove plan</button></div>
+    </form></dialog>
   <dialog id="guide" aria-labelledby="guide-h"><div class="dlg-head"><h3 id="guide-h"></h3><button class="x" data-close aria-label="Close">&times;</button></div>
     <div class="guide-body"></div></dialog>
   <dialog id="legal"><div class="dlg-head"><h3></h3><button class="x" data-close aria-label="Close">&times;</button></div><div class="legal-body"></div></dialog>
@@ -238,6 +269,7 @@ window.openPlace = openPlace;
 function setupDialogs() {
   $$('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d || e.target.closest('[data-close]')) d.close(); }));
   document.addEventListener('click', e => {
+    const a = e.target.closest('[data-action="book"]'); if (a) { e.preventDefault(); openBookChoice(a.dataset.trip); return; }
     const b = e.target.closest('[data-book]'); if (b) { e.preventDefault(); openBooking(b.dataset.book); }
     const l = e.target.closest('[data-legal]'); if (l) { const d = $('#legal'); $('h3', d).textContent = l.dataset.legal; $('.legal-body', d).innerHTML = LEGAL[l.dataset.legal]; d.showModal(); }
   });
@@ -329,11 +361,11 @@ function home() {
   if (next) {
     const days = Math.max(0, Math.ceil((new Date(status(next).dep.start + 'T00:00:00') - new Date()) / 864e5));
     box.innerHTML = `<p class="k">Next departure</p><h2>${esc(next.title)}</h2><p class="count"><b>${days}</b> days to go</p>
-      <p>${status(next).label}<br>${next.pickup ? 'Pickup: ' + esc(next.pickup) : ''}</p><p>Affordable trips — prices vary by season and time of year.</p>${next.bestTime ? `<p><b>Best time to visit:</b> ${esc(next.bestTime)}</p>` : ''}
-      <button class="btn btn-primary wide" data-book="${next.id}">Reserve a seat</button>`;
+      <p>${status(next).label}<br>${next.pickup ? 'Pickup: ' + esc(next.pickup) : ''}</p><p>Affordable trips — prices vary by season and time of year. Book now or start an installment plan.</p>${next.bestTime ? `<p><b>Best time to visit:</b> ${esc(next.bestTime)}</p>` : ''}
+      <button class="btn btn-primary wide" data-action="book" data-trip="${next.id}">Book / Start plan</button>`;
   } else {
-    box.innerHTML = `<p class="k">Plan your next trip</p><h2>Your dates, your way</h2><p>Our scheduled 2026 group dates have departed. Tell us when you can travel and we will plan a private trip or add you to the next group.</p>
-      <button class="btn btn-primary wide" data-book="custom-trips">Start planning</button>`;
+    box.innerHTML = `<p class="k">Plan your next trip</p><h2>Your dates, your way</h2><p>Explore our experiences and services — tell us when you can travel and we will plan an affordable private trip around the best time to visit.</p>
+      <p class="actions" style="margin-top:.8rem"><button class="btn btn-primary" data-book="custom-trips">Start planning</button><a class="btn btn-light" href="#services">Our services</a></p>`;
   }
 
   // Four ways into the catalogue
@@ -433,6 +465,110 @@ function homeExtras() {
 }
 
 
+/* ---------- Package plan (installments) & booking choice ---------- */
+const fmtDT = ms => {
+  if (ms <= 0) return 'Reached';
+  const s = Math.floor(ms/1000), d = Math.floor(s/86400), h = Math.floor((s%86400)/3600), m = Math.floor((s%3600)/60);
+  if (d > 0) return `${d}d ${h}h ${m}m`;
+  if (h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+};
+function planStatusHTML(t, plan) {
+  if (!plan) return '';
+  const now = Date.now();
+  const start = new Date(plan.start + 'T00:00:00').getTime();
+  const finish = new Date(plan.finish + 'T23:59:59').getTime();
+  const due = new Date(plan.due + 'T23:59:59').getTime();
+  const toFinish = finish - now, toDue = due - now;
+  const total = Math.max(finish - start, 1);
+  const elapsed = Math.min(Math.max(now - start, 0), total);
+  const pct = Math.round(elapsed / total * 100);
+  return `<div class="tinfo plan-live" data-trip="${t.id}">
+    <h4>Your installment plan</h4>
+    <dl>
+      <dt>Started</dt><dd>${esc(shortDate(plan.start))}</dd>
+      <dt>Finish by</dt><dd>${esc(shortDate(plan.finish))} · <b data-timer="finish">${fmtDT(toFinish)}</b> left</dd>
+      <dt>Trip due date</dt><dd>${esc(shortDate(plan.due))} · <b data-timer="due">${fmtDT(toDue)}</b> left</dd>
+    </dl>
+    <div class="progress" style="margin-top:.6rem"><i style="width:${pct}%"></i></div>
+    <p class="meta" style="margin-top:.4rem">${pct}% of your plan period elapsed · <button type="button" class="link" data-edit-plan="${t.id}">Edit plan</button></p>
+  </div>`;
+}
+let planTimer = null;
+function startPlanTimerTick() {
+  if (planTimer) return;
+  planTimer = setInterval(() => {
+    $$('.plan-live').forEach(el => {
+      const t = byId(el.dataset.trip), p = t && pkgPlans.get(t.id);
+      if (!p) return;
+      const now = Date.now();
+      const f = el.querySelector('[data-timer="finish"]'), d = el.querySelector('[data-timer="due"]');
+      if (f) f.textContent = fmtDT(new Date(p.finish + 'T23:59:59').getTime() - now);
+      if (d) d.textContent = fmtDT(new Date(p.due + 'T23:59:59').getTime() - now);
+      const start = new Date(p.start + 'T00:00:00').getTime(), finish = new Date(p.finish + 'T23:59:59').getTime();
+      const total = Math.max(finish - start, 1), pct = Math.round(Math.min(Math.max(now - start, 0), total) / total * 100);
+      const bar = el.querySelector('.progress i'); if (bar) bar.style.width = pct + '%';
+    });
+  }, 30000);
+}
+function openPlanDialog(tripId) {
+  const t = byId(tripId); if (!t || isPast(t)) return;
+  const dlg = $('#plan-dlg'), form = $('#plan-form'), err = $('.err', form);
+  const existing = pkgPlans.get(tripId);
+  const today = new Date().toISOString().slice(0,10);
+  const dep = status(t).dep ? status(t).dep.start : '';
+  $('#plan-trip-name').innerHTML = `<b>${esc(t.title)}</b> — set your installment plan dates.`;
+  form.start.value = (existing && existing.start) || today;
+  form.finish.value = (existing && existing.finish) || dep || today;
+  form.due.value = (existing && existing.due) || dep || today;
+  form.start.min = '2020-01-01';
+  err.hidden = true; err.textContent = '';
+  const rem = $('#plan-remove');
+  rem.hidden = !existing;
+  rem.onclick = () => { pkgPlans.del(tripId); dlg.close(); const box = document.querySelector(`[data-plan-box="${tripId}"]`); if (box) box.innerHTML = planBoxInner(t); done(); };
+  $('#plan-cancel').onclick = () => dlg.close();
+  form.onsubmit = e => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const start = fd.get('start'), finish = fd.get('finish'), due = fd.get('due');
+    if (!start || !finish || !due) { err.textContent = 'Please fill in all dates.'; err.hidden = false; return; }
+    if (new Date(finish) < new Date(start)) { err.textContent = 'Finish-by date should be on or after the plan start date.'; err.hidden = false; return; }
+    if (new Date(due) < new Date(finish)) { err.textContent = 'Trip due date should be on or after your finish-by date.'; err.hidden = false; return; }
+    pkgPlans.set(tripId, { start, finish, due });
+    dlg.close();
+    const box = document.querySelector(`[data-plan-box="${tripId}"]`);
+    if (box) { box.innerHTML = planBoxInner(t); startPlanTimerTick(); done(); }
+  };
+  dlg.showModal();
+}
+function planBoxInner(t) {
+  if (isPast(t)) return '';
+  const p = pkgPlans.get(t.id);
+  return p ? planStatusHTML(t, p) : `<div class="tinfo"><p><b>Pay in installments:</b> start a package plan for this trip, set your start and finish dates, and track a timer until your plan is complete and the trip is due.</p><p style="margin-top:.5rem"><button type="button" class="btn btn-ghost" data-start-plan="${t.id}">Start installment plan</button></p></div>`;
+}
+function openBookChoice(tripId) {
+  const t = byId(tripId);
+  if (!t) { openBooking('custom-trips'); return; }
+  if (isPast(t)) { location.href = 'trip.html?id=' + t.id; return; }
+  const dlg = $('#book-choice'), body = $('#bch-body');
+  $('#bch-h').textContent = esc ? 'Book or start a plan' : 'Book or start a plan';
+  const dep = status(t).dep ? `Next departure: ${status(t).label}` : status(t).label;
+  body.innerHTML = `<p><b>${esc(t.title)}</b></p><p class="meta">${esc(dep)}</p>
+    ${t.bestTime ? `<p class="meta" style="margin-top:.4rem"><b>Best time to visit:</b> ${esc(t.bestTime)}</p>` : ''}
+    <p style="margin-top:.8rem">Choose how you’d like to go ahead. You can book now, or start an installment plan and pay over time until your chosen dates.</p>
+    <div class="actions" style="margin-top:1rem">
+      <button type="button" class="btn btn-primary" data-choose-book="${t.id}">Book this trip</button>
+      <button type="button" class="btn btn-ghost" data-choose-plan="${t.id}">Start installment plan</button>
+    </div>`;
+  body.querySelector('[data-choose-book]').onclick = () => { dlg.close(); openBooking(t.id); };
+  body.querySelector('[data-choose-plan]').onclick = () => { dlg.close(); openPlanDialog(t.id); };
+  dlg.showModal();
+}
+document.addEventListener('click', e => {
+  const sp = e.target.closest('[data-start-plan]'); if (sp) { openPlanDialog(sp.dataset.startPlan); }
+  const ep = e.target.closest('[data-edit-plan]'); if (ep) { openPlanDialog(ep.dataset.editPlan); }
+});
+
 /* ---------- Trip detail page ---------- */
 function detail() {
   const t = byId(new URLSearchParams(location.search).get('id'));
@@ -440,28 +576,45 @@ function detail() {
   if (!t) { main.innerHTML = '<div class="wrap empty"><h1>Trip not found</h1><p><a href="index.html#trips">See all trips</a></p></div>'; return; }
   document.title = `${t.title} | ${SITE.name}`;
   $('meta[name=description]').content = t.summary;
-  const s = status(t);
+  const s = status(t), past = isPast(t);
   const pics = [t.media, ...(t.gallery || [])].filter(x => x.src && x.type !== 'video').map(x => x.src);
   const photo = pics[0] || 'sunset.webp', photo2 = pics[1] || pics[0] || 'hills.webp';
   const block = (h, a) => a && a.length ? `<div><h3>${h}</h3><ul class="ticks">${a.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
   const revs = DB.reviews().filter(r => r.trip === t.id);
-  const panels = `<section class="panel" id="overview" data-title="Overview"><div class="lists">${block('Highlights', t.highlights)}${block('Where we go', t.locations)}${block('Activities', t.activities)}${block('Cost includes', t.includes)}</div></section>
+  const overview = past
+    ? `<div class="lists">${block('Experience highlights', t.highlights)}${block('Places we explore', t.locations)}${block('Activities', t.activities)}</div>
+       <div class="note" style="margin-top:1rem"><h3 style="margin:0 0 .4rem;font-size:1.1rem">Plan your next journey with Scenes</h3>
+       <p>This departure has passed, but the experience lives on. We design affordable, season-aware trips across Uganda, East Africa and beyond.</p>
+       <p class="actions" style="margin-top:.8rem"><a class="btn btn-primary" href="index.html#services">Explore our services</a><a class="btn btn-ghost" href="index.html#trips">Browse trips</a><a class="btn btn-ghost" href="index.html#contact">Talk to us</a></p></div>`
+    : `<div class="lists">${block('Highlights', t.highlights)}${block('Where we go', t.locations)}${block('Activities', t.activities)}${block('Cost includes', t.includes)}</div>`;
+  const panels = `<section class="panel" id="overview" data-title="Overview">${overview}</section>
     ${t.gallery || t.videos ? `<section class="panel" id="gallery" data-title="Photos and videos" hidden>${t.gallery ? `<div class="gallery">${t.gallery.map((g, i) => `<button data-i="${i}"><img src="${g.src}" alt="${esc(g.cap)}" loading="lazy"><span>${esc(g.cap)}</span></button>`).join('')}</div>` : ''}${t.videos ? `<div class="videos">${t.videos.map(v => `<video src="${v}" muted loop playsinline preload="none"></video>`).join('')}</div>` : ''}</section>` : ''}
     <section class="panel" id="feedback" data-title="Customer feedback (${revs.length})" hidden>${revs.length ? `<div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous">&lsaquo;</button><div class="rail reviews">${revs.map(reviewCard).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next">&rsaquo;</button></div>` : '<p class="empty">No reviews for this trip yet.</p>'}<p class="actions"><a class="btn btn-ghost" href="index.html#reviews">Share your experience</a></p></section>`;
+
+  const side = past
+    ? `<aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Scenes experience</p>
+        <p>${esc(s.label)}</p>
+        <p class="note">This trip’s dates have passed, so booking and payment details aren’t available here. Discover more of what we offer and let us plan a similar, affordable trip for you.</p>
+        <a class="btn btn-primary wide" href="index.html#services">Explore our services</a>
+        <a class="btn btn-ghost wide" href="index.html#contact">Plan a similar trip</a>
+        <button class="btn btn-ghost wide" id="share-trip" type="button">Share this trip</button></aside>`
+    : `<aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Affordable &amp; flexible</p>
+        <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>Dates</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.bestTime ? `<dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd>` : ''}</dl>
+        <p class="note">Trips are affordable and prices vary by destination and time of year. You can book now or start an installment plan and pay over time.</p>
+        <div id="plan-box" data-plan-box="${t.id}">${planBoxInner(t)}</div>
+        <button class="btn btn-primary wide" data-action="book" data-trip="${t.id}">${t.kind === 'request' ? 'Book / Start plan' : 'Book or start installment plan'}</button>
+        <button class="btn btn-ghost wide" id="share-trip" type="button">Share this trip</button></aside>`;
+
   main.innerHTML = `
   <section class="t-hero"><div class="t-media">${mediaHTML(t.media, t.title)}</div>
     <div class="wrap"><p class="crumb"><a href="index.html#trips">All trips</a> / ${t.type}</p><h1>${esc(t.title)}</h1><p>${esc(t.desc)}</p></div></section>
   <section class="bgs v-warm t-body" style="--photo:url('${photo}')"><div class="wrap t-grid"><div>
     <div class="tabs-bar t-tabs"><div class="tabs" id="ttabs" role="tablist"></div></div><div id="tpanels">${panels}</div></div>
-  <aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Affordable &amp; flexible</p>
-    <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>Dates</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.bestTime ? `<dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd>` : ''}</dl>
-    <p class="note">Trips are affordable and prices vary depending on the destination and time of year. <a href="index.html#save">Use the savings planner</a> or ask us for a tailored quote.</p>
-    <button class="btn btn-primary wide" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book this trip'}</button>
-    <button class="btn btn-ghost wide" id="share-trip" type="button">Share this trip</button></aside></div></section>
+  ${side}</div></section>
   <section class="more bgs v-night dk" style="--photo:url('${photo2}')"><div class="wrap"><div class="more-head"><h2>More trips</h2><input id="search2" type="search" placeholder="Search all trips and places" aria-label="Search trips"></div><div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div class="rail">${TRIPS.filter(x => x.id !== t.id).map(cardHTML).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div></div></section>
-  <div class="sticky-book"><div><b>Affordable trip</b><small>${esc(s.label)} · prices vary by season</small></div><button class="btn btn-primary" data-book="${t.id}">${t.kind === 'request' ? 'Start planning' : 'Book now'}</button></div>`;
-  document.body.classList.add('has-bookbar');
-  $('#share-trip').addEventListener('click', async e => {
+  ${past ? '' : `<div class="sticky-book"><div><b>Affordable trip</b><small>${esc(s.label)} · book or pay in installments</small></div><button class="btn btn-primary" data-action="book" data-trip="${t.id}">Book / Plan</button></div>`}`;
+  if (!past) document.body.classList.add('has-bookbar'); else document.body.classList.remove('has-bookbar');
+  const share = $('#share-trip'); if (share) share.addEventListener('click', async e => {
     const b = e.currentTarget, data = { title: t.title, text: t.summary, url: location.href };
     try {
       if (navigator.share) await navigator.share(data);
@@ -474,10 +627,11 @@ function detail() {
   if (t.gallery) {
     const lb = $('#lightbox'); let i = 0;
     const show = n => { i = (n + t.gallery.length) % t.gallery.length; $('img', lb).src = t.gallery[i].src; $('img', lb).alt = t.gallery[i].cap; $('p', lb).textContent = t.gallery[i].cap; };
-    $('.gallery').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { show(+b.dataset.i); lb.showModal(); } });
+    const g = $('.gallery'); if (g) g.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { show(+b.dataset.i); lb.showModal(); } });
     lb.addEventListener('keydown', e => { if (e.key === 'ArrowRight') show(i + 1); if (e.key === 'ArrowLeft') show(i - 1); });
     $('img', lb).addEventListener('click', () => show(i + 1));
   }
+  if (!past && pkgPlans.get(t.id)) startPlanTimerTick();
 }
 
 const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 }) : null;
