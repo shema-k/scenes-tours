@@ -451,7 +451,7 @@ const TEAM = {
       head: { title: 'Legal and Safety Compliance Officer', photo: '', name: '', bio: 'Ensures licensing, contracts, insurance, risk assessments and traveler-safety procedures meet legal and industry standards.' },
       members: [] },
     { name: 'Marketing and Communications',
-      head: { title: 'Public Relations Officer', photo: '', name: '', bio: 'Manages the company\'s reputation, media relations, partnerships and community engagement.' },
+      head: { title: 'Public Relations Officer', photo: 'team-pro.webp', name: 'Ms. Ainembabazi Racheal', bio: 'Manages the company\'s reputation, media relations, partnerships and community engagement.' },
       members: [
         { title: 'Media Team', photo: 'team-media.webp', name: '', bio: 'Captures and publishes photo, video and social content that documents every trip and promotes our packages.' }] }
   ]
