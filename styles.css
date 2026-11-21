@@ -300,7 +300,7 @@ body{background:var(--dark)}
 .person,.stat,.svc{color:var(--text)}
 
 /* Savings image */
-.cash{width:min(340px,80%);margin:0 0 1rem;filter:drop-shadow(0 18px 24px #0008);animation:bob 6s ease-in-out infinite}
+.cash{display:block;width:100%;max-width:680px;margin:0 0 1.25rem;filter:drop-shadow(0 18px 24px #0008);animation:bob 6s ease-in-out infinite}
 
 /* Services */
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:1.3rem}
@@ -440,7 +440,7 @@ nav .dd-menu .all{font-weight:700;color:var(--orange-t);border-top:1px solid #e2
 /* compact panels */
 .save{gap:2.5rem}.save h2{font-size:1.7rem}.save>div:first-child p{color:var(--text2);font-size:.95rem}
 @media(max-width:860px){.save{grid-template-columns:1fr}}
-.cash{width:min(220px,60%);margin-bottom:.4rem}
+.cash{width:min(100%,520px);margin:0 auto .75rem}
 .svc-grid{grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:1rem}.svc{padding:1.1rem}
 .world-grid{grid-template-columns:repeat(4,1fr);gap:1rem}.wcard{aspect-ratio:4/5}
 @media(max-width:1000px){.world-grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.world-grid{grid-template-columns:1fr}}
