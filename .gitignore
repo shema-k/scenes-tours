@@ -1,4 +1,5 @@
-# Local-only previews and secrets must never be committed.
+admin.html
 /admin.local.html
 .env
 .env.*
+# Local-only previews and secrets must never be committed.

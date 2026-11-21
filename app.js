@@ -370,7 +370,7 @@ function home() {
     const days = Math.max(0, Math.ceil((new Date(status(next).dep.start + 'T00:00:00') - new Date()) / 864e5));
     box.innerHTML = `<p class="k">Next departure</p><h2>${esc(next.title)}</h2><p class="count"><b>${days}</b> days to go</p>
       <p>${status(next).label}<br>${next.pickup ? 'Pickup: ' + esc(next.pickup) : ''}</p><p>Affordable trips — prices vary by season and time of year. Book now or start an installment plan.</p>${next.bestTime ? `<p><b>Best time to visit:</b> ${esc(next.bestTime)}</p>` : ''}
-      <button class="btn btn-primary wide" data-action="book" data-trip="${next.id}">Book / Start plan</button>`;
+      <button class="btn btn-primary wide" data-action="book" data-trip="${next.id}">Book / Plan</button>`;
   } else {
     box.innerHTML = `<p class="k">Plan your next trip</p><h2>Your dates, your way</h2><p>Explore our experiences and services — tell us when you can travel and we will plan an affordable private trip around the best time to visit.</p>
       <p class="actions" style="margin-top:.8rem"><button class="btn btn-primary" data-book="custom-trips">Start planning</button><a class="btn btn-light" href="#services">Our services</a></p>`;
@@ -614,7 +614,22 @@ function detail() {
   const main = $('#trip');
   if (!t) { main.innerHTML = '<div class="wrap empty"><h1>Trip not found</h1><p><a href="index.html#trips">See all trips</a></p></div>'; return; }
   document.title = `${t.title} | ${SITE.name}`;
-  $('meta[name=description]').content = t.summary;
+  const desc = t.summary || t.desc || '';
+  const pageUrl = `https://shema-k.github.io/scenes-tours/trip.html?id=${encodeURIComponent(t.id)}`;
+  const imgUrl = `https://shema-k.github.io/scenes-tours/${t.feature || (t.media && (t.media.poster || t.media.src)) || 'og.jpg'}`;
+  const setMeta = (sel, attr, val) => { const el = $(sel); if (el) el.setAttribute(attr, val); };
+  setMeta('meta[name=description]', 'content', desc);
+  setMeta('link[rel=canonical]', 'href', pageUrl);
+  setMeta('meta[property="og:title"]', 'content', `${t.title} | ${SITE.name}`);
+  setMeta('meta[property="og:description"]', 'content', desc);
+  setMeta('meta[property="og:image"]', 'content', imgUrl);
+  setMeta('meta[property="og:url"]', 'content', pageUrl);
+  setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
+  setMeta('meta[name="twitter:title"]', 'content', `${t.title} | ${SITE.name}`);
+  setMeta('meta[name="twitter:description"]', 'content', desc);
+  setMeta('meta[name="twitter:image"]', 'content', imgUrl);
+  let ld = $('#trip-ld'); if (!ld) { ld = document.createElement('script'); ld.id = 'trip-ld'; ld.type = 'application/ld+json'; document.head.appendChild(ld); }
+  ld.textContent = JSON.stringify({"@context":"https://schema.org","@type":"TouristTrip","name":t.title,"description":desc,"url":pageUrl,"image":imgUrl,"touristType":t.type,"provider":{"@type":"TravelAgency","name":SITE.name,"url":"https://shema-k.github.io/scenes-tours/"}});
   const s = status(t), past = isPast(t);
   const pics = [t.media, ...(t.gallery || [])].filter(x => x.src && x.type !== 'video').map(x => x.src);
   const photo = pics[0] || 'sunset.webp', photo2 = pics[1] || pics[0] || 'hills.webp';
@@ -624,7 +639,7 @@ function detail() {
        <div class="note" style="margin-top:1rem"><h3 style="margin:0 0 .4rem;font-size:1.1rem">Discover this experience with Scenes</h3>
        <p>${esc(t.desc)}</p>
        <p>We make trips like this <b>affordable and flexible</b>, with options that suit your budget and the best time to visit. Let us plan a similar journey for you.</p>
-       <p class="actions" style="margin-top:.8rem"><a class="btn btn-primary" href="index.html#services">Explore our services</a><a class="btn btn-ghost" href="index.html#trips">Browse trips</a><a class="btn btn-ghost" href="index.html#contact">Plan with us</a></p></div>`
+       <p class="actions" style="margin-top:.8rem"><a class="btn btn-primary" href="index.html#contact">Plan a similar trip</a><a class="btn btn-ghost" href="index.html#services">Explore our services</a></p></div>`
     : `<p style="margin-bottom:1rem;color:var(--text2)">${esc(t.desc)}</p>
        <p class="note" style="margin-bottom:1rem"><b>Affordable &amp; flexible:</b> this trip is designed to be budget-friendly, with costs that vary by season and travel dates. We’ll help you choose the best time to go and an option that fits your plan.</p>
        <div class="lists">${block('Highlights', t.highlights)}${block('Where we go', t.locations)}${block('Activities', t.activities)}${block('What’s included', t.includes)}</div>`;
@@ -635,8 +650,7 @@ function detail() {
     ? `<aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Affordable experience</p>
         ${t.bestTime ? `<dl><dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd></dl>` : ''}
         <p class="note">Interested in a trip like this? Scenes Tours &amp; Travels offers affordable, well-planned experiences across Uganda, East Africa and beyond. Tell us your dates and we’ll tailor a similar journey for you.</p>
-        <a class="btn btn-primary wide" href="index.html#services">Explore our services</a>
-        <a class="btn btn-ghost wide" href="index.html#contact">Plan a similar trip</a>
+        <a class="btn btn-primary wide" href="index.html#contact">Plan a similar trip</a>
         <button class="btn btn-ghost wide" id="share-trip" type="button">Share</button></aside>`
     : `<aside class="side"><p class="k">${esc(t.region)}</p><p class="price">Affordable &amp; flexible</p>
         <dl><dt>Duration</dt><dd>${esc(t.duration)}</dd><dt>When to go</dt><dd>${esc(s.label)}${(t.deps || []).length > 1 ? '<br><small>All dates: ' + t.deps.map(range).join('; ') + '</small>' : ''}</dd>${t.pickup ? `<dt>Pickup</dt><dd>${esc(t.pickup)}</dd>` : ''}${t.bestTime ? `<dt>Best time to visit</dt><dd>${esc(t.bestTime)}</dd>` : ''}</dl>
