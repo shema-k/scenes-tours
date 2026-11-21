@@ -1430,7 +1430,7 @@ const TEAM = {
     "title": "Managing Director",
     "photo": "brochure-founder.webp",
     "name": "Mr. Mukisa Shear-Jashub",
-    "bio": "Vision Bearer. \nCEO\nProvides strategic leadership and overall direction of the company, sets annual targets, builds partnerships and represents Scenes Tours & Travels to clients, regulators and industry partners."
+    "bio": "Vision Bearer. \nCEO. \nProvides strategic leadership and overall direction of the company, sets annual targets, builds partnerships and represents Scenes Tours & Travels to clients, regulators and industry partners."
   },
   "deputy": {
     "title": "Deputy Managing Director",
@@ -1464,8 +1464,8 @@ const TEAM = {
       "head": {
         "title": "Company Accountant",
         "photo": "",
-        "name": "",
-        "bio": "Oversees budgeting, trip costing, payments, Traveler's Savings Account records and statutory filings."
+        "name": "Mr.Ssemigga AbdulRahman",
+        "bio": "Oversees budgeting, trip costing, payments, Traveler's Savings Account records and statutory filings. Audits company expenditure."
       },
       "members": []
     },
@@ -1473,8 +1473,8 @@ const TEAM = {
       "name": "Legal, Safety and Compliance",
       "head": {
         "title": "Legal and Safety Compliance Officer",
-        "photo": "",
-        "name": "",
+        "photo": "team-deputy.webp",
+        "name": "Mr.Shema Kevine",
         "bio": "Ensures licensing, contracts, insurance, risk assessments and traveler-safety procedures meet legal and industry standards."
       },
       "members": []
