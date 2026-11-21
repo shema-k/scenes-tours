@@ -11,8 +11,8 @@ const SITE = {
   address: 'Next to Lynn Modern Apartments, Kikoni-Makerere, Kampala, Uganda',
   map: 'https://www.google.com/maps?q=Lynn+Apartments+kikoni+Kampala&hl=en&z=14&output=embed',
   social: [
-    { name: 'TikTok', url: 'https://www.tiktok.com/@scenes.travel' },
-    { name: 'Instagram', url: 'https://www.instagram.com/scenestours' },
+    { name: 'TikTok', url: 'https://www.tiktok.com/@scenestravels' },
+    { name: 'Instagram', url: 'https://www.instagram.com/scenestravels' },
     { name: 'Twitter', url: 'https://twitter.com/scenestours' }
   ]
 };
@@ -33,18 +33,16 @@ const SEED_TRIPS = [
     locations: ['Amabere Caves', 'Kazinga Channel', 'Mubuku Irrigation Scheme', 'Kiwa Hot Springs'],
     activities: ['Campfires', 'Music on board', 'Boat cruising', 'Wildlife viewing', 'Road trip', 'Bird watching', 'Sunset at the national park'],
     gallery: [
+      { src: 'queen-elizabeth.webp', cap: 'Safari experience at Queen Elizabeth' },
       { src: 'gallery-sceners-safari.webp', cap: 'Sceners on safari at Queen Elizabeth' },
       { src: 'gallery-open-park-qenp.webp', cap: 'Open Park Days at Queen Elizabeth' },
       { src: 'gallery-zebras-qenp.webp', cap: 'Zebras in Queen Elizabeth National Park' },
-      { src: 'gallery-kazinga-buffalo-hippo.webp', cap: 'Buffalo and hippo along the Kazinga Channel' },
-      { src: 'sunset.webp', cap: 'Sunset experience' }, { src: 'queen-elizabeth.webp', cap: 'Safari experience' },
-      { src: 'lakeview.webp', cap: 'Lake view' }, { src: 'crater.webp', cap: 'Crater lakes' },
-      { src: 'hills.webp', cap: 'Hills at Queen Elizabeth' }, { src: 'gorilla.webp', cap: 'Animals at Queen Elizabeth' }
+      { src: 'gallery-kazinga-buffalo-hippo.webp', cap: 'Buffalo and hippo along the Kazinga Channel' }
     ],
     videos: ['preview-hotsprings.mp4', 'preview-animals.mp4', 'preview-tourists.mp4']
   },
   {
-    id: 'diani-beach', type: 'Beach', group: 'East Africa', feature: 'world-beach.webp', title: 'Diani Beach Holiday', region: 'Diani Beach, Kenya',
+    id: 'diani-beach', type: 'Beach', group: 'East Africa', feature: 'poster-beachview.webp', title: 'Diani Beach Holiday', region: 'Diani Beach, Kenya',
     duration: 'To be communicated', kind: 'tbc', price: null,
     bestTime: 'July to October and January to March offer the sunniest beach weather, calm seas and great snorkeling. April to June brings the long rains, while November has short showers but fewer visitors.',
     summary: 'Cool ocean breeze, sun-soaked beaches, snorkeling and premium beachfront hotels on the Kenyan coast.',
@@ -69,7 +67,7 @@ const SEED_TRIPS = [
       { src: 'rwanda5.webp', cap: 'Research team' }, { src: 'rwanda6.webp', cap: 'Adventure awaits' },
       { src: 'rwanda7.webp', cap: 'Golden hour' }
     ],
-    videos: ['preview-rwanda8.mp4']
+    videos: ['rwanda-company-1.mp4', 'rwanda-company-2.mp4', 'rwanda-company-3.mp4', 'rwanda-company-4.mp4', 'rwanda-company-5.mp4']
   },
   {
     id: 'custom-trips', type: 'Custom', group: 'Uganda', title: 'Custom Made Trips Across Uganda', region: 'Uganda and East Africa',
@@ -78,13 +76,11 @@ const SEED_TRIPS = [
     summary: 'Journeys designed around your interests and budget, to any destination in Uganda.',
     desc: 'Tailor-made trips across Uganda and East Africa, designed around your budget, interests and travel dreams. Tell us your vision and we handle the logistics.',
         faq: [{"q": "How does a custom trip work?", "a": "Tell us where you want to go, who’s travelling, your dates and budget. We design a tailored itinerary and quote for you."}, {"q": "Can you plan around my budget and season?", "a": "Yes. Trips are affordable and flexible; prices vary by season, group size and travel style. We recommend the best time to visit for value and experience."}, {"q": "What destinations can you arrange?", "a": "Uganda, East Africa and beyond — safaris, beaches, cities, family trips, schools and group travel."}, {"q": "Can I book or start a savings plan?", "a": "Yes. Once your plan is agreed, you can book or start an installment plan and pay over time."}],
-    media: { type: 'image', src: 'custom1.webp' },
+    media: { type: 'image', src: 'custom6.webp' },
     highlights: ['Epic safaris', 'Luxury retreats', 'Cultural immersion', 'Mountain hikes', 'Water adventures', 'Night safaris', 'Community encounters'],
     gallery: [
-      { src: 'custom1.webp', cap: 'Epic safaris' }, { src: 'custom2.webp', cap: 'Luxury retreats' },
-      { src: 'custom3.webp', cap: 'Cultural immersion' }, { src: 'custom4.webp', cap: 'Mountain hikes' },
-      { src: 'custom5.webp', cap: 'Water adventures' }, { src: 'custom6.webp', cap: 'Night safaris' },
-      { src: 'custom7.webp', cap: 'Community encounters' }
+      { src: 'custom6.webp', cap: 'Night safaris' }, { src: 'custom2.webp', cap: 'Luxury retreats' },
+      { src: 'custom3.webp', cap: 'Cultural immersion' }, { src: 'custom7.webp', cap: 'Community encounters' }
     ],
     videos: ['preview-zebra.mp4']
   },
@@ -101,8 +97,7 @@ const SEED_TRIPS = [
     locations: ['Murchison Falls', 'River Nile', 'Lake Albert', 'Ziwa Rhino Sanctuary'],
     activities: ['Game drives', 'Boat cruise', 'Waterfall walk', 'Bird watching', 'Photography'],
     gallery: [
-      { src: 'custom4.webp', cap: 'The falls and the Nile' }, { src: 'sunset.webp', cap: 'Sunset on the savanna' },
-      { src: 'queen-elizabeth.webp', cap: 'Wildlife on the plains' }, { src: 'hills.webp', cap: 'Uganda\'s open plains' }
+      { src: 'custom4.webp', cap: 'The falls and the Nile' }
     ]
   },
   {
@@ -118,8 +113,7 @@ const SEED_TRIPS = [
     locations: ['Bwindi Impenetrable Forest', 'Lake Bunyonyi', 'Kabale'],
     activities: ['Gorilla trekking', 'Forest walks', 'Canoeing', 'Community visits', 'Bird watching'],
     gallery: [
-      { src: 'gorilla.webp', cap: 'Mountain gorilla in Bwindi' }, { src: 'lakeview.webp', cap: 'Lake Bunyonyi' },
-      { src: 'hills.webp', cap: 'Terraced hills' }, { src: 'custom3.webp', cap: 'Community encounters' }
+      { src: 'gorilla.webp', cap: 'Mountain gorilla in Bwindi' }
     ]
   },
   {
@@ -135,8 +129,7 @@ const SEED_TRIPS = [
     locations: ['Lake Bunyonyi', 'Kabale', 'Bwindi foothills'],
     activities: ['Canoeing', 'Hiking', 'Swimming', 'Bird watching', 'Relaxing'],
     gallery: [
-      { src: 'lakeview.webp', cap: 'Lake Bunyonyi' }, { src: 'hills.webp', cap: 'Terraced hills' },
-      { src: 'sunset.webp', cap: 'Golden hour on the lake' }
+      { src: 'lakeview.webp', cap: 'Lake Bunyonyi' }
     ]
   },
   {
@@ -151,8 +144,7 @@ const SEED_TRIPS = [
     locations: ['Jinja', 'Source of the Nile', 'Busoga'],
     activities: ['Rafting', 'Tubing', 'Quad biking', 'Boat rides', 'Market walks'],
     gallery: [
-      { src: 'custom5.webp', cap: 'Water adventures on the Nile' }, { src: 'custom2.webp', cap: 'A riverside stay' },
-      { src: 'hills.webp', cap: 'Busoga hills' }
+      { src: 'custom5.webp', cap: 'Water adventures on the Nile' }
     ]
   },
   {
@@ -167,8 +159,7 @@ const SEED_TRIPS = [
     locations: ['Kidepo Valley', 'Karamoja', 'Moroto'],
     activities: ['Game drives', 'Cultural visits', 'Hiking', 'Photography', 'Bird watching'],
     gallery: [
-      { src: 'sunset.webp', cap: 'Kidepo sunsets' }, { src: 'queen-elizabeth.webp', cap: 'Wildlife on the plains' },
-      { src: 'hills.webp', cap: 'The valley' }
+      { src: 'sunset.webp', cap: 'Kidepo sunsets' }
     ]
   },
   {
@@ -178,7 +169,7 @@ const SEED_TRIPS = [
     summary: 'Turquoise water, spice tours, dhow cruises and the white sand of Nungwi and Paje.',
     desc: 'Fly out to the Indian Ocean for a relaxed beach stay with a spice-farm visit, a dhow sunset cruise and time in Stone Town.',
         faq: [{"q": "What’s included in the Zanzibar holiday?", "a": "Typically flight booking support, airport transfers, beach hotel, breakfast and selected activities. We confirm the exact inclusions for your package and dates."}, {"q": "When is the best time to visit Zanzibar?", "a": "June–October is dry and pleasantly warm; December–February is hot and sunny. March–May has long rains and November short showers."}, {"q": "Do I need a passport/visa?", "a": "Travel requirements depend on your nationality. We’ll guide you on the documents needed before you travel."}, {"q": "Can I book or pay in installments?", "a": "Yes. Book now or start a payment savings/installment plan and pay over time before departure."}],
-    media: { type: 'image', src: 'world-beach.webp' },
+    media: { type: 'image', src: 'zanzibar-company-1.webp' },
     highlights: ['Nungwi and Paje beaches', 'Stone Town', 'Spice tour', 'Sunset dhow cruise'],
     includes: ['Flight booking', 'Airport transfers', 'Beach hotel', 'Breakfast', 'Selected activities'],
     locations: ['Zanzibar', 'Stone Town', 'Nungwi', 'Paje'],
@@ -186,8 +177,25 @@ const SEED_TRIPS = [
     gallery: [
       { src: 'gallery-zanzibar-splash.webp', cap: 'Island splash in Zanzibar' },
       { src: 'gallery-salaam-cave-turtles.webp', cap: 'Swimming with turtles in Salaam Cave' },
-      { src: 'world-beach.webp', cap: 'Indian Ocean beaches' }, { src: 'poster-beachview.webp', cap: 'Beach time' },
-      { src: 'sunset.webp', cap: 'Sunset over the ocean' }
+      { src: 'zanzibar-company-1.webp', cap: 'Zanzibar island experience' },
+      { src: 'zanzibar-company-2.webp', cap: 'Zanzibar beach moments' },
+      { src: 'zanzibar-company-3.webp', cap: 'Zanzibar coast' },
+      { src: 'zanzibar-company-4.webp', cap: 'Zanzibar turquoise waters' },
+      { src: 'zanzibar-company-5.webp', cap: 'Zanzibar holiday highlights' },
+      { src: 'zanzibar-company-6.webp', cap: 'Exploring Zanzibar' },
+      { src: 'zanzibar-company-7.webp', cap: 'Zanzibar scenery' },
+      { src: 'zanzibar-company-8.webp', cap: 'Zanzibar island views' },
+      { src: 'zanzibar-company-9.webp', cap: 'Zanzibar travel moments' },
+      { src: 'zanzibar-company-10.webp', cap: 'Zanzibar getaway' },
+      { src: 'zanzibar-company-11.webp', cap: 'Zanzibar experience' },
+      { src: 'zanzibar-company-12.webp', cap: 'Zanzibar shores' },
+      { src: 'zanzibar-company-13.webp', cap: 'Zanzibar island life' },
+      { src: 'zanzibar-company-14.webp', cap: 'Zanzibar adventure' },
+      { src: 'zanzibar-company-15.webp', cap: 'Zanzibar memories' },
+      { src: 'zanzibar-company-16.webp', cap: 'Zanzibar escape' },
+      { src: 'zanzibar-company-17.webp', cap: 'Zanzibar highlights' },
+      { src: 'zanzibar-company-18.webp', cap: 'Zanzibar discovery' },
+      { src: 'zanzibar-company-19.webp', cap: 'Zanzibar moments' }
     ]
   },
   {
@@ -202,8 +210,7 @@ const SEED_TRIPS = [
     locations: ['Masai Mara', 'Narok', 'Mara River'],
     activities: ['Game drives', 'Cultural visits', 'Photography', 'Balloon safari on request'],
     gallery: [
-      { src: 'world-wildlife.webp', cap: 'Mara wildlife' }, { src: 'sunset.webp', cap: 'Mara sunset' },
-      { src: 'queen-elizabeth.webp', cap: 'On safari' }
+      { src: 'world-wildlife.webp', cap: 'Mara wildlife' }
     ]
   },
   {
@@ -218,7 +225,7 @@ const SEED_TRIPS = [
     locations: ['Kilimanjaro', 'Arusha', 'Moshi'],
     activities: ['Trekking', 'Summit climb', 'Wildlife spotting', 'Photography'],
     gallery: [
-      { src: 'hills.webp', cap: 'Mountain trails' }, { src: 'sunset.webp', cap: 'High-altitude sunsets' },
+      { src: 'hills.webp', cap: 'Mountain trails' },
       { src: 'crater.webp', cap: 'Volcanic landscape' }
     ]
   },
@@ -235,7 +242,7 @@ const SEED_TRIPS = [
     locations: ['Dubai', 'Abu Dhabi on request'],
     activities: ['City tour', 'Desert safari', 'Shopping', 'Dhow dinner cruise'],
     gallery: [
-      { src: 'world-cities.webp', cap: 'City skylines' }, { src: 'sunset.webp', cap: 'Desert sunset' }
+      { src: 'world-cities.webp', cap: 'City skylines' }
     ]
   },
   {
@@ -251,8 +258,7 @@ const SEED_TRIPS = [
     locations: ['Cape Town', 'Cape Peninsula', 'Stellenbosch'],
     activities: ['Mountain cableway', 'Coastal drive', 'Wine tasting', 'Beach time', 'City walks'],
     gallery: [
-      { src: 'world-cities.webp', cap: 'Cape Town' }, { src: 'hills.webp', cap: 'Mountain views' },
-      { src: 'sunset.webp', cap: 'Evening on the coast' }
+      { src: 'world-beach.webp', cap: 'Cape Town coast' }
     ]
   }
 ];
@@ -362,7 +368,7 @@ const WAYS = [
 const GUIDES = [
   {
     id: 'best-time-uganda', title: 'When is the best time to visit Uganda?', date: 'Nov 2026', read: '4 min read',
-    img: 'queen-elizabeth.webp', place: 'Queen Elizabeth National Park',
+    img: 'brochure-savings.webp', place: 'Queen Elizabeth National Park',
     excerpt: 'Dry-season game viewing, green-season waterfalls and what each month actually feels like on the road.',
     body: [
       'Uganda is a year-round destination, but the experience changes with the rains. The drier months from December to February and June to September are easiest for game drives, gorilla trekking and long road trips. Tracks are firmer, parks are busy and the savanna is shorter, which makes animals easier to spot.',
@@ -372,7 +378,7 @@ const GUIDES = [
   },
   {
     id: 'gorilla-trekking', title: 'Gorilla trekking in Bwindi: what to expect', date: 'Oct 2026', read: '5 min read',
-    img: 'gorilla.webp', place: 'Bwindi Impenetrable Forest',
+    img: 'poster-animals.webp', place: 'Bwindi Impenetrable Forest',
     excerpt: 'Permits, fitness, what to wear and the moment you come face to face with a mountain gorilla family.',
     body: [
       'A gorilla trek starts early at the park headquarters, where rangers assign groups and brief visitors. Treks can last from one to six hours depending on where the family slept the night before. Porters are available and worth hiring.',
@@ -382,7 +388,7 @@ const GUIDES = [
   },
   {
     id: 'safari-cost', title: 'What affects the cost of a Uganda safari?', date: 'Sep 2026', read: '4 min read',
-    img: 'custom4.webp', place: 'Murchison Falls',
+    img: 'poster-zebra.webp', place: 'Murchison Falls',
     excerpt: 'Why prices vary by season, parks, lodges and group size — and how we keep every trip affordable.',
     body: [
       'Safari costs are shaped by park fees, accommodation, transport and guide time — and they vary depending on the time of year, availability and the style of trip you choose. Peak travel seasons and holiday periods can differ from quieter months, so timing matters.',
@@ -392,7 +398,7 @@ const GUIDES = [
   },
   {
     id: 'packing-safari', title: 'Packing for a 3-day safari', date: 'Aug 2026', read: '3 min read',
-    img: 'hills.webp', place: 'Queen Elizabeth National Park',
+    img: 'poster-camelwalk.webp', place: 'Queen Elizabeth National Park',
     excerpt: 'A simple, light packing list for game drives, boat cruises and campfires — plus what to leave at home.',
     body: [
       'Bring neutral-coloured clothes, a warm layer for early game drives, a hat, sunglasses, sunscreen and insect repellent. Closed shoes are better than sandals for walks and rough ground.',
@@ -402,7 +408,7 @@ const GUIDES = [
   },
   {
     id: 'diani-guide', title: 'Diani Beach: sun, sand and Fort Jesus', date: 'Jul 2026', read: '4 min read',
-    img: 'world-beach.webp', place: 'Diani Beach, Kenya',
+    img: 'poster-masai.webp', place: 'Diani Beach, Kenya',
     excerpt: 'How to combine a Kenyan beach stay with Mombasa history, snorkeling and a smooth transfer from the airport.',
     body: [
       'Diani is a long, white-sand beach south of Mombasa. The reef keeps the water calm, which makes it good for swimming and snorkeling, and the beach is lined with hotels, cafes and small tour operators.',
@@ -412,7 +418,7 @@ const GUIDES = [
   },
   {
     id: 'rwanda-or-uganda', title: 'Rwanda or Uganda for gorillas?', date: 'Jun 2026', read: '5 min read',
-    img: 'rwanda.webp', place: 'Volcanoes National Park',
+    img: 'poster-tourists.webp', place: 'Volcanoes National Park',
     excerpt: 'Permit prices, travel time, lodges and the feel of each gorilla destination — a practical comparison.',
     body: [
       'Both Rwanda and Uganda offer genuine mountain-gorilla trekking in the Virunga and Bwindi forests. Rwanda is quicker to reach from Kigali, with short transfers and a wide range of lodges. Uganda usually costs less for permits and can be combined with a longer safari.',
