@@ -14,7 +14,7 @@
 <link rel="preload" href="fonts/playfair.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/playfair-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="sunset.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="styles.css?v=24">
+<link rel="stylesheet" href="styles.css?v=27">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Scenes Tours and Travel","url":"https://shema-k.github.io/scenes-tours/","slogan":"See the World","telephone":"+256784066320","email":"bookingscenestravels@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Next to Lynn Modern Apartments, Kikoni-Makerere","addressLocality":"Kampala","addressCountry":"UG"}}</script>
 </head><body>
 <header id="site-header"></header>
@@ -24,14 +24,15 @@
   <div class="wrap hero-grid">
   <div><span class="motto">See the world &middot; Uganda and beyond</span>
   <h1>Extraordinary journeys, <em>planned around you</em></h1>
-  <p>Small-group safaris and private trips across Uganda and East Africa. Gorillas, big-game plains, lakes and coast &mdash; with local guides, affordable options and prices that vary by season and time of year. Select any destination to see the best time to visit.</p>
+  <p>Small-group safaris and private trips across Uganda and East Africa &mdash; planned by local guides, made affordable, and tailored to the best time to visit.</p>
   <form id="quick" class="quick" aria-label="Plan your trip">
     <label>Where to?<select name="trip"></select></label>
     <label>Who is travelling?<select name="who"><option value="0">Just me</option><option value="1">A couple</option><option value="2">Small group (3 to 6)</option><option value="3">School or large group</option></select></label>
     <label>When?<input type="date" name="date"></label>
     <button class="btn btn-primary" type="submit">Plan my trip</button>
   </form>
-  <ul class="pills"><li>Local guides</li><li>Registered company</li><li>5+ years of experience</li><li>Kampala-based</li></ul></div>
+  <p class="actions" style="margin-top:.9rem"><a class="btn btn-ghost" href="#trips">Browse trips</a><a class="btn btn-ghost" href="https://wa.me/256700907617" target="_blank" rel="noopener">WhatsApp us</a></p>
+  <ul class="pills"><li>Local guides</li><li>Registered company</li><li>Affordable &amp; flexible</li><li>Kampala-based</li></ul></div>
   <div class="next" id="next" aria-live="polite"></div>
   </div>
   <div class="hero-dots" id="hero-dots" aria-label="Choose a hero image"></div>
@@ -83,7 +84,7 @@
 <section class="panel" id="gallery" data-title="Gallery" hidden>
   <div class="panel-head"><div><span class="tagline">Moments from our trips</span><h2>Gallery</h2></div><p class="meta">Real places, real departures. Tap any photo to open it full size.</p></div>
   <div id="moments" class="mosaic"></div>
-  <p class="actions"><a class="btn btn-primary" href="#trips">Find a trip</a><a class="btn btn-ghost" href="https://www.instagram.com/scenestours" target="_blank" rel="noopener">Follow on Instagram</a></p>
+  <p class="actions"><a class="btn btn-primary" href="#trips">Find a trip</a><button class="btn btn-ghost" data-book="custom-trips">Plan a trip</button><a class="btn btn-ghost" href="https://www.instagram.com/scenestours" target="_blank" rel="noopener">Instagram</a></p>
 </section>
 
 <section class="panel" id="save" data-title="Savings" hidden>
@@ -103,6 +104,16 @@
     <p class="meta" style="margin-top:.6rem"><span id="pct"></span> of <span id="goal"></span></p>
     <button class="btn btn-primary wide" type="button" data-book="custom-trips">Start planning</button>
   </form>
+  </div>
+</section>
+
+<section class="panel" id="how" data-title="How it works" hidden>
+  <div class="panel-head"><div><span class="tagline">Simple steps</span><h2>How to plan your trip</h2></div><p class="meta">From idea to departure &mdash; we make it easy.</p></div>
+  <div class="ways">
+    <div class="tinfo"><p><b>1. Choose a trip</b></p><p>Browse destinations and pick an experience that fits you.</p><p class="actions"><a class="btn btn-ghost" href="#trips">Browse trips</a></p></div>
+    <div class="tinfo"><p><b>2. Check the best time</b></p><p>Select a destination to see the best time to visit and affordable seasonal options.</p><p class="actions"><a class="btn btn-ghost" href="#world">Destinations</a></p></div>
+    <div class="tinfo"><p><b>3. Book or start a savings plan</b></p><p>Book now, or start an installment plan and pay over time.</p><p class="actions"><a class="btn btn-ghost" href="#save">Savings plan</a></p></div>
+    <div class="tinfo"><p><b>4. Travel with Scenes</b></p><p>We handle the details. You enjoy the journey.</p><p class="actions"><a class="btn btn-ghost" href="#contact">Contact us</a></p></div>
   </div>
 </section>
 

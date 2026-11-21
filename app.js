@@ -651,7 +651,7 @@ function detail() {
   <section class="bgs v-warm t-body" style="--photo:url('${photo}')"><div class="wrap t-grid"><div>
     <div class="tabs-bar t-tabs"><div class="tabs" id="ttabs" role="tablist"></div></div><div id="tpanels">${panels}</div></div>
   ${side}</div></section>
-  <section class="bgs v-mint" style="--photo:url('${photo2}')"><div class="wrap" style="padding:2rem 0 1rem"><div class="panel-head" style="margin-bottom:1rem"><div><span class="tagline">Good to know</span><h2 style="font-size:1.5rem">FAQ</h2></div><a class="btn btn-ghost" href="index.html#contact">Ask us</a></div><div id="faq-list" class="faq"></div></div></section>
+  <section class="bgs v-mint" style="--photo:url('${photo2}')"><div class="wrap" style="padding:2rem 0 1rem"><div class="panel-head" style="margin-bottom:1rem"><div><span class="tagline">Good to know</span><h2 style="font-size:1.5rem">Questions about this trip</h2></div><a class="btn btn-ghost" href="index.html#contact">Ask us</a></div><div id="faq-list" class="faq"></div></div></section>
   <section class="more bgs v-night dk" style="--photo:url('${photo2}')"><div class="wrap"><div class="more-head"><h2>More trips</h2><input id="search2" type="search" placeholder="Search all trips and places" aria-label="Search trips"></div><div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous trips">&lsaquo;</button><div class="rail">${TRIPS.filter(x => x.id !== t.id).map(cardHTML).join('')}</div><button class="rail-btn next" data-dir="1" aria-label="Next trips">&rsaquo;</button></div></div></section>
   ${past ? '' : `<div class="sticky-book"><div><b>Affordable trip</b><small>${esc(s.label)} · book or pay in installments</small></div><button class="btn btn-primary" data-action="book" data-trip="${t.id}">Book / Plan</button></div>`}`;
   if (!past) document.body.classList.add('has-bookbar'); else document.body.classList.remove('has-bookbar');
@@ -675,7 +675,8 @@ function detail() {
   if (!past) { initEstimator(t); if (pkgPlans.get(t.id)) startPlanTimerTick(); }
   const fl = $('#faq-list');
   if (fl && !fl.children.length) {
-    fl.innerHTML = FAQ.map((f, i) => `<details${i === 0 ? ' open' : ''}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
+    const faqs = (t.faq && t.faq.length) ? t.faq : FAQ;
+    fl.innerHTML = faqs.map((f, i) => `<details${i === 0 ? ' open' : ''}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
     fl.addEventListener('toggle', e => { if (e.target.open) $$('details', fl).forEach(d => { if (d !== e.target) d.open = false; }); }, true);
   }
 }
