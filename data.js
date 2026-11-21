@@ -133,36 +133,15 @@ const SEED_TRIPS = [
     "id": "diani-beach",
     "type": "Beach",
     "group": "East Africa",
+    "feature": "poster-beachview.webp",
     "title": "Diani Beach Holiday",
     "region": "Diani Beach, Kenya",
-    "duration": "All year",
+    "duration": "To be communicated",
     "kind": "tbc",
+    "price": null,
+    "bestTime": "July to October and January to March offer the sunniest beach weather, calm seas and great snorkeling. April to June brings the long rains, while November has short showers but fewer visitors.",
     "summary": "Cool ocean breeze, sun-soaked beaches, snorkeling and premium beachfront hotels on the Kenyan coast.",
     "desc": "Experience the cool ocean breeze, beautiful sun-soaked beaches, historic Fort Jesus walks, snorkeling adventures, and premium beachfront hotel accommodation in Kenya.",
-    "feature": "poster-beachview.webp",
-    "bestTime": "July to October and January to March offer the sunniest beach weather, calm seas and great snorkeling. April to June brings the long rains, while November has short showers but fewer visitors.",
-    "price": null,
-    "media": {
-      "type": "video",
-      "src": "beachview.mp4",
-      "poster": "poster-beachview.webp",
-      "preview": "preview-beachview.mp4"
-    },
-    "highlights": [
-      "Sun-soaked beaches",
-      "Fort Jesus walks",
-      "Snorkeling adventures",
-      "Beachfront hotels"
-    ],
-    "includes": [],
-    "locations": [],
-    "activities": [],
-    "gallery": [],
-    "videos": [
-      "preview-beachview.mp4",
-      "preview-camelwalk.mp4",
-      "preview-masai.mp4"
-    ],
     "faq": [
       {
         "q": "What’s included in the Diani trip?",
@@ -180,6 +159,23 @@ const SEED_TRIPS = [
         "q": "Can I start a payment plan?",
         "a": "Yes. You can book now or start an installment plan, set your dates, and pay over time before the trip is due."
       }
+    ],
+    "media": {
+      "type": "video",
+      "src": "beachview.mp4",
+      "poster": "poster-beachview.webp",
+      "preview": "preview-beachview.mp4"
+    },
+    "highlights": [
+      "Sun-soaked beaches",
+      "Fort Jesus walks",
+      "Snorkeling adventures",
+      "Beachfront hotels"
+    ],
+    "videos": [
+      "preview-beachview.mp4",
+      "preview-camelwalk.mp4",
+      "preview-masai.mp4"
     ]
   },
   {
