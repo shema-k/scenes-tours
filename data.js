@@ -1430,21 +1430,21 @@ const TEAM = {
     "title": "Managing Director",
     "photo": "brochure-founder.webp",
     "name": "Mr. Mukisa Shear-Jashub",
-    "bio": "Provides strategic leadership and overall direction of the company, sets annual targets, builds partnerships and represents Scenes Tours & Travels to clients, regulators and industry partners."
+    "bio": "Vision Bearer. \nCEO\nProvides strategic leadership and overall direction of the company, sets annual targets, builds partnerships and represents Scenes Tours & Travels to clients, regulators and industry partners."
   },
   "deputy": {
     "title": "Deputy Managing Director",
     "photo": "team-deputy.webp",
     "name": "Mr. Shema Kevine",
-    "bio": "Second in command. Deputizes for the Managing Director, supervises the department heads and oversees day-to-day operations so company plans and trip standards are delivered."
+    "bio": "Vision Bearer.\nSecond in command. \nDeputizes for the Managing Director, supervises the department heads and oversees day-to-day operations so company plans and trip standards are delivered."
   },
   "depts": [
     {
       "name": "Operations and Tour Delivery",
       "head": {
         "title": "Operations Manager",
-        "photo": "",
-        "name": "",
+        "photo": "brochure-founder.webp",
+        "name": "Mr.Mukisa ShearJashub",
         "bio": "Plans and coordinates itineraries, transport, suppliers, lodging and schedules so every departure runs smoothly and on time."
       },
       "members": [
