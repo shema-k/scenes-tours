@@ -120,7 +120,10 @@
 <section class="panel" id="reviews" data-title="Reviews" hidden>
   <div class="panel-head"><div><span class="tagline">Customer feedback</span><h2>What our travelers say</h2></div><div id="rev-sum" class="rev-sum"></div></div>
   <div class="rev-layout">
-    <form id="fb" class="planner" novalidate><h3>Share your experience</h3>
+    <form id="fb" class="planner" name="review-submissions" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="review-submissions">
+      <p class="hidden" style="display:none"><label>Don’t fill this out: <input name="bot-field"></label></p>
+      <h3>Share your experience</h3>
       <div class="row"><label>Your name<input name="name" autocomplete="name"></label><label>Trip you joined<select name="trip"></select></label></div>
       <fieldset class="rate"><legend>Your rating</legend><div class="stars-in">
         <input type="radio" name="rating" id="r5" value="5"><label for="r5" title="5 stars">&#9733;</label><input type="radio" name="rating" id="r4" value="4"><label for="r4" title="4 stars">&#9733;</label><input type="radio" name="rating" id="r3" value="3"><label for="r3" title="3 stars">&#9733;</label><input type="radio" name="rating" id="r2" value="2"><label for="r2" title="2 stars">&#9733;</label><input type="radio" name="rating" id="r1" value="1"><label for="r1" title="1 star">&#9733;</label></div></fieldset>

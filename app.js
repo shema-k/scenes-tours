@@ -941,27 +941,43 @@ function stage() {
   deepLink(T);
 }
 
-/* ---------- Customer feedback: published reviews + form that sends to admin for review or directly via WhatsApp ---------- */
+/* ---------- Customer feedback: Netlify Forms for publish review, WhatsApp for direct message ---------- */
 function feedback() {
   const list = DB.reviews(), avg = list.length ? list.reduce((s, r) => s + r.rating, 0) / list.length : 0;
   $('#rev-sum').innerHTML = list.length ? `<b>${avg.toFixed(1)}</b><span class="stars" aria-hidden="true">${stars(Math.round(avg))}</span><small>${list.length} customer review${list.length > 1 ? 's' : ''}</small>` : '<small>No public reviews yet</small>';
   $('#rev-rail').innerHTML = list.length ? list.map(reviewCard).join('') : '<div class="rev-empty"><h3>Your story could be the first</h3><p>Travelled with us? Tell us how it went and your feedback will be featured here once approved.</p></div>';
   const f = $('#fb'); f.trip.innerHTML = TRIPS.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('') + '<option value="other">Another trip</option>';
-  f.addEventListener('submit', e => {
+  f.addEventListener('submit', async e => {
     e.preventDefault(); const d = Object.fromEntries(new FormData(f)), err = $('.err', f), bad = [];
     const mode = e.submitter?.dataset.reviewSend || 'publish';
-    if (d.name.trim().length < 2) bad.push('Enter your name.');
+    if (String(d.name||'').trim().length < 2) bad.push('Enter your name.');
     if (!d.rating) bad.push('Choose a star rating.');
-    if (d.text.trim().length < 10) bad.push('Write a few words about your trip.');
+    if (String(d.text||'').trim().length < 10) bad.push('Write a few words about your trip.');
     if (bad.length) { err.textContent = bad.join(' '); err.hidden = false; return; }
     err.hidden = true;
     const t = byId(d.trip), tripTitle = t ? t.title : 'Another trip';
-    const msg = mode === 'publish'
-      ? `*REVIEW FOR PUBLISHING*\n\nPlease review and publish this customer review if approved.\n\nName: ${d.name}\nFrom: \nTrip: ${tripTitle}\nTrip ID: ${d.trip}\nRating: ${+d.rating}/5\nReview: ${d.text}`
-      : `*CUSTOMER FEEDBACK*\n\nName: ${d.name}\nTrip: ${tripTitle}\nRating: ${stars(+d.rating)} (${d.rating}/5)\nFeedback: ${d.text}`;
-    window.open(`https://wa.me/${SITE.phones[0].wa}?text=${encodeURIComponent(msg)}`, '_blank');
-    f.innerHTML = mode === 'publish'
-      ? '<h3>Thank you!</h3><p>Your review opened in WhatsApp. Press <b>Send</b> so the admin can review it for publishing on the website.</p>'
-      : '<h3>Thank you!</h3><p>Your message opened in WhatsApp. Press <b>Send</b> to share your feedback with us.</p>';
+    if (mode === 'whatsapp') {
+      const msg = `*CUSTOMER FEEDBACK*\n\nName: ${d.name}\nTrip: ${tripTitle}\nRating: ${stars(+d.rating)} (${d.rating}/5)\nFeedback: ${d.text}`;
+      window.open(`https://wa.me/${SITE.phones[0].wa}?text=${encodeURIComponent(msg)}`, '_blank');
+      f.innerHTML = '<h3>Thank you!</h3><p>Your message opened in WhatsApp. Press <b>Send</b> to share your feedback with us.</p>';
+      return;
+    }
+    // Netlify Forms submission for admin review
+    try {
+      const body = new URLSearchParams();
+      body.set('form-name', 'review-submissions');
+      body.set('name', String(d.name||'').trim());
+      body.set('trip', tripTitle);
+      body.set('trip_id', String(d.trip||''));
+      body.set('rating', String(d.rating||''));
+      body.set('text', String(d.text||'').trim());
+      body.set('submitted_at', new Date().toISOString());
+      const res = await fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString() });
+      if (!res.ok) throw new Error('Submission failed');
+      f.innerHTML = '<h3>Thank you!</h3><p>Your review was submitted for admin review. Once approved, it can be published on the website.</p>';
+    } catch (err2) {
+      err.textContent = 'Could not submit review right now. Please try again or use WhatsApp.';
+      err.hidden = false;
+    }
   });
 }
