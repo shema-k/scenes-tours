@@ -939,28 +939,10 @@ const SEED_TRIPS = [
     "region": "Dubai, UAE",
     "duration": "4 days / 3 nights",
     "kind": "request",
-    "price": null,
-    "bestTime": "November to March is the most comfortable time, with pleasant temperatures for city tours and desert safaris. May to September is very hot, though indoor attractions and deals are plentiful.",
     "summary": "A modern-city stopover with a desert safari, old Dubai and easy connections onward.",
     "desc": "Add a Dubai stopover to your East African trip: skyline views, the old creek and souks, a desert dune safari and time to shop or rest before flying home.",
-    "faq": [
-      {
-        "q": "What can I do in Dubai?",
-        "a": "City highlights, desert experiences, shopping, beaches and family attractions. We tailor the stopover to your time and interests."
-      },
-      {
-        "q": "When is the best time to visit Dubai?",
-        "a": "November–March is generally cooler and comfortable for outdoor activities. Summer months are hotter, but indoor attractions are plentiful."
-      },
-      {
-        "q": "Do you help with flights and visas?",
-        "a": "Yes. We can assist with flight booking and advise on visa requirements based on your nationality."
-      },
-      {
-        "q": "Can I pay in installments?",
-        "a": "Yes. Book now or start an installment plan and pay over time."
-      }
-    ],
+    "bestTime": "November to March is the most comfortable time, with pleasant temperatures for city tours and desert safaris. May to September is very hot, though indoor attractions and deals are plentiful.",
+    "price": null,
     "media": {
       "type": "image",
       "src": "world-cities.webp"
@@ -992,6 +974,25 @@ const SEED_TRIPS = [
       {
         "src": "world-cities.webp",
         "cap": "City skylines"
+      }
+    ],
+    "videos": [],
+    "faq": [
+      {
+        "q": "What can I do in Dubai?",
+        "a": "City highlights, desert experiences, shopping, beaches and family attractions. We tailor the stopover to your time and interests."
+      },
+      {
+        "q": "When is the best time to visit Dubai?",
+        "a": "November–March is generally cooler and comfortable for outdoor activities. Summer months are hotter, but indoor attractions are plentiful."
+      },
+      {
+        "q": "Do you help with flights and visas?",
+        "a": "Yes. We can assist with flight booking and advise on visa requirements based on your nationality."
+      },
+      {
+        "q": "Can I pay in installments?",
+        "a": "Yes. Book now or start an installment plan and pay over time."
       }
     ]
   },
