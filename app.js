@@ -704,7 +704,14 @@ function detail() {
 }
 
 const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 }) : null;
-function reveal() { $$('.rv:not(.in)').forEach(el => io ? io.observe(el) : el.classList.add('in')); }
+function reveal() {
+  $$('.rv:not(.in)').forEach(el => {
+    if (!io) { el.classList.add('in'); return; }
+    const r = el.getBoundingClientRect(), vh = innerHeight || document.documentElement.clientHeight;
+    if (r.bottom > 0 && r.top < vh + 40) { el.classList.add('in'); return; }
+    io.observe(el);
+  });
+}
 function playlists() { /* videos with several clips play one after another, as on the original site */
   $$('video[data-list]').forEach(v => {
     const list = v.dataset.list.split(','); v._list = list; v._n = 0;
@@ -893,6 +900,7 @@ function initTabs(tabsEl, panelsEl, hash, anchor, before) {
     if (hash && !quiet) history.replaceState(null, '', location.pathname + location.search + '#' + p.id);
     if (scroll) { const base = anchor ? anchor.offsetTop + anchor.offsetHeight : bar.getBoundingClientRect().top + scrollY; const hh = $('#site-header').offsetHeight - (($('.topbar') || {}).offsetHeight || 0); scrollTo({ top: Math.max(0, base - hh + 1), behavior: instant ? 'instant' : 'smooth' }); }
     done();
+    requestAnimationFrame(done);
   };
   tabsEl.addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(b.dataset.id, true); });
   tabsEl.addEventListener('keydown', e => { const bs = $$('button', tabsEl), i = bs.indexOf(document.activeElement); if (i < 0 || !/Arrow(Left|Right)/.test(e.key)) return; const n = bs[(i + (e.key === 'ArrowRight' ? 1 : -1) + bs.length) % bs.length]; n.focus(); show(n.dataset.id, false); });
@@ -933,7 +941,7 @@ function stage() {
   deepLink(T);
 }
 
-/* ---------- Customer feedback: published reviews + a form that sends new feedback to the team on WhatsApp ---------- */
+/* ---------- Customer feedback: published reviews + form that sends to admin for review or directly via WhatsApp ---------- */
 function feedback() {
   const list = DB.reviews(), avg = list.length ? list.reduce((s, r) => s + r.rating, 0) / list.length : 0;
   $('#rev-sum').innerHTML = list.length ? `<b>${avg.toFixed(1)}</b><span class="stars" aria-hidden="true">${stars(Math.round(avg))}</span><small>${list.length} customer review${list.length > 1 ? 's' : ''}</small>` : '<small>No public reviews yet</small>';
@@ -941,13 +949,19 @@ function feedback() {
   const f = $('#fb'); f.trip.innerHTML = TRIPS.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('') + '<option value="other">Another trip</option>';
   f.addEventListener('submit', e => {
     e.preventDefault(); const d = Object.fromEntries(new FormData(f)), err = $('.err', f), bad = [];
+    const mode = e.submitter?.dataset.reviewSend || 'publish';
     if (d.name.trim().length < 2) bad.push('Enter your name.');
     if (!d.rating) bad.push('Choose a star rating.');
     if (d.text.trim().length < 10) bad.push('Write a few words about your trip.');
     if (bad.length) { err.textContent = bad.join(' '); err.hidden = false; return; }
     err.hidden = true;
-    const t = byId(d.trip), msg = `*CUSTOMER FEEDBACK*\n\nName: ${d.name}\nTrip: ${t ? t.title : 'Another trip'}\nRating: ${stars(+d.rating)} (${d.rating}/5)\nFeedback: ${d.text}`;
+    const t = byId(d.trip), tripTitle = t ? t.title : 'Another trip';
+    const msg = mode === 'publish'
+      ? `*REVIEW FOR PUBLISHING*\n\nPlease review and publish this customer review if approved.\n\nName: ${d.name}\nFrom: \nTrip: ${tripTitle}\nTrip ID: ${d.trip}\nRating: ${+d.rating}/5\nReview: ${d.text}`
+      : `*CUSTOMER FEEDBACK*\n\nName: ${d.name}\nTrip: ${tripTitle}\nRating: ${stars(+d.rating)} (${d.rating}/5)\nFeedback: ${d.text}`;
     window.open(`https://wa.me/${SITE.phones[0].wa}?text=${encodeURIComponent(msg)}`, '_blank');
-    f.innerHTML = '<h3>Thank you!</h3><p>Your feedback opened in WhatsApp. Press <b>Send</b> there and our team will review it for publishing.</p>';
+    f.innerHTML = mode === 'publish'
+      ? '<h3>Thank you!</h3><p>Your review opened in WhatsApp. Press <b>Send</b> so the admin can review it for publishing on the website.</p>'
+      : '<h3>Thank you!</h3><p>Your message opened in WhatsApp. Press <b>Send</b> to share your feedback with us.</p>';
   });
 }

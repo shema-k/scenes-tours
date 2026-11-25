@@ -126,8 +126,11 @@
         <input type="radio" name="rating" id="r5" value="5"><label for="r5" title="5 stars">&#9733;</label><input type="radio" name="rating" id="r4" value="4"><label for="r4" title="4 stars">&#9733;</label><input type="radio" name="rating" id="r3" value="3"><label for="r3" title="3 stars">&#9733;</label><input type="radio" name="rating" id="r2" value="2"><label for="r2" title="2 stars">&#9733;</label><input type="radio" name="rating" id="r1" value="1"><label for="r1" title="1 star">&#9733;</label></div></fieldset>
       <label>Your feedback<textarea name="text" rows="3" placeholder="How was your trip?"></textarea></label>
       <p class="err" role="alert" hidden></p>
-      <button class="btn btn-primary wide" type="submit">Send feedback on WhatsApp</button>
-      <p class="meta" style="margin-top:.6rem">Approved feedback is published on this page.</p></form>
+      <div class="actions" style="display:grid;gap:.6rem;margin-top:.5rem">
+        <button class="btn btn-primary wide" type="submit" data-review-send="publish">Send for review &amp; publish</button>
+        <button class="btn btn-ghost wide" type="submit" data-review-send="whatsapp">Send via WhatsApp</button>
+      </div>
+      <p class="meta" style="margin-top:.6rem">Choose "Send for review &amp; publish" to submit your review for admin approval before it appears on the website, or "Send via WhatsApp" to message us directly.</p></form>
     <div class="rail-wrap"><button class="rail-btn prev" data-dir="-1" aria-label="Previous reviews">&lsaquo;</button><div id="rev-rail" class="rail reviews"></div><button class="rail-btn next" data-dir="1" aria-label="Next reviews">&rsaquo;</button></div>
   </div>
 </section>
