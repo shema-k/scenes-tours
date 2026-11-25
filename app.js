@@ -53,21 +53,19 @@ const titleCase = s => String(s || '').trim().replace(/\s+/g, ' ').replace(/\b[a
 const shorten = (s, n = 112) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n - 1).replace(/[\s,.;:-]+$/, '') + '…' : s; };
 function cardHTML(t, i = 0) {
   const s = status(t), past = isPast(t);
-  const actions = past
-    ? `<a class="btn btn-primary" href="trip.html?id=${t.id}">Explore this experience</a><a class="btn btn-ghost" href="index.html#services">Our services</a>`
-    : `<button class="btn btn-primary" data-action="book" data-trip="${t.id}">Book / Plan</button><a class="btn btn-ghost" href="trip.html?id=${t.id}">Details &amp; savings plan</a>`;
-  const sub = past ? 'A Scenes experience · plan something similar' : `${esc(t.region)} · ${esc(t.duration)}`;
+  const cta = past ? 'Explore this experience' : 'View trip & plan';
+  const meta = past ? 'Scenes experience' : `${esc(t.duration)} · ${esc(t.region)}`;
   return `<article class="card rv" style="--i:${i % 4}" data-type="${t.type}">
-    <a class="card-media" href="trip.html?id=${t.id}">${mediaHTML(t.media, t.title)}<span class="badge badge-${s.key}">${t.type}</span></a>
-    <div class="card-body">
-      <p class="kicker">${esc(t.group || t.region)}</p>
-      <h3><a href="trip.html?id=${t.id}">${esc(t.title)}</a></h3>
-      <p class="meta">${sub}</p>
-      <p>${esc(shorten(t.summary))}</p>
-      <p class="when ${s.key}">${esc(s.label)}</p>
-      ${past ? '<p class="price">Plan a similar trip with Scenes Tours &amp; Travels</p>' : `<p class="price">${fromPrice(t)}</p>`}
-      <div class="actions">${actions}</div>
-    </div></article>`;
+    <a class="card-link" href="trip.html?id=${t.id}">
+      <div class="card-media">${mediaHTML(t.media, t.title)}<span class="card-overlay"></span></div>
+      <div class="card-body">
+        <p class="card-meta">${meta}</p>
+        <h3>${esc(t.title)}</h3>
+        <p class="card-summary">${esc(shorten(t.summary, 110))}</p>
+        <span class="card-cta">${cta} <span aria-hidden="true">&rarr;</span></span>
+      </div>
+    </a>
+  </article>`;
 }
 
 function newsHTML() {
@@ -352,7 +350,16 @@ const cio = 'IntersectionObserver' in window ? new IntersectionObserver(es => es
   requestAnimationFrame(step); }), { threshold: .5 }) : null;
 function company() {
   $('#svc').innerHTML = SERVICES.map((s, i) => `<article class="svc rv" style="--i:${i % 4}"><i>${i + 1}</i><div><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p><button type="button" class="link svc-cta" data-service="${esc(s.t)}">${esc(s.cta || 'Request a quote')} &rarr;</button></div></article>`).join('');
-  $('#world-grid').innerHTML = WORLD.map((w, i) => `<article class="wcard rv" style="--i:${i}"><img src="${w.img}" alt="${esc(w.t)}" loading="lazy"><div><h3>${esc(w.t)}</h3><p>${esc(w.d)}</p></div></article>`).join('');
+  $('#world-grid').innerHTML = WORLD.map((w, i) => `<button type="button" class="wcard rv" style="--i:${i}" data-dest="${esc(w.t)}"><img src="${w.img}" alt="${esc(w.t)}" loading="lazy"><div><h3>${esc(w.t)}</h3><p>${esc(w.d)}</p><span class="wcard-cta">Explore trips <span aria-hidden="true">&rarr;</span></span></div></button>`).join('');
+  $('#world-grid').onclick = e => {
+    const b = e.target.closest('[data-dest]'); if (!b) return;
+    const q = b.dataset.dest;
+    const search = $('#search'); const chips = $('#chips');
+    if (search) { search.value = q; search.dispatchEvent(new Event('input', {bubbles:true})); }
+    const tripsTab = $$('.tab-btn,[data-tab],[role="tab"]').find(x => /safari|trip/i.test(x.textContent||''));
+    if (tripsTab) tripsTab.click();
+    const panel = $('#trips'); if (panel) panel.scrollIntoView({behavior:'smooth', block:'start'});
+  };
   $('#story').innerHTML = STORY.slice(0, 2).map(p => `<p>${esc(p)}</p>`).join('') + `<details class="readmore"><summary>Read our full story</summary>${STORY.slice(2).map(p => `<p>${esc(p)}</p>`).join('')}</details>`;
   $('#stats').innerHTML = STATS.map(s => `<div class="stat rv"><b data-to="${s.n}" data-pre="${s.pre || ''}" data-suf="${s.suf || ''}">${(s.pre || '') + s.n.toLocaleString('en-US') + (s.suf || '')}</b><span>${esc(s.l)}</span></div>`).join('');
   $('#faq-list').innerHTML = FAQ.map((f, i) => `<details class="rv" style="--i:${i % 4}"${i === 0 ? ' open' : ''}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
@@ -360,6 +367,7 @@ function company() {
   $('#org').innerHTML = `<div class="org-top">${person(TEAM.lead, 'lead')}</div><div class="org-top">${person(TEAM.deputy, 'deputy')}</div><div class="org-depts">${TEAM.depts.map(d => `<section class="dept"><h5>${esc(d.name)}</h5>${person(d.head)}${d.members.map(m => person(m, 'sub')).join('')}</section>`).join('')}</div>`;
   $('#org').addEventListener('click', e => { const b = e.target.closest('.pc'); if (!b) return; const p = flatTeam().find(x => x.title === b.dataset.t), dl = $('#pdlg'); $('h3', dl).textContent = p.title; $('.pbody', dl).innerHTML = `<div class="pface">${face(p)}</div>${p.name ? `<p class="pname">${esc(p.name)}</p>` : ''}<p>${esc(p.bio)}</p>`; dl.showModal(); done(); });
   if (cio && !matchMedia('(prefers-reduced-motion: reduce)').matches) $$('.stat b').forEach(b => { b.textContent = (b.dataset.pre || '') + '0' + (b.dataset.suf || ''); cio.observe(b); });
+  updateRails();
 }
 
 function home() {
@@ -902,8 +910,8 @@ function deepLink(T) {
   [180, 600, 1200].forEach(ms => setTimeout(jump, ms));
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(jump).catch(() => {});
 }
-function updateRails() { $$('.rail-wrap').forEach(w => { const r = $('.rail', w); if (!r.clientWidth) return; const more = r.scrollWidth > r.clientWidth + 4; $$('.rail-btn', w).forEach(b => { b.hidden = !more; }); }); }
-document.addEventListener('click', e => { const b = e.target.closest('.rail-btn'); if (!b) return; const r = $('.rail', b.closest('.rail-wrap')); r.scrollBy({ left: +b.dataset.dir * r.clientWidth * .85, behavior: 'smooth' }); });
+function updateRails() { $$('.rail-wrap').forEach(w => { const r = $('.rail, .rail-scroll', w); if (!r || !r.clientWidth) return; const more = r.scrollWidth > r.clientWidth + 4; $$('.rail-btn', w).forEach(b => { b.hidden = !more; }); }); }
+document.addEventListener('click', e => { const b = e.target.closest('.rail-btn'); if (!b) return; const r = $('.rail, .rail-scroll', b.closest('.rail-wrap')); if (r) r.scrollBy({ left: +b.dataset.dir * r.clientWidth * .85, behavior: 'smooth' }); });
 addEventListener('resize', updateRails);
 
 function stage() {
