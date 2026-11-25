@@ -1115,7 +1115,24 @@ const PUBLISHED = {
   "reviews": []
 };
 /* Real customer reviews go here (or add them in the private editor). Example: { name: 'Name', from: 'Kampala', trip: 'queen-elizabeth', rating: 5, text: 'Their words.', date: 'Aug 2026' } */
-const REVIEWS = [];
+const REVIEWS = [
+  {
+    "name": "Mr.Muganga Shadrack",
+    "from": "",
+    "trip": "Queen Elizabeth Safari",
+    "rating": 4,
+    "date": "2026-11-25",
+    "text": "Asante kwa kazi njema"
+  },
+  {
+    "name": "",
+    "from": "",
+    "trip": "",
+    "rating": 5,
+    "text": "",
+    "date": "2026-11-25"
+  }
+];
 
 const DB = {
   KEY: 'stt_db_v1',
